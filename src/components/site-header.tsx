@@ -1,13 +1,16 @@
 "use client";
 
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, ChevronDown, Heart, Menu, Search, Sparkles, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Heart, LogIn, Menu, Search, Sparkles, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { BrandMark } from "@/components/brand-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
+
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const navigation = [
   {
@@ -155,6 +158,22 @@ export function SiteHeader() {
             <Link href="/volunteer" className="hidden rounded-full px-3 py-2 text-sm font-bold text-ink/70 transition hover:text-forest xl:inline-flex">
               Volunteer
             </Link>
+            {clerkEnabled ? (
+              <div className="hidden items-center sm:flex">
+                <SignedOut>
+                  <Link
+                    href="/sign-in"
+                    className="inline-flex min-h-10 items-center gap-2 rounded-full border border-ink/10 bg-paper/60 px-3 text-sm font-bold text-ink/70 transition hover:border-forest/30 hover:text-forest"
+                  >
+                    <LogIn className="size-4" aria-hidden="true" />
+                    <span className="hidden xl:inline">Sign in</span>
+                  </Link>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton appearance={{ elements: { avatarBox: "size-10" } }} />
+                </SignedIn>
+              </div>
+            ) : null}
             <Link href="/donate" className="button-primary min-h-10 px-4 py-2 sm:px-5">
               <Heart className="size-4 fill-current" aria-hidden="true" /> <span className="hidden sm:inline">Donate</span>
             </Link>
@@ -193,6 +212,27 @@ export function SiteHeader() {
                   <button type="button" className="button-secondary" onClick={() => { setMobileOpen(false); setSearchOpen(true); }}><Search className="size-4" /> Search</button>
                   <ThemeToggle />
                 </div>
+                {clerkEnabled ? (
+                  <div className="mt-4 rounded-2xl border border-ink/10 bg-ink/[0.035] p-3">
+                    <SignedOut>
+                      <Link
+                        href="/sign-in"
+                        className="flex items-center gap-2 text-sm font-bold text-forest"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <LogIn className="size-4" aria-hidden="true" /> Sign in to your account
+                      </Link>
+                    </SignedOut>
+                    <SignedIn>
+                      <div className="flex items-center gap-3">
+                        <UserButton appearance={{ elements: { avatarBox: "size-9" } }} />
+                        <Link href="/dashboard" className="text-sm font-bold text-forest" onClick={() => setMobileOpen(false)}>
+                          Open my account
+                        </Link>
+                      </div>
+                    </SignedIn>
+                  </div>
+                ) : null}
               </nav>
             </motion.div>
           ) : null}

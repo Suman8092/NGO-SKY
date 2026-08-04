@@ -14,6 +14,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { AccountGreeting } from "@/components/dashboard/account-greeting";
+
 const metrics = [
   { label: "Gross donations", value: "₹42.8L", change: "+18.4%", icon: CircleDollarSign, positive: true },
   { label: "Active donors", value: "3,842", change: "+9.2%", icon: Users, positive: true },
@@ -31,7 +33,7 @@ export default function AdminDashboard() {
   return (
     <div className="mx-auto max-w-[1500px]">
       <header className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div><p className="text-xs font-bold text-forest">Wednesday · 5 August 2026</p><h1 className="mt-1 font-display text-3xl font-bold tracking-tight sm:text-4xl">Good morning, Ananya.</h1><p className="mt-2 text-sm text-ink/45">Here’s what moved across Ashaaya in the last 30 days.</p></div>
+        <div><p className="text-xs font-bold text-forest">Wednesday · 5 August 2026</p><h1 className="mt-1 font-display text-3xl font-bold tracking-tight sm:text-4xl"><AccountGreeting role="admin" /></h1><p className="mt-2 text-sm text-ink/45">Here’s what moved across Ashaaya in the last 30 days.</p></div>
         <div className="flex gap-2"><button type="button" className="grid size-11 place-items-center rounded-full border border-ink/10 bg-white dark:bg-white/[0.06]" aria-label="Notifications"><Bell className="size-4" /></button><button type="button" className="button-primary min-h-11"><Plus className="size-4" /> New campaign</button></div>
       </header>
 

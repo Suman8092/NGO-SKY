@@ -2,12 +2,14 @@ import { ArrowRight, Award, CalendarDays, Download, Heart, Leaf, ReceiptText, Sp
 import Image from "next/image";
 import Link from "next/link";
 
+import { AccountGreeting } from "@/components/dashboard/account-greeting";
+
 export default function UserDashboard() {
   return (
     <div className="mx-auto max-w-[1300px]">
       <div className="rounded-4xl bg-[#0b3028] p-6 text-white shadow-lift sm:p-9">
         <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
-          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#70d5b3]">Your impact · since March 2024</p><h1 className="mt-4 max-w-2xl font-display text-4xl font-semibold leading-tight tracking-[-0.05em] sm:text-5xl">Ananya, your generosity keeps showing up.</h1><p className="mt-4 max-w-xl text-sm leading-7 text-white/55">Twenty-nine gifts have helped fund learning, clean water, and the work that must move first.</p></div>
+          <div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#70d5b3]">Your impact · since March 2024</p><h1 className="mt-4 max-w-2xl font-display text-4xl font-semibold leading-tight tracking-[-0.05em] sm:text-5xl"><AccountGreeting role="user" /></h1><p className="mt-4 max-w-xl text-sm leading-7 text-white/55">Twenty-nine gifts have helped fund learning, clean water, and the work that must move first.</p></div>
           <div className="rounded-3xl border border-white/12 bg-white/[0.06] px-6 py-5"><p className="text-[0.62rem] font-bold uppercase tracking-wider text-white/40">Total given</p><p className="mt-2 font-display text-4xl font-bold text-[#f3bd67]">₹34,800</p><p className="mt-1 text-xs text-white/40">₹1,200 monthly · active</p></div>
         </div>
       </div>
