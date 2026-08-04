@@ -1,5 +1,6 @@
 "use client";
 
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import {
   BarChart3,
   Bell,
@@ -24,6 +25,8 @@ import { useState } from "react";
 import { BrandMark } from "@/components/brand-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
+
+const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 const adminLinks = [
   ["Overview", "/admin", LayoutDashboard],
@@ -66,10 +69,60 @@ export function DashboardSidebar({ role = "admin" }: { role?: "admin" | "user" }
           ))}
         </nav>
         <div className="border-t border-white/10 pt-5">
-          <div className="flex items-center gap-3 rounded-2xl bg-white/[0.045] p-3"><div className="grid size-9 place-items-center rounded-full bg-[#f3bd67] font-display text-xs font-extrabold text-[#17231f]">AK</div><div className="min-w-0 flex-1"><p className="truncate text-xs font-bold">Ananya Kapoor</p><p className="truncate text-[0.62rem] text-white/35">{role === "admin" ? "Program administrator" : "Monthly supporter"}</p></div><LogOut className="size-4 text-white/35" /></div>
+          {clerkEnabled ? <ClerkAccount role={role} /> : <DemoAccount role={role} />}
           <div className="mt-4 flex items-center justify-between"><Link href="/" className="inline-flex items-center gap-1.5 text-xs text-white/40 hover:text-white"><ChevronLeft className="size-3.5" /> Website</Link><ThemeToggle /></div>
         </div>
       </aside>
     </>
+  );
+}
+
+function ClerkAccount({ role }: { role: "admin" | "user" }) {
+  const { isLoaded, user } = useUser();
+  const displayName =
+    user?.fullName ?? user?.firstName ?? user?.primaryEmailAddress?.emailAddress ?? "Ashaaya supporter";
+  const initials = displayName
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.045] p-3">
+      <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#f3bd67] font-display text-xs font-extrabold text-[#17231f]">
+        {isLoaded ? initials : "…"}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-bold">{isLoaded ? displayName : "Loading account…"}</p>
+        <p className="truncate text-[0.62rem] text-white/35">
+          {role === "admin" ? "Program administrator" : "Ashaaya supporter"}
+        </p>
+      </div>
+      <SignOutButton>
+        <button
+          type="button"
+          className="grid size-8 shrink-0 place-items-center rounded-full text-white/35 transition hover:bg-white/10 hover:text-white"
+          aria-label="Sign out"
+          title="Sign out"
+        >
+          <LogOut className="size-4" aria-hidden="true" />
+        </button>
+      </SignOutButton>
+    </div>
+  );
+}
+
+function DemoAccount({ role }: { role: "admin" | "user" }) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.045] p-3">
+      <div className="grid size-9 place-items-center rounded-full bg-[#f3bd67] font-display text-xs font-extrabold text-[#17231f]">AK</div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-bold">Ananya Kapoor</p>
+        <p className="truncate text-[0.62rem] text-white/35">
+          {role === "admin" ? "Program administrator" : "Monthly supporter"}
+        </p>
+      </div>
+    </div>
   );
 }
