@@ -44,6 +44,7 @@ export async function createStripeCheckout(
 
   const env = getServerEnv();
   const stripe = getStripe();
+  const siteOrigin = new URL(env.NEXT_PUBLIC_SITE_URL).origin;
   const recurring =
     donation.frequency === "monthly"
       ? ({ interval: "month" } as const)
@@ -52,7 +53,6 @@ export async function createStripeCheckout(
         : undefined;
   const metadata = {
     donationId: donation.id,
-    campaignId: donation.campaignId ?? "general",
     frequency: donation.frequency,
   };
   const lineItem: Stripe.Checkout.SessionCreateParams.LineItem = {
@@ -61,7 +61,7 @@ export async function createStripeCheckout(
       currency: donation.currency.toLowerCase(),
       unit_amount: donation.amountMinor,
       product_data: {
-        name: donation.campaignId ? "Campaign donation" : "General donation",
+        name: "General donation",
         description: "A charitable contribution to Ashaaya Foundation",
       },
       ...(recurring ? { recurring } : {}),
@@ -72,8 +72,8 @@ export async function createStripeCheckout(
     line_items: [lineItem],
     client_reference_id: donation.id,
     customer_email: donation.donor.email,
-    success_url: `${env.NEXT_PUBLIC_SITE_URL}/donate/success?donation_id=${encodeURIComponent(donation.id)}&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${env.NEXT_PUBLIC_SITE_URL}/donate?status=cancelled`,
+    success_url: `${siteOrigin}/donate/success?donation_id=${encodeURIComponent(donation.id)}&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${siteOrigin}/donate?status=cancelled`,
     metadata,
     allow_promotion_codes: false,
     billing_address_collection: "auto",

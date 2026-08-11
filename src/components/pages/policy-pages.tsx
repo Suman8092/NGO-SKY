@@ -369,8 +369,8 @@ const privacySections: PolicySection[] = [
           used.
         </p>
         <p>
-          For privacy questions or rights requests, email privacy@ashaaya.org.
-          For safeguarding concerns, email safeguarding@ashaaya.org. If someone
+          For privacy questions, rights requests, or safeguarding concerns, use
+          the website contact form and select the relevant subject. If someone
           is in immediate danger, contact the appropriate local emergency
           service first.
         </p>
@@ -460,7 +460,7 @@ const termsSections: PolicySection[] = [
     content: (
       <p>
         If you believe a donation was duplicated, entered incorrectly, or made
-        without authority, contact giving@ashaaya.org promptly with the
+        without authority, use the website contact form promptly and include the
         transaction reference. Refund eligibility depends on payment status,
         law, tax documentation already issued, provider rules, and whether funds
         have been committed. Event cancellation and transfer terms are stated at

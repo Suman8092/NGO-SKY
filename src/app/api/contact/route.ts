@@ -6,7 +6,10 @@ import {
   parseJsonRequest,
 } from "@/lib/server/http";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
-import { submitContact } from "@/lib/server/services/submissions";
+import {
+  assertSubmissionWorkflow,
+  submitContact,
+} from "@/lib/server/services/submissions";
 import { contactSchema } from "@/lib/server/validation";
 
 export const runtime = "nodejs";
@@ -15,8 +18,12 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
+    assertSubmissionWorkflow("contact");
     const ip = getClientIp(request);
-    enforceRateLimit("contact", ip, { limit: 5, windowMs: 10 * 60_000 });
+    await enforceRateLimit("contact", ip, {
+      limit: 5,
+      windowMs: 10 * 60_000,
+    });
     const input = await parseJsonRequest(request, contactSchema);
     const result = await submitContact(input, {
       requestId,

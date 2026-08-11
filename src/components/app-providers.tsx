@@ -6,10 +6,20 @@ import { Toaster } from "sonner";
 
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { PwaRegister } from "@/components/pwa-register";
-
-export function AppProviders({ children }: { children: React.ReactNode }) {
+export function AppProviders({
+  children,
+  clerkEnabled,
+}: {
+  children: React.ReactNode;
+  clerkEnabled: boolean;
+}) {
   const content = (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
       <SmoothScroll>{children}</SmoothScroll>
       <PwaRegister />
       <Toaster position="bottom-right" richColors closeButton />
@@ -18,7 +28,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
   const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-  return publishableKey ? (
+  return publishableKey && clerkEnabled ? (
     <ClerkProvider
       publishableKey={publishableKey}
       signInUrl="/sign-in"

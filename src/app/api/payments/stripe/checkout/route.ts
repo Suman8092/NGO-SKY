@@ -6,7 +6,10 @@ import {
   parseJsonRequest,
 } from "@/lib/server/http";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
-import { startDonationCheckout } from "@/lib/server/services/donations";
+import {
+  assertDonationCheckoutRetryAllowed,
+  startDonationCheckout,
+} from "@/lib/server/services/donations";
 import { donationReferenceSchema } from "@/lib/server/validation";
 
 export const runtime = "nodejs";
@@ -15,7 +18,8 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
-    enforceRateLimit("stripe-checkout", getClientIp(request), {
+    assertDonationCheckoutRetryAllowed();
+    await enforceRateLimit("stripe-checkout", getClientIp(request), {
       limit: 10,
       windowMs: 10 * 60_000,
     });

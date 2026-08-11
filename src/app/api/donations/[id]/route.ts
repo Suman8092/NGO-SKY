@@ -17,7 +17,7 @@ export async function GET(
 ): Promise<Response> {
   const requestId = getRequestId(request);
   try {
-    enforceRateLimit("donation-status", getClientIp(request), {
+    await enforceRateLimit("donation-status", getClientIp(request), {
       limit: 30,
       windowMs: 60_000,
     });

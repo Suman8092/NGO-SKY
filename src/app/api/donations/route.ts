@@ -6,7 +6,10 @@ import {
   parseJsonRequest,
 } from "@/lib/server/http";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
-import { createDonationIntent } from "@/lib/server/services/donations";
+import {
+  assertDonationLaunchBasics,
+  createDonationIntent,
+} from "@/lib/server/services/donations";
 import { donationSchema } from "@/lib/server/validation";
 
 export const runtime = "nodejs";
@@ -15,8 +18,12 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
+    assertDonationLaunchBasics();
     const ip = getClientIp(request);
-    enforceRateLimit("donations", ip, { limit: 10, windowMs: 10 * 60_000 });
+    await enforceRateLimit("donations", ip, {
+      limit: 10,
+      windowMs: 10 * 60_000,
+    });
     const input = await parseJsonRequest(request, donationSchema);
     const result = await createDonationIntent(input, {
       requestId,

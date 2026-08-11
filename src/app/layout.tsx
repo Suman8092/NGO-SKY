@@ -5,6 +5,8 @@ import Script from "next/script";
 import { AppProviders } from "@/components/app-providers";
 import { CustomCursor } from "@/components/custom-cursor";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { isClerkConfigured } from "@/lib/auth-config";
+import { isEditorialContentPublished } from "@/lib/content-config";
 
 import "./globals.css";
 
@@ -20,37 +22,44 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ashaaya.org";
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const siteUrl = configuredSiteUrl || "http://localhost:3000";
+const editorialContentPublished = isEditorialContentPublished();
+const defaultTitle = editorialContentPublished
+  ? "Ashaaya Foundation — Hope, made practical"
+  : "Ashaaya Foundation — Publication status";
+const metadataDescription = editorialContentPublished
+  ? "Ashaaya Foundation website, with reviewed organisation information and available services."
+  : "Publication and online-service availability for the Ashaaya Foundation website.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Ashaaya Foundation — Hope, made practical",
+    default: defaultTitle,
     template: "%s · Ashaaya Foundation",
   },
-  description:
-    "Back locally led solutions in education, health, livelihoods, relief, and climate resilience—and follow every rupee to its outcome.",
-  keywords: [
-    "NGO India",
-    "donate to charity India",
-    "community-led development",
-    "education nonprofit",
-    "climate resilience",
-  ],
+  description: metadataDescription,
+  keywords: editorialContentPublished
+    ? [
+        "NGO India",
+        "donate to charity India",
+        "community-led development",
+        "education nonprofit",
+        "climate resilience",
+      ]
+    : ["Ashaaya Foundation", "website publication status"],
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
     siteName: "Ashaaya Foundation",
-    title: "Ashaaya Foundation — Hope, made practical",
-    description:
-      "Practical, community-owned progress. Radically transparent giving.",
+    title: defaultTitle,
+    description: metadataDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ashaaya Foundation — Hope, made practical",
-    description:
-      "Practical, community-owned progress. Radically transparent giving.",
+    title: defaultTitle,
+    description: metadataDescription,
   },
   category: "nonprofit",
   creator: "Ashaaya Foundation",
@@ -70,25 +79,16 @@ export const viewport: Viewport = {
 
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "NGO",
+  "@type": "WebSite",
   name: "Ashaaya Foundation",
   url: siteUrl,
-  logo: `${siteUrl}/icon.svg`,
-  description:
-    "An India-rooted nonprofit backing locally led solutions in learning, health, livelihoods, relief, and climate resilience.",
-  email: "hello@ashaaya.org",
-  telephone: "+91-80-4718-2020",
-  areaServed: ["India", "South Asia"],
-  sameAs: [
-    "https://instagram.com/ashaayafoundation",
-    "https://linkedin.com/company/ashaaya-foundation",
-    "https://youtube.com/@ashaayafoundation",
-  ],
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const clerkEnabled = isClerkConfigured();
+
   return (
     <html
       lang="en"
@@ -102,7 +102,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <AppProviders>
+        <AppProviders clerkEnabled={clerkEnabled}>
           <ScrollProgress />
           <CustomCursor />
           {children}

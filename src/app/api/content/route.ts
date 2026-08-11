@@ -1,4 +1,5 @@
 import { fetchPublishedContent } from "@/lib/server/cms/sanity";
+import { isEditorialContentPublished } from "@/lib/content-config";
 import { ApiError } from "@/lib/server/errors";
 import {
   errorResponse,
@@ -15,7 +16,15 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
-    enforceRateLimit("content", getClientIp(request), {
+    if (!isEditorialContentPublished()) {
+      throw new ApiError(
+        503,
+        "CONTENT_UNPUBLISHED",
+        "Editorial content is not available until verification is complete.",
+        { retryAfter: 300 },
+      );
+    }
+    await enforceRateLimit("content", getClientIp(request), {
       limit: 120,
       windowMs: 60_000,
     });

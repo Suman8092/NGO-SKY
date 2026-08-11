@@ -2,11 +2,17 @@
 
 import { useUser } from "@clerk/nextjs";
 
-const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
-
-export function AccountGreeting({ role }: { role: "admin" | "user" }) {
+export function AccountGreeting({
+  role,
+  clerkEnabled,
+}: {
+  role: "admin" | "user";
+  clerkEnabled: boolean;
+}) {
   if (!clerkEnabled) {
-    return role === "admin" ? "Good morning." : "Your generosity keeps showing up.";
+    return role === "admin"
+      ? "Operations overview"
+      : "Welcome to your account.";
   }
 
   return <ClerkGreeting role={role} />;
@@ -17,10 +23,12 @@ function ClerkGreeting({ role }: { role: "admin" | "user" }) {
   const firstName = user?.firstName ?? user?.fullName?.split(/\s+/)[0];
 
   if (!isLoaded || !firstName) {
-    return role === "admin" ? "Good morning." : "Your generosity keeps showing up.";
+    return role === "admin"
+      ? "Operations overview"
+      : "Welcome to your account.";
   }
 
   return role === "admin"
     ? `Good morning, ${firstName}.`
-    : `${firstName}, your generosity keeps showing up.`;
+    : `Welcome to your account, ${firstName}.`;
 }

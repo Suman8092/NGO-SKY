@@ -8,7 +8,7 @@ Maintain at least three isolated tiers:
 | --------------- | ----------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------ |
 | Local           | Bundled demo or development dataset; local/non-production MongoDB | Demo or test keys only                                  | Developer machine              |
 | Preview/Staging | Non-production Sanity dataset and MongoDB database                | Test/sandbox accounts; email limited to team recipients | Deployment protection required |
-| Production      | Approved production content and durable production database       | Live keys and verified webhooks                         | Canonical public domain        |
+| Production      | Approved production content and durable production database       | Live keys, verified webhooks, and explicit launch gates | Canonical public domain        |
 
 Never share databases, datasets, webhook endpoints, or signing secrets between tiers. Vercel environment scoping should be reviewed variable by variable; Preview must not inherit live payment/email credentials.
 
@@ -18,14 +18,15 @@ The Next.js application is the primary Vercel deployable.
 
 1. Import the repository into a Vercel project and keep the repository root as the project root.
 2. Select the Next.js framework preset and Node.js 22.12 or newer. Use `npm install` and `npm run build` unless the lockfile policy specifies stricter commands.
-3. Add safe Preview variables first: `DEMO_MODE=true` or isolated MongoDB plus provider test keys. Apply deployment protection to previews.
+3. Add safe Preview variables first. Keep `PUBLIC_SUBMISSIONS_ENABLED=false` and `DONATIONS_ENABLED=false`; use `DEMO_MODE=true` or isolated non-production services and test keys. Apply deployment protection to previews.
 4. Deploy Preview and run the full quality gate against the generated URL.
-5. Add Production variables individually from an approved secret inventory. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS origin and `DEMO_MODE=false` only after live readiness is signed off.
+5. Add Production variables individually from an approved secret inventory. Set `NEXT_PUBLIC_SITE_URL` to the final HTTPS origin and `DEMO_MODE=false`; keep both public launch gates false while dependencies are verified.
 6. Attach and verify the production domain, canonical `www`/apex redirect, DNS, and TLS.
 7. Register provider webhooks against the stable production URL after the domain is final. Store the endpoint-specific signing secrets in Production only.
 8. Trigger a new production deployment after changing any build-time `NEXT_PUBLIC_` value.
-9. Validate `/api/health` and `/api/health?deep=true`, a Sanity read, each submission flow, and controlled payment journeys.
-10. Enable observability and alerts before announcing launch. Keep the last known-good deployment ready for immediate rollback.
+9. Validate `/api/health` and `/api/health?deep=true`, editorial publication behavior, matching live Clerk keys, email/password signup, a Sanity read, each submission flow, and controlled payment journeys.
+10. Enable `PUBLIC_SUBMISSIONS_ENABLED` only after MongoDB, the verified Resend sender, and monitored notification workflow pass. Enable `DONATIONS_ENABLED` only after the separately owned payment launch gate passes.
+11. Enable observability and alerts before announcing launch. Keep the last known-good deployment ready for immediate rollback.
 
 Place serverless execution close to MongoDB where practical and measure the effect on the actual donor regions. A region change can improve database latency while worsening public API latency elsewhere, so use field data.
 
@@ -50,25 +51,26 @@ Demo mode is an explicit safety feature, not an error-masking feature.
 When `DEMO_MODE=true`:
 
 - configured MongoDB, Sanity, Stripe, Razorpay, and Resend values are treated as disabled by integration readiness checks;
-- submissions and donation intents are stored only in process memory;
-- responses expose `mode: "demo"` or `persistence: "memory"` metadata;
-- emails are skipped;
-- payment initiation returns an unavailable reason and no provider call is made;
+- public contact, newsletter, volunteer, and donation services remain unavailable because their readiness requirements cannot pass;
+- donation intents are never written to process memory;
+- no payment or email provider call is made;
 - CMS collection reads return an empty demo source rather than fabricated CMS records.
 
-When MongoDB is missing with `DEMO_MODE=false`, writes still fall back to memory and payments remain unavailable. Therefore the boolean alone does not prove live readiness; deep health, an integration test, and provider dashboards must agree.
+Repository-level memory storage remains available only for non-production development and tests. Public service gates prevent it from being presented as a successful live submission. In Production, missing MongoDB causes submissions, donations, and the shared abuse-protection layer to fail closed.
 
 Presentation rules for demo environments:
 
-- show a persistent, unambiguous “demonstration—no payment will be taken” message in donation and admin experiences;
-- never label a demo intent paid, receipted, tax-deductible, emailed, synced, or stored permanently;
-- do not collect real tax IDs, medical details, identity documents, or personal narratives during demos;
+- show unavailable states rather than a working payment or submission success path;
+- never label an unavailable or local-only record paid, receipted, emailed, synced, or stored permanently;
+- do not collect medical details, identity documents, or personal narratives during demos;
 - use synthetic email addresses and names in review sessions;
-- keep dashboard/admin content explicitly synthetic; with either Clerk key missing, the middleware permits those preview routes;
+- keep dashboards on their truthful empty states until authenticated, ownership-checked read adapters exist;
 - protect public preview URLs and periodically restart/clear preview instances;
 - never copy demo records into production or use synthetic impact metrics in external communications.
 
-Production startup and release automation should fail closed if demo mode, memory persistence, invalid environment fields, missing Clerk keys while dashboard routes exist, or a test-mode payment account is detected.
+Production startup and release automation should fail closed if demo mode, either launch gate lacks its required dependencies, invalid environment fields, missing/non-live Clerk keys, unsafe payment return origins, or a test-mode payment account is detected.
+
+Unverified editorial routes also fail closed. In Production, Preview, and local production builds, `NEXT_PUBLIC_CONTENT_VERIFIED` must be explicitly true before bundled campaign, programme, impact, story, event, gallery, or related editorial routes are published. Until then, those routes show the content-review state, are excluded from the production sitemap, and are disallowed for crawlers.
 
 ## Security baseline
 
@@ -83,12 +85,20 @@ Production startup and release automation should fail closed if demo mode, memor
 ### Application boundary
 
 - Preserve Zod validation, strict object schemas, bounded request bodies, consent literals, and honeypots on all public mutations.
-- Replace the in-memory IP limiter with a shared atomic limiter or platform/WAF policy for horizontally scaled production traffic.
+- Keep the Mongo-backed atomic limiter and TTL index healthy. Production requests fail closed when that shared limiter cannot obtain durable storage; an additional platform/WAF policy may provide an outer abuse-control layer.
 - Trust forwarding headers only from the deployment proxy. Directly exposed Express servers need explicit trusted-proxy configuration.
 - Add server-side Clerk authentication and object-level authorization before any account/admin/private endpoint exists.
 - If cookie-authenticated mutations are added, validate origin and anti-CSRF tokens; JSON content type alone is not a complete CSRF design.
 - Return stable public errors and request IDs. Keep payloads, personal information, connection strings, provider responses, and raw exceptions out of logs.
 - Sanitize any future rich content renderer. Sanity Portable Text should be mapped to an allowlisted component set rather than emitted as arbitrary HTML.
+
+### Authentication and signup
+
+- Production requires matching Clerk `pk_live_` and `sk_live_` keys. Preview may use development keys; do not copy live identity credentials into Preview.
+- `/dashboard` requires a valid Clerk session. `/admin` additionally requires the exact Clerk user ID in `ADMIN_USER_IDS`; an empty allowlist denies everyone.
+- The current account and operations dashboards deliberately show truthful empty states. Do not connect donation, receipt, volunteer, or operational records until server-side ownership and data-isolation tests exist.
+- Prefer email/password signup. Keep phone signup disabled unless the Clerk plan and SMS configuration support every intended country. For India, verify Indian delivery in the production Clerk instance before making phone number required.
+- After changing Clerk identifier requirements, clear abandoned signup attempts where applicable and retry in a clean browser session. Stale incomplete attempts or cookies can continue an older required-field flow.
 
 ### Browser policy and headers
 
@@ -104,13 +114,15 @@ Roll CSP out in report-only mode first, collect violations without personal data
 
 ### Payments
 
+- `DONATIONS_ENABLED` is the explicit master switch. Keep it false while onboarding, legal/refund review, webhook testing, reconciliation ownership, or the production HTTPS origin is incomplete.
 - Require MongoDB durability before checkout and store currency amounts as integer minor units.
+- Donation writes never use the in-process repository fallback.
 - Verify webhook signatures against the untouched raw body and reject missing/invalid signatures.
 - Use HTTPS provider-hosted checkout where possible and never handle card details directly.
 - Persist provider event IDs and a payment-status audit trail as throughput grows, enabling deterministic replay and duplicate rejection.
 - Treat browser success pages as informational until the signed webhook confirms `paid`.
 - Reconcile daily during launch and define owners for exceptions, refunds, disputes, receipt reissue, and settlement differences.
-- Never log donor tax identifiers or secrets. Restrict finance exports, watermark where appropriate, and audit access.
+- The current donation flow does not store donor tax identifiers. Do not add that collection without an approved purpose, retention schedule, access model, and secure receipt workflow. Never log payment secrets or personal donation data.
 
 ### Privacy and safeguarding
 
@@ -191,7 +203,7 @@ Use structured logs with timestamp, environment, release, route, request ID, saf
 
 - Keep MongoDB pools bounded per serverless instance and monitor aggregate connections across regions.
 - Project only required fields, paginate unbounded collections, and verify query indexes with production-like volumes.
-- Move global rate limiting and idempotency/event processing to durable shared primitives where necessary.
+- Monitor the MongoDB `rate_limits` collection, TTL index creation, atomic counter latency, and connection impact. Keep idempotency and provider-event processing durable as throughput grows.
 - Set timeouts and bounded retries for providers; do not retry non-idempotent operations without a stable key.
 
 ### Performance budgets

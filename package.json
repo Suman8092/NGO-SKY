@@ -42,7 +42,7 @@
     "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "resend": "^6.0.2",
-    "sanity": "6.9.0",
+    "sanity": "6.9.1",
     "sonner": "^2.0.7",
     "stripe": "^18.4.0",
     "styled-components": "^6.1.19",
@@ -75,7 +75,15 @@
     "node": ">=22.12.0"
   },
   "overrides": {
+    "@module-federation/vite": "1.20.5",
+    "@vercel/frameworks": {
+      "js-yaml": "3.15.1",
+      "smol-toml": "1.7.1"
+    },
     "postcss": "8.5.25",
-    "sharp": "0.35.3"
+    "sharp": "0.35.3",
+    "typeid-js": {
+      "uuid": "11.1.1"
+    }
   }
 }

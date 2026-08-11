@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
-    enforceRateLimit("razorpay-verify", getClientIp(request), {
+    await enforceRateLimit("razorpay-verify", getClientIp(request), {
       limit: 20,
       windowMs: 10 * 60_000,
     });

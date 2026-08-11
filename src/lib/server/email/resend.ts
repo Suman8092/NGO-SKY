@@ -130,9 +130,9 @@ export function sendDonationConfirmation(donation: DonationRecord): Promise<Emai
   return deliver([
     {
       to: donation.donor.email,
-      subject: "Your donation payment is confirmed",
+      subject: "Donation payment status confirmed",
       key: `donation-confirmation-${donation.id}`,
-      html: `<p>Hello ${escapeHtml(donation.donor.name)},</p><p>Thank you. Your ${escapeHtml(amount)} donation to Ashaaya Foundation has been confirmed.</p><p>Reference: ${escapeHtml(donation.id)}</p><p>Please keep this reference for your records. Our giving team will send any applicable tax documentation separately.</p>`,
+      html: `<p>Hello ${escapeHtml(donation.donor.name)},</p><p>The payment provider has confirmed your ${escapeHtml(amount)} donation payment.</p><p>Reference: ${escapeHtml(donation.id)}</p><p>Please keep this reference for your records.</p>`,
     },
   ]);
 }

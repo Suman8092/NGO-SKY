@@ -4,7 +4,10 @@ import { getServerEnv, hasSanityConfig } from "../env";
 import { ApiError } from "../errors";
 
 export type ContentKind = "campaigns" | "programs" | "stories" | "posts" | "events";
-export type ContentResult<T> = { data: T[]; source: "sanity" | "demo" };
+export type ContentResult<T> = {
+  data: T[];
+  source: "sanity" | "unconfigured";
+};
 
 const queries: Record<ContentKind, string> = {
   campaigns: `*[_type == "campaign" && coalesce(isActive, true) == true] | order(featured desc, _createdAt desc)[0...$limit]{
@@ -53,7 +56,7 @@ export async function fetchPublishedContent<T extends Record<string, unknown>>(
   limit: number,
 ): Promise<ContentResult<T>> {
   const sanity = client();
-  if (!sanity) return { data: [], source: "demo" };
+  if (!sanity) return { data: [], source: "unconfigured" };
   try {
     const data = await sanity.fetch<T[]>(queries[kind], { limit });
     return { data, source: "sanity" };
