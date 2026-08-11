@@ -6,7 +6,10 @@ import {
   parseJsonRequest,
 } from "@/lib/server/http";
 import { enforceRateLimit } from "@/lib/server/rate-limit";
-import { subscribeToNewsletter } from "@/lib/server/services/submissions";
+import {
+  assertSubmissionWorkflow,
+  subscribeToNewsletter,
+} from "@/lib/server/services/submissions";
 import { newsletterSchema } from "@/lib/server/validation";
 
 export const runtime = "nodejs";
@@ -15,8 +18,12 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
+    assertSubmissionWorkflow("newsletter");
     const ip = getClientIp(request);
-    enforceRateLimit("newsletter", ip, { limit: 10, windowMs: 60 * 60_000 });
+    await enforceRateLimit("newsletter", ip, {
+      limit: 10,
+      windowMs: 60 * 60_000,
+    });
     const input = await parseJsonRequest(request, newsletterSchema);
     const result = await subscribeToNewsletter(input, { requestId, ip });
     return jsonSuccess(

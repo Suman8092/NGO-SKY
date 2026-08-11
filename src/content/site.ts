@@ -186,7 +186,7 @@ export const primaryNavigation: SiteContent["navigation"] = [
       },
       {
         label: "Partner with us",
-        href: "/contact?subject=partnership",
+        href: "/contact?subject=partnerships",
         description: "Build a long-term collaboration",
       },
     ],
@@ -2259,7 +2259,7 @@ export const footerGroups: SiteContent["footer"] = [
       { label: "Donate", href: "/donate" },
       { label: "Volunteer", href: "/volunteer" },
       { label: "Attend an event", href: "/events" },
-      { label: "Partner with us", href: "/contact?subject=partnership" },
+      { label: "Partner with us", href: "/contact?subject=partnerships" },
       { label: "Start a fundraiser", href: "/fundraise" },
     ],
   },
@@ -2278,7 +2278,7 @@ export const footerGroups: SiteContent["footer"] = [
     links: [
       { label: "Contact", href: "/contact" },
       { label: "FAQs", href: "/faq" },
-      { label: "Donor help", href: "/contact?subject=donor-support" },
+      { label: "Donor help", href: "/contact?subject=donation-support" },
       { label: "Media room", href: "/media" },
       { label: "Careers", href: "/careers" },
     ],

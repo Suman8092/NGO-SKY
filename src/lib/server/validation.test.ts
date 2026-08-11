@@ -65,6 +65,30 @@ describe("public API validation", () => {
     expect(invalid.success).toBe(false);
   });
 
+  it("rejects unvalidated campaign designations and donor tax identifiers", () => {
+    const donation = {
+      amount: 2500,
+      currency: "INR",
+      frequency: "one_time",
+      provider: "auto",
+      donor: { name: "Arjun Mehta", email: "arjun@example.org" },
+      consent: true,
+    };
+
+    expect(
+      donationSchema.safeParse({
+        ...donation,
+        campaignId: "unverified-campaign",
+      }).success,
+    ).toBe(false);
+    expect(
+      donationSchema.safeParse({
+        ...donation,
+        donor: { ...donation.donor, taxId: "ABCDE1234F" },
+      }).success,
+    ).toBe(false);
+  });
+
   it("applies safe volunteer defaults", () => {
     const result = volunteerSchema.parse({
       name: "Mira Sen",

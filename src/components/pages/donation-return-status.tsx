@@ -42,7 +42,7 @@ function statusContent(status: DonationStatus) {
         Icon: BadgeCheck,
         title: "Payment confirmed",
         description:
-          "Your signed payment confirmation has been received. Keep this reference for your records; any applicable receipt will follow by email.",
+          "Your signed payment confirmation has been received. Keep the reference shown here with your payment-provider record.",
         tone: "border-emerald-200 bg-emerald-50 text-emerald-950 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-100",
       };
     case "failed":
@@ -176,7 +176,7 @@ export function DonationReturnStatus({ donationId }: { donationId?: string }) {
           </Link>
           <Link
             className="button-secondary"
-            href="/contact?subject=donations-receipts"
+            href="/contact?subject=donation-support"
           >
             Contact the giving team
           </Link>
@@ -228,7 +228,7 @@ export function DonationReturnStatus({ donationId }: { donationId?: string }) {
         </Link>
         <Link
           className="button-secondary"
-          href="/contact?subject=donations-receipts"
+          href="/contact?subject=donation-support"
         >
           Ask about this gift
         </Link>

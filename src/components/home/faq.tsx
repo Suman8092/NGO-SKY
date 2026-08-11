@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const questions = [
   ["How much of my donation reaches programs?", "In FY 2025–26, 91% of total expenditure supported program delivery and field monitoring. The remaining 9% funded fundraising, governance, audit, technology, and essential operations. Our audited statements explain every category."],
-  ["Will I receive an 80G tax certificate?", "Yes. Eligible donors in India receive a payment receipt immediately and a consolidated 80G certificate by email after PAN and address details are verified."],
+  ["Are receipts or tax documents available?", "This website does not promise a receipt or tax document. Ask through a verified contact channel about current documentation before donating; the online form does not collect PAN details."],
   ["Can I choose where my gift is used?", "You can fund a featured campaign or program. Unrestricted gifts go to the highest verified need, which gives field teams the flexibility to respond quickly and sustain less-visible essentials."],
   ["How do you verify impact figures?", "Field teams log attendance, service delivery, procurement, and participant feedback. Quarterly reconciliations, outcome samples, partner reviews, and annual external audits turn those records into published figures."],
   ["Can my company or team partner with Ashaaya?", "Yes. We design multi-year program partnerships, employee giving, skills-based volunteering, and transparent reporting packages around shared outcomes—not logo placement alone."],

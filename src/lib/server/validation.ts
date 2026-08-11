@@ -1,11 +1,16 @@
 import { z } from "zod";
 
-const cleanText = (min: number, max: number) => z.string().trim().min(min).max(max);
+const cleanText = (min: number, max: number) =>
+  z.string().trim().min(min).max(max);
 const cleanSingleLine = (min: number, max: number) =>
-  cleanText(min, max).refine((value) => !/[\r\n]/.test(value), "Must be a single line");
+  cleanText(min, max).refine(
+    (value) => !/[\r\n]/.test(value),
+    "Must be a single line",
+  );
 const optionalText = (max: number) =>
   z.preprocess(
-    (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+    (value) =>
+      typeof value === "string" && value.trim() === "" ? undefined : value,
     z.string().trim().max(max).optional(),
   );
 const phone = z
@@ -20,7 +25,8 @@ export const contactSchema = z
     name: cleanSingleLine(2, 100),
     email: z.string().trim().toLowerCase().email().max(254),
     phone: z.preprocess(
-      (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+      (value) =>
+        typeof value === "string" && value.trim() === "" ? undefined : value,
       phone.optional(),
     ),
     subject: cleanSingleLine(3, 140),
@@ -35,7 +41,8 @@ export const newsletterSchema = z
     email: z.string().trim().toLowerCase().email().max(254),
     name: optionalText(100),
     source: z.preprocess(
-      (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+      (value) =>
+        typeof value === "string" && value.trim() === "" ? undefined : value,
       z.string().trim().max(80).default("website"),
     ),
     consent: z.literal(true),
@@ -52,7 +59,13 @@ export const volunteerSchema = z
     country: cleanSingleLine(2, 100).default("India"),
     areaOfInterest: cleanSingleLine(2, 120),
     skills: z.array(cleanSingleLine(1, 80)).max(20).default([]),
-    availability: z.enum(["weekdays", "weekends", "evenings", "flexible", "event_based"]),
+    availability: z.enum([
+      "weekdays",
+      "weekends",
+      "evenings",
+      "flexible",
+      "event_based",
+    ]),
     motivation: cleanText(20, 3_000),
     experience: optionalText(2_000),
     consent: z.literal(true),
@@ -61,13 +74,17 @@ export const volunteerSchema = z
   .strict();
 
 const amount = z.preprocess(
-  (value) => (typeof value === "string" && value.trim() !== "" ? Number(value) : value),
+  (value) =>
+    typeof value === "string" && value.trim() !== "" ? Number(value) : value,
   z
     .number()
     .finite()
     .min(1)
     .max(10_000_000)
-    .refine((value) => Number.isInteger(value * 100), "Amount can have at most two decimal places"),
+    .refine(
+      (value) => Number.isInteger(value * 100),
+      "Amount can have at most two decimal places",
+    ),
 );
 
 export const donationSchema = z
@@ -76,21 +93,30 @@ export const donationSchema = z
     currency: z.enum(["INR", "USD", "EUR", "GBP"]).default("INR"),
     frequency: z.enum(["one_time", "monthly", "yearly"]).default("one_time"),
     provider: z.enum(["auto", "stripe", "razorpay"]).default("auto"),
-    campaignId: optionalText(100),
-    donor: z.object({
-      name: cleanSingleLine(2, 120),
-      email: z.string().trim().toLowerCase().email().max(254),
-      phone: z.preprocess(
-        (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-        phone.optional(),
-      ),
-      country: optionalText(100),
-      taxId: optionalText(32),
-    }),
+    donor: z
+      .object({
+        name: cleanSingleLine(2, 120),
+        email: z.string().trim().toLowerCase().email().max(254),
+        phone: z.preprocess(
+          (value) =>
+            typeof value === "string" && value.trim() === ""
+              ? undefined
+              : value,
+          phone.optional(),
+        ),
+        country: optionalText(100),
+      })
+      .strict(),
     anonymous: z.boolean().default(false),
     message: optionalText(500),
     consent: z.literal(true),
-    idempotencyKey: z.string().trim().min(8).max(100).regex(/^[a-zA-Z0-9._:-]+$/).optional(),
+    idempotencyKey: z
+      .string()
+      .trim()
+      .min(8)
+      .max(100)
+      .regex(/^[a-zA-Z0-9._:-]+$/)
+      .optional(),
     website: honeypot,
   })
   .strict()
@@ -112,15 +138,26 @@ export const donationSchema = z
   });
 
 export const donationReferenceSchema = z
-  .object({ donationId: z.string().trim().regex(/^[a-f0-9]{24}$/i) })
+  .object({
+    donationId: z
+      .string()
+      .trim()
+      .regex(/^[a-f0-9]{24}$/i),
+  })
   .strict();
 
 export const razorpayVerificationSchema = z
   .object({
-    donationId: z.string().trim().regex(/^[a-f0-9]{24}$/i),
+    donationId: z
+      .string()
+      .trim()
+      .regex(/^[a-f0-9]{24}$/i),
     razorpay_order_id: z.string().trim().min(8).max(100),
     razorpay_payment_id: z.string().trim().min(8).max(100),
-    razorpay_signature: z.string().trim().regex(/^[a-f0-9]{64}$/i),
+    razorpay_signature: z
+      .string()
+      .trim()
+      .regex(/^[a-f0-9]{64}$/i),
   })
   .strict();
 

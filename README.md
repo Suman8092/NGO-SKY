@@ -1,6 +1,6 @@
 # Ashaaya Foundation
 
-A premium, accessible NGO platform built with Next.js 15, React 19, TypeScript, Tailwind CSS, MongoDB, Sanity, Clerk, Stripe, Razorpay, and Resend. The application combines an editorial marketing experience with validated submission APIs, donation orchestration, signed payment webhooks, and an explicit no-side-effect demo mode.
+A premium, accessible NGO platform built with Next.js 15, React 19, TypeScript, Tailwind CSS, MongoDB, Sanity, Clerk, Stripe, Razorpay, and Resend. The application combines an editorial marketing experience with validated submission APIs, donation orchestration, signed payment webhooks, explicit launch gates, and fail-closed production behavior.
 
 > **Content and launch status:** The names, registration details, impact figures, campaigns, people, partner organisations, testimonials, awards, addresses, and financial claims in the bundled content are demonstration data. They must be verified and approved by the real organisation before the site is made public or accepts money.
 
@@ -14,17 +14,17 @@ Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Open `http://localhost:3000`. The example environment intentionally starts in `DEMO_MODE=true`: forms use ephemeral in-process storage, email is skipped, CMS reads are disabled, and payment gateways are never called. See [setup and integrations](docs/setup-and-integrations.md) before enabling live mode.
+Open `http://localhost:3000`. The example environment intentionally starts with `DEMO_MODE=true`, `PUBLIC_SUBMISSIONS_ENABLED=false`, and `DONATIONS_ENABLED=false`. Public forms and online checkout stay unavailable, CMS integration reads are disabled, and payment/email providers are not called. See [setup and integrations](docs/setup-and-integrations.md) before enabling a connected workflow.
 
 ## What is included
 
 | Area                 | Current implementation                                                                                                                                    | Production boundary                                                                                                            |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Public experience    | Responsive App Router pages, light/dark themes, premium motion, accessible navigation, campaign/program/story/event content, forms, and donation journeys | Verify every route, link, claim, image licence, and policy with the organisation                                               |
-| Content              | Typed local source in `src/content/site.ts`; read-only Sanity adapter and Studio schemas                                                                  | Publish reviewed Sanity documents; decide whether each page reads local, CMS, or merged content                                |
-| Submissions          | Contact, newsletter, and volunteer APIs with Zod validation, honeypots, request IDs, rate limits, MongoDB persistence, and optional Resend delivery       | Add retention/deletion procedures, consent records, abuse monitoring, and a shared rate-limit store                            |
-| Donations            | Idempotent donation intent records, Stripe Checkout, Razorpay orders, client verification, and signed provider webhooks                                   | Complete provider onboarding, tax/legal review, webhook replay tests, reconciliation, refunds, receipts, and incident runbooks |
-| Authentication       | Clerk sign-in/up, provider, and middleware protection for `/dashboard` and `/admin` when both keys exist                                                  | Authentication is not admin authorization; enforce roles and object ownership before connecting private data or mutations      |
+| Public experience    | Responsive App Router pages, light/dark themes, accessible navigation, gated forms, and donation readiness states                                         | Unverified editorial routes fail closed until `NEXT_PUBLIC_CONTENT_VERIFIED=true` after written approval                       |
+| Content              | Typed local source in `src/content/site.ts`; read-only Sanity adapter and Studio schemas                                                                  | Publish only reviewed names, claims, documents, and rights-cleared media                                                        |
+| Submissions          | Explicit `PUBLIC_SUBMISSIONS_ENABLED` gate, Zod validation, MongoDB records, Resend delivery, monitored notifications, and Mongo-backed atomic rate limits | Approve retention/deletion, consent, abuse-response, mailbox ownership, and operational response procedures                    |
+| Donations            | Explicit `DONATIONS_ENABLED` gate, MongoDB-only intents, Stripe/Razorpay checkout, client verification, and signed webhooks                                | Complete provider onboarding, legal review, webhook replay tests, reconciliation, refunds, receipts, and incident runbooks     |
+| Authentication       | Clerk sign-in/up, protected `/dashboard`, and a fail-closed `ADMIN_USER_IDS` allowlist for `/admin`; dashboards contain truthful empty states              | Use matching live Clerk keys in Production, MFA, server-side ownership checks, and least-privilege operator access             |
 | SEO and PWA metadata | Metadata, canonical base, Open Graph image, JSON-LD, robots, sitemap, and web manifest                                                                    | Replace the canonical domain and re-run crawl, structured-data, and social-card validation                                     |
 | Operational modes    | Deliberate demo/live behavior plus shallow/deep health reporting                                                                                          | Production must explicitly set live credentials and pass the deployment gate in the operations guide                           |
 
@@ -76,13 +76,15 @@ Sanity Studio source is under `sanity/`. From that directory, run `npx sanity de
 
 Do not enable donations merely because a provider key is available. A launch owner must confirm all of the following:
 
-1. Demonstration claims and identities have been replaced or verified in writing.
-2. `DEMO_MODE=false`, MongoDB is durable and backed up, and `/api/health?deep=true` reports live dependencies as expected.
-3. Stripe and/or Razorpay live-mode webhooks pass signature and replay tests on the production hostname.
-4. Privacy, terms, safeguarding, refund, donation, tax, consent, and data-retention policies have legal approval.
-5. Both Clerk keys are present, protected routes enforce roles and object ownership on the server, and the synthetic dashboards are not connected to private data until those checks pass.
-6. The complete `npm run check` suite, critical Playwright journeys, accessibility audit, and production Lighthouse run pass.
-7. Monitoring, alerting, reconciliation ownership, and rollback procedures are assigned to named operators.
+1. Demonstration claims and identities have been replaced or verified in writing before `NEXT_PUBLIC_CONTENT_VERIFIED=true` is promoted.
+2. `DEMO_MODE=false`, MongoDB is durable and backed up, and `/api/health?deep=true` reports the intended live dependencies.
+3. Keep `PUBLIC_SUBMISSIONS_ENABLED=false` until MongoDB, a verified Resend sender, and the monitored notification mailbox and response workflow are proven; enable it only after that sign-off.
+4. Keep `DONATIONS_ENABLED=false` until the required live provider, exact production webhook, HTTPS return origin, finance reconciliation, and legal/tax/refund workflow pass controlled tests.
+5. Privacy, terms, safeguarding, consent, and data-retention policies have legal approval.
+6. Matching production Clerk `pk_live_` and `sk_live_` keys are present, `ADMIN_USER_IDS` contains only approved operators, and any account-level records enforce server-side ownership.
+7. Prefer email/password signup. Keep Clerk phone signup disabled unless the SMS plan and intended country—including India—are enabled and tested.
+8. The complete `npm run check` suite, critical Playwright journeys, accessibility audit, and production Lighthouse run pass.
+9. Monitoring, alerting, submission response, reconciliation, and rollback responsibilities are assigned to named operators.
 
 ## Licence and governance
 

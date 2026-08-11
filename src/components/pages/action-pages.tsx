@@ -8,7 +8,6 @@ import {
   Building2,
   CalendarDays,
   CheckCircle2,
-  CircleDollarSign,
   CircleX,
   Clock3,
   GraduationCap,
@@ -17,8 +16,6 @@ import {
   Landmark,
   LifeBuoy,
   LockKeyhole,
-  Mail,
-  MapPin,
   MessageCircle,
   Search,
   ShieldCheck,
@@ -27,12 +24,17 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { resolveContactSubject } from "@/lib/contact-subjects";
+import {
+  paymentProviderLabel,
+  type PublicPaymentReadiness,
+} from "@/lib/payment-readiness";
+
 import { ContactForm, DonationForm, VolunteerForm } from "./action-forms";
 import { campaigns } from "./campaigns-pages";
 import {
   CheckList,
   IconCard,
-  MetricGrid,
   PageHero,
   SectionHeading,
   pageSurface,
@@ -98,8 +100,10 @@ const volunteerSteps = [
 
 export function VolunteerPage({
   initialInterest,
+  submissionsAvailable,
 }: {
   initialInterest?: string;
+  submissionsAvailable: boolean;
 }) {
   return (
     <main>
@@ -108,7 +112,11 @@ export function VolunteerPage({
         description="Bring your time, care, and capability to work that communities have already said matters—and receive the support to contribute well."
         eyebrow="Volunteer with Ashaaya"
         primaryAction={{ href: "#roles", label: "Explore open roles" }}
-        secondaryAction={{ href: "#apply", label: "Apply now" }}
+        secondaryAction={
+          submissionsAvailable
+            ? { href: "#apply", label: "Apply now" }
+            : undefined
+        }
         title={
           <>
             Your time can become someone’s{" "}
@@ -127,16 +135,11 @@ export function VolunteerPage({
             Volunteer roles are designed around reliability, respect, and real
             programme need.
           </p>
-          <div className="mt-8">
-            <MetricGrid
-              columns={3}
-              metrics={[
-                { value: "460+", label: "Active volunteers" },
-                { value: "18K", label: "Hours shared" },
-                { value: "92%", label: "Would recommend" },
-              ]}
-            />
-          </div>
+          <p className="mt-8 border-t border-white/10 pt-6 text-sm leading-7 text-slate-300">
+            Registering interest does not promise a placement. The team will
+            respond only when a verified role and appropriate supervision are
+            available.
+          </p>
         </div>
       </PageHero>
 
@@ -248,7 +251,7 @@ export function VolunteerPage({
             </p>
             <Link
               className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-amber-300"
-              href="/contact?subject=Safeguarding concern"
+              href="/contact?subject=safeguarding"
             >
               Ask a safeguarding question{" "}
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -264,23 +267,40 @@ export function VolunteerPage({
         <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[.7fr_1.3fr] lg:px-8">
           <div>
             <SectionHeading
-              description="This takes around five minutes. Share only what you are comfortable sharing at this stage."
+              description={
+                submissionsAvailable
+                  ? "This takes around five minutes. Share only what you are comfortable sharing at this stage."
+                  : "The production website is not accepting volunteer applications at this time."
+              }
               eyebrow="Register your interest"
-              title="Let’s find your place in the work"
+              title={
+                submissionsAvailable
+                  ? "Let’s find your place in the work"
+                  : "Applications are currently unavailable"
+              }
             />
             <div className={`mt-8 rounded-[1.75rem] p-6 ${pageSurface}`}>
               <p className="font-bold text-slate-950 dark:text-white">
-                What happens after you apply?
+                {submissionsAvailable
+                  ? "What happens after you apply?"
+                  : "No application will be collected"}
               </p>
               <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                We review interest weekly. If an available role looks aligned,
-                we will invite you to a discovery conversation. If there is no
-                current match, you can opt to stay in the volunteer pool.
+                {submissionsAvailable
+                  ? "Submitted applications enter the managed volunteer review workflow. A submission does not promise a role or response date."
+                  : "The form stays hidden until durable storage, managed notification delivery, and an explicit production launch flag are configured."}
               </p>
             </div>
           </div>
           <div className={`rounded-[2rem] p-7 sm:p-10 ${pageSurface}`}>
-            <VolunteerForm initialInterest={initialInterest} />
+            {submissionsAvailable ? (
+              <VolunteerForm initialInterest={initialInterest} />
+            ) : (
+              <SubmissionUnavailable
+                description="Please return later or use a separately verified contact channel if one is published on this site."
+                title="Volunteer intake is closed on this deployment"
+              />
+            )}
           </div>
         </div>
       </section>
@@ -288,52 +308,55 @@ export function VolunteerPage({
   );
 }
 
-const contactOptions = [
-  {
-    icon: MessageCircle,
-    title: "General enquiries",
-    detail: "hello@ashaaya.org",
-    href: "mailto:hello@ashaaya.org",
-  },
-  {
-    icon: CircleDollarSign,
-    title: "Donations & receipts",
-    detail: "giving@ashaaya.org",
-    href: "mailto:giving@ashaaya.org",
-  },
-  {
-    icon: Building2,
-    title: "Partnerships",
-    detail: "partners@ashaaya.org",
-    href: "mailto:partners@ashaaya.org",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Safeguarding",
-    detail: "safeguarding@ashaaya.org",
-    href: "mailto:safeguarding@ashaaya.org",
-  },
-];
+const publicContactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
 
-const subjectMap: Record<string, string> = {
-  partnerships: "Partnerships",
-  "donations-receipts": "Donations & receipts",
-  volunteering: "Volunteering",
-  events: "Events",
-  media: "Media & speaking",
-  safeguarding: "Safeguarding concern",
-  accessibility: "Accessibility",
-  "impact-report": "Impact report",
-};
+function SubmissionUnavailable({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div
+      className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-6 text-amber-950 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100"
+      role="status"
+    >
+      <ShieldCheck aria-hidden="true" className="h-7 w-7" />
+      <h2 className="mt-5 text-xl font-bold">{title}</h2>
+      <p className="mt-3 text-sm leading-7 opacity-80">{description}</p>
+    </div>
+  );
+}
 
-export function ContactPage({ subject }: { subject?: string }) {
-  const initialSubject =
-    subjectMap[(subject ?? "").toLowerCase()] ?? "General enquiry";
+const contactOptions = publicContactEmail
+  ? [
+      {
+        icon: MessageCircle,
+        title: "General enquiries",
+        detail: publicContactEmail,
+        href: `mailto:${publicContactEmail}`,
+      },
+    ]
+  : [];
+
+export function ContactPage({
+  subject,
+  submissionsAvailable,
+}: {
+  subject?: string;
+  submissionsAvailable: boolean;
+}) {
+  const initialSubject = resolveContactSubject(subject);
   return (
     <main>
       <PageHero
         breadcrumbs={[{ label: "Contact" }]}
-        description="Ask a question, share an idea, request support, or start a partnership conversation. We will make sure your message reaches a real person."
+        description={
+          submissionsAvailable
+            ? "Ask a question, share an idea, request support, or start a partnership conversation through the managed contact service."
+            : "The managed contact form is not accepting messages on this deployment."
+        }
         eyebrow="We are listening"
         title={
           <>
@@ -345,33 +368,60 @@ export function ContactPage({ subject }: { subject?: string }) {
         }
       >
         <div className="grid gap-4 sm:grid-cols-2">
-          {contactOptions.map((option) => (
-            <a
-              className={`group rounded-[1.5rem] p-6 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${pageSurface}`}
-              href={option.href}
-              key={option.title}
+          {contactOptions.length ? (
+            contactOptions.map((option) => (
+              <a
+                className={`group rounded-[1.5rem] p-6 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${pageSurface}`}
+                href={option.href}
+                key={option.title}
+              >
+                <option.icon
+                  aria-hidden="true"
+                  className="h-6 w-6 text-teal-700 dark:text-teal-300"
+                />
+                <p className="mt-7 font-bold text-slate-950 dark:text-white">
+                  {option.title}
+                </p>
+                <p className="mt-1 break-all text-sm text-slate-500 transition group-hover:text-teal-700 dark:text-slate-400 dark:group-hover:text-teal-300">
+                  {option.detail}
+                </p>
+              </a>
+            ))
+          ) : (
+            <div
+              className={`rounded-[1.5rem] p-6 sm:col-span-2 ${pageSurface}`}
             >
-              <option.icon
+              <MessageCircle
                 aria-hidden="true"
                 className="h-6 w-6 text-teal-700 dark:text-teal-300"
               />
               <p className="mt-7 font-bold text-slate-950 dark:text-white">
-                {option.title}
+                {submissionsAvailable
+                  ? "Managed contact form"
+                  : "No public contact channel is active"}
               </p>
-              <p className="mt-1 break-all text-sm text-slate-500 transition group-hover:text-teal-700 dark:text-slate-400 dark:group-hover:text-teal-300">
-                {option.detail}
+              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+                {submissionsAvailable
+                  ? "Use the form below. A public email address will appear here only after it is verified."
+                  : "No managed form or verified public email address is available on this deployment."}
               </p>
-            </a>
-          ))}
+            </div>
+          )}
         </div>
       </PageHero>
 
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[.72fr_1.28fr] lg:px-8 lg:py-28">
         <div>
           <SectionHeading
-            description="Tell us what you need and include any helpful context. Please do not send sensitive personal, medical, or financial information through this form."
-            eyebrow="Send a message"
-            title="How can we help?"
+            description={
+              submissionsAvailable
+                ? "Tell us what you need and include any helpful context. Please do not send sensitive personal, medical, or financial information through this form."
+                : "No contact details or message content will be collected while the managed submission workflow is unavailable."
+            }
+            eyebrow={submissionsAvailable ? "Send a message" : "Contact status"}
+            title={
+              submissionsAvailable ? "How can we help?" : "Form unavailable"
+            }
           />
           <div className="mt-9 space-y-5">
             <div className="flex gap-4">
@@ -380,11 +430,14 @@ export function ContactPage({ subject }: { subject?: string }) {
               </div>
               <div>
                 <h3 className="font-bold text-slate-950 dark:text-white">
-                  Typical response time
+                  {submissionsAvailable
+                    ? "Response handling"
+                    : "No submission is collected"}
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  Within two working days. Urgent safeguarding messages are
-                  triaged as soon as possible.
+                  {submissionsAvailable
+                    ? "Response times depend on the type of request. Please avoid sending urgent or emergency reports through this website."
+                    : "The website cannot accept or route a message while the managed workflow is unavailable."}
                 </p>
               </div>
             </div>
@@ -394,80 +447,28 @@ export function ContactPage({ subject }: { subject?: string }) {
               </div>
               <div>
                 <h3 className="font-bold text-slate-950 dark:text-white">
-                  Access support
+                  {submissionsAvailable
+                    ? "Access support"
+                    : "Accessibility contact pending"}
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  Tell us your preferred language, format, or communication
-                  adjustment and we will do our best to accommodate it.
+                  {submissionsAvailable
+                    ? "Share your preferred language, format, or communication adjustment in the managed form."
+                    : "A verified accessibility contact route will be published before requests are accepted."}
                 </p>
               </div>
             </div>
           </div>
         </div>
         <div className={`rounded-[2rem] p-7 sm:p-10 ${pageSurface}`}>
-          <ContactForm initialSubject={initialSubject} />
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <SectionHeading
-            align="center"
-            description="Our core team is based in Bengaluru and works alongside regional partners. Meetings are by appointment so the right person can be there."
-            eyebrow="Where to find us"
-            title="Local roots, connected work"
-          />
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <article className={`rounded-[1.75rem] p-7 ${pageSurface}`}>
-              <MapPin
-                aria-hidden="true"
-                className="h-7 w-7 text-teal-700 dark:text-teal-300"
-              />
-              <h3 className="mt-7 text-xl font-bold text-slate-950 dark:text-white">
-                Bengaluru office
-              </h3>
-              <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
-                Indiranagar, Bengaluru
-                <br />
-                Karnataka, India
-              </p>
-              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
-                Visits by appointment
-              </p>
-            </article>
-            <article className={`rounded-[1.75rem] p-7 ${pageSurface}`}>
-              <Clock3
-                aria-hidden="true"
-                className="h-7 w-7 text-teal-700 dark:text-teal-300"
-              />
-              <h3 className="mt-7 text-xl font-bold text-slate-950 dark:text-white">
-                Office hours
-              </h3>
-              <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
-                Monday–Friday
-                <br />
-                9:30 AM–5:30 PM IST
-              </p>
-              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
-                Closed on public holidays
-              </p>
-            </article>
-            <article className="rounded-[1.75rem] bg-teal-700 p-7 text-white shadow-xl">
-              <Mail aria-hidden="true" className="h-7 w-7 text-teal-200" />
-              <h3 className="mt-7 text-xl font-bold">Prefer email?</h3>
-              <p className="mt-3 leading-7 text-teal-50">
-                Write to hello@ashaaya.org and include the best way and time to
-                reach you.
-              </p>
-              <a
-                className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-amber-300"
-                href="mailto:hello@ashaaya.org"
-              >
-                Open your email{" "}
-                <ArrowRight aria-hidden="true" className="h-4 w-4" />
-              </a>
-            </article>
-          </div>
+          {submissionsAvailable ? (
+            <ContactForm initialSubject={initialSubject} />
+          ) : (
+            <SubmissionUnavailable
+              description="The form will appear only after durable storage, verified email delivery, a notification destination, and an explicit production launch flag are configured."
+              title="Messages are not being accepted"
+            />
+          )}
         </div>
       </section>
     </main>
@@ -476,23 +477,29 @@ export function ContactPage({ subject }: { subject?: string }) {
 
 export function DonatePage({
   frequency = "one_time",
-  campaignSlug,
   checkoutCancelled = false,
-  paymentsUnavailable = false,
+  initialAmount,
+  paymentReadiness,
 }: {
   frequency?: "one_time" | "monthly" | "yearly";
-  campaignSlug?: string;
   checkoutCancelled?: boolean;
-  paymentsUnavailable?: boolean;
+  initialAmount?: number;
+  paymentReadiness: PublicPaymentReadiness;
 }) {
-  const campaign = campaigns.find((item) => item.slug === campaignSlug);
+  const paymentsUnavailable =
+    !paymentReadiness.oneTimeProvider && !paymentReadiness.recurringProvider;
+  const oneTimeLabel = paymentProviderLabel(paymentReadiness.oneTimeProvider);
+  const recurringLabel = paymentProviderLabel(
+    paymentReadiness.recurringProvider,
+  );
+
   return (
     <main>
       <PageHero
         accent="amber"
         breadcrumbs={[{ label: "Donate" }]}
-        description="Your gift backs practical work shaped by communities—and the people, safeguards, and learning that make it last."
-        eyebrow="Give with confidence"
+        description="Online checkout is enabled only when durable storage, a safe return origin, live provider credentials, signed webhooks, and the explicit launch flag are ready."
+        eyebrow="Verified online giving"
         title={
           <>
             Turn your care into{" "}
@@ -512,20 +519,26 @@ export function DonatePage({
             className="relative h-10 w-10 text-amber-300"
           />
           <p className="relative mt-10 text-3xl font-semibold tracking-tight">
-            A secure gift. A clear purpose. Progress you can follow.
+            Checkout configuration is checked on the server.
           </p>
           <div className="relative mt-8 grid grid-cols-3 gap-3 border-t border-white/10 pt-6">
             <div>
-              <p className="text-xl font-bold text-teal-300">₹500</p>
-              <p className="mt-1 text-xs text-slate-400">learning materials</p>
+              <p className="text-sm font-bold text-teal-300">
+                {paymentReadiness.persistenceReady
+                  ? "Configured"
+                  : "Unavailable"}
+              </p>
+              <p className="mt-1 text-xs text-slate-400">durable records</p>
             </div>
             <div>
-              <p className="text-xl font-bold text-teal-300">₹2.5K</p>
-              <p className="mt-1 text-xs text-slate-400">mentor support</p>
+              <p className="text-sm font-bold text-teal-300">{oneTimeLabel}</p>
+              <p className="mt-1 text-xs text-slate-400">one-time checkout</p>
             </div>
             <div>
-              <p className="text-xl font-bold text-teal-300">₹10K</p>
-              <p className="mt-1 text-xs text-slate-400">community milestone</p>
+              <p className="text-sm font-bold text-teal-300">
+                {recurringLabel}
+              </p>
+              <p className="mt-1 text-xs text-slate-400">monthly / yearly</p>
             </div>
           </div>
         </div>
@@ -533,7 +546,7 @@ export function DonatePage({
 
       {paymentsUnavailable ? (
         <section
-          aria-label="Demonstration payment notice"
+          aria-label="Payment availability notice"
           className="border-b border-amber-300/60 bg-amber-50 text-amber-950 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100"
         >
           <div className="mx-auto flex max-w-7xl items-start gap-3 px-6 py-4 text-sm leading-6 lg:px-8">
@@ -542,9 +555,9 @@ export function DonatePage({
               className="mt-0.5 h-5 w-5 shrink-0"
             />
             <p>
-              <strong>Demonstration checkout—no payment will be taken.</strong>{" "}
-              This environment records only a temporary pledge and does not
-              contact a payment provider.
+              <strong>Online donations are temporarily unavailable.</strong> No
+              payment or pledge can be submitted until the required production
+              checkout configuration is present.
             </p>
           </div>
         </section>
@@ -553,21 +566,17 @@ export function DonatePage({
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[.72fr_1.28fr] lg:items-start lg:px-8 lg:py-28">
         <aside className="lg:sticky lg:top-28">
           <SectionHeading
-            description={
-              campaign
-                ? `Your donation will support ${campaign.title}.`
-                : "Choose an amount and frequency that feels right. Every contribution matters."
-            }
-            eyebrow="Complete your gift"
-            title="Make possibility practical"
+            description="No pledge or payment is accepted when the production checkout is unavailable."
+            eyebrow="Checkout status"
+            title="Give only through a verified flow"
           />
           <div className="mt-8">
             <CheckList
               items={[
                 "Secure provider-hosted payment",
-                "Email confirmation and receipt",
-                "Tax documentation for eligible gifts",
-                "Clear updates on the work you support",
+                "Durable server-side donation record",
+                "Signed payment status confirmation",
+                "Explicit launch flag and safe HTTPS return origin",
               ]}
             />
           </div>
@@ -582,8 +591,8 @@ export function DonatePage({
                   Your information is protected
                 </p>
                 <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                  We collect only what is needed to process your gift, meet
-                  legal obligations, and provide a receipt.
+                  The form validates required details on the server and does not
+                  store complete card information.
                 </p>
               </div>
             </div>
@@ -602,10 +611,29 @@ export function DonatePage({
               </p>
             </div>
           ) : null}
-          <DonationForm
-            campaign={campaign?.slug}
-            initialFrequency={frequency}
-          />
+          {paymentsUnavailable ? (
+            <div className="rounded-[1.75rem] border border-amber-200 bg-amber-50 p-7 text-amber-950 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
+              <ShieldCheck aria-hidden="true" className="h-7 w-7" />
+              <h2 className="mt-5 text-2xl font-bold">No checkout is active</h2>
+              <p className="mt-3 leading-7">
+                This form appears only after durable records, a safe return
+                origin, live provider credentials, signed webhooks, and the
+                explicit launch flag are ready.
+              </p>
+              <Link
+                className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-amber-950 px-5 text-sm font-bold text-white dark:bg-amber-200 dark:text-amber-950"
+                href="/contact?subject=donation-support"
+              >
+                Contact the team
+              </Link>
+            </div>
+          ) : (
+            <DonationForm
+              initialAmount={initialAmount}
+              initialFrequency={frequency}
+              paymentReadiness={paymentReadiness}
+            />
+          )}
         </div>
       </section>
 
@@ -613,33 +641,32 @@ export function DonatePage({
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
-            description="Giving should feel clear at every step—from the first click to the final programme report."
-            eyebrow="Our giving commitments"
-            title="Trust built into the experience"
+            description="These controls are enforced by the application whenever online checkout is active."
+            eyebrow="Technical safeguards"
+            title="A payment flow that fails closed"
           />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             <IconCard
-              description="Payments are handled by approved providers; Ashaaya does not store complete card details."
+              description="Complete card or bank details stay with the payment provider."
               icon={LockKeyhole}
               title="Secure payment"
             />
             <IconCard
-              description="Restricted gifts follow the named purpose, with donor communication if circumstances materially change."
+              description="The donation request is stored durably before checkout begins."
               icon={Landmark}
-              title="Responsible stewardship"
+              title="Durable record first"
             />
             <IconCard
-              description="We share milestones, challenges, adaptations, and completion learning—not only polished success stories."
+              description="Only a valid signed provider webhook can confirm final payment status."
               icon={BadgeCheck}
               title="Visible accountability"
             />
           </div>
           <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-6 text-slate-500 dark:text-slate-400">
-            Questions about receipts, eligible tax benefits, institutional
-            giving, or bank transfers?{" "}
+            Questions about payment availability or an existing transaction?{" "}
             <Link
               className="font-bold text-teal-700 underline underline-offset-4 dark:text-teal-300"
-              href="/contact?subject=donations-receipts"
+              href="/contact?subject=donation-support"
             >
               Contact our giving team
             </Link>
@@ -719,7 +746,7 @@ const searchItems: SearchItem[] = [
     description: "Make a secure one-time, monthly, or annual gift.",
     href: "/donate",
     type: "Take action",
-    keywords: "give payment tax receipt monthly contribution",
+    keywords: "give payment checkout monthly contribution",
     icon: HeartHandshake,
   },
   ...campaigns.map((campaign) => ({

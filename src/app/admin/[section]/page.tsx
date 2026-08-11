@@ -1,29 +1,269 @@
 import type { LucideIcon } from "lucide-react";
-import { BarChart3, BookOpen, CalendarDays, CircleDollarSign, FileImage, HeartHandshake, Plus, Settings, ShieldCheck, Users } from "lucide-react";
+import {
+  ArrowLeft,
+  BarChart3,
+  BookOpen,
+  CalendarDays,
+  CircleDollarSign,
+  Database,
+  ExternalLink,
+  FileImage,
+  HeartHandshake,
+  Settings,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-const sections: Record<string, { title: string; description: string; icon: LucideIcon; rows: string[][]; columns: string[] }> = {
-  campaigns: { title: "Campaigns", description: "Create, fund, publish, and close campaign work.", icon: HeartHandshake, columns: ["Campaign", "Owner", "Raised", "Status"], rows: [["Clean water, powered by sunlight", "Neha Rao", "₹36.4L", "Active"], ["Learning labs beyond the last mile", "Arjun Bedi", "₹22.8L", "Active"], ["Women growing climate-ready farms", "Nila Joseph", "₹18.2L", "Active"], ["Assam flood response", "Imran Ali", "₹14.7L", "Urgent"]] },
-  donations: { title: "Donations", description: "Reconcile payments, receipts, refunds, and donor intent.", icon: CircleDollarSign, columns: ["Reference", "Donor", "Amount", "Status"], rows: [["DON-98241", "Aarav Sharma", "₹5,000", "Settled"], ["DON-98240", "Anonymous", "₹1,200", "Settled"], ["DON-98239", "Maya Iyer", "₹12,000", "Settled"], ["DON-98238", "Kabir Mehta", "₹2,500", "Review"]] },
-  users: { title: "People", description: "Supporters, participants, staff accounts, and consent records.", icon: Users, columns: ["Person", "Relationship", "Last active", "Status"], rows: [["Ananya Kapoor", "Monthly donor", "Today", "Active"], ["Ravi Menon", "Partner lead", "Yesterday", "Active"], ["Saira Begum", "Volunteer", "2 days ago", "Active"], ["Thomas Lee", "Donor", "4 days ago", "Active"]] },
-  volunteers: { title: "Volunteers", description: "Applications, safeguarding checks, matching, and hours.", icon: ShieldCheck, columns: ["Applicant", "Role", "Location", "Stage"], rows: [["Diya Shah", "STEM mentor", "Remote", "Interview"], ["Aditya Rao", "Field photographer", "Bengaluru", "Screening"], ["Rhea Thomas", "Data analyst", "Remote", "Matched"], ["Mohit Sen", "Relief roster", "Guwahati", "Cleared"]] },
-  events: { title: "Events", description: "Registration, attendance, capacity, and follow-up.", icon: CalendarDays, columns: ["Event", "Date", "Registered", "Status"], rows: [["Field Notes: Rebuilding", "18 Aug", "386", "Open"], ["Bengaluru Open House", "6 Sep", "112", "Open"], ["The Long Table", "21 Sep", "84", "Open"], ["Monsoon Briefing", "11 Jul", "620", "Complete"]] },
-  stories: { title: "Stories & blog", description: "Consent-aware publishing from draft through review.", icon: BookOpen, columns: ["Story", "Author", "Updated", "Stage"], rows: [["Kavya’s lab stays open", "Leena D’Souza", "Today", "Published"], ["Water committee, year two", "Aman Qureshi", "Yesterday", "Review"], ["Seeds after the landslide", "Mia George", "3 days", "Draft"], ["What verification looks like", "Farah Khan", "6 days", "Published"]] },
-  media: { title: "Media library", description: "Rights-managed imagery, video, transcripts, and documents.", icon: FileImage, columns: ["Asset", "Collection", "Rights", "Updated"], rows: [["Water station opening", "Jal Jyoti", "Approved", "Today"], ["Learning lab workshop", "Shiksha Setu", "Approved", "Yesterday"], ["Wayanad seedlings", "Udaan", "Approved", "3 days"], ["FY26 annual report", "Governance", "Public", "8 days"]] },
-  analytics: { title: "Analytics", description: "Acquisition, conversion, retention, and program engagement.", icon: BarChart3, columns: ["Metric", "Current", "Previous", "Change"], rows: [["Donation conversion", "4.8%", "4.1%", "+17%"], ["Monthly retention", "87.6%", "85.5%", "+2.1pt"], ["Volunteer completion", "62%", "58%", "+4pt"], ["Newsletter engagement", "48.3%", "46.9%", "+1.4pt"]] },
-  settings: { title: "Settings", description: "Organization, roles, integrations, SEO, and notification defaults.", icon: Settings, columns: ["Area", "Owner", "Last reviewed", "Status"], rows: [["Organization profile", "Admin", "31 Jul", "Complete"], ["Payment integrations", "Finance", "1 Aug", "Connected"], ["Role management", "Security", "24 Jul", "Complete"], ["SEO defaults", "Comms", "2 Aug", "Complete"]] },
+import { isEditorialContentPublished } from "@/lib/content-config";
+
+type SectionDefinition = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  source: string;
+  requirements: readonly string[];
+  publicHref?: string;
 };
 
-export default async function AdminSectionPage({ params }: { params: Promise<{ section: string }> }) {
+const sections: Record<string, SectionDefinition> = {
+  campaigns: {
+    title: "Campaigns",
+    description:
+      "Publish and manage campaign work from approved content records.",
+    icon: HeartHandshake,
+    source: "Published campaign documents in the configured Sanity dataset",
+    requirements: [
+      "Approved campaign copy and media",
+      "Stable campaign identifiers",
+      "Published goals and totals from verified records",
+    ],
+    publicHref: "/campaigns",
+  },
+  donations: {
+    title: "Donations",
+    description:
+      "Reconcile confirmed payments, receipts, refunds, and donor intent.",
+    icon: CircleDollarSign,
+    source:
+      "Persistent donation records updated by signed payment-provider webhooks",
+    requirements: [
+      "Production database connection",
+      "Live payment credentials",
+      "Verified webhook processing and reconciliation",
+    ],
+  },
+  users: {
+    title: "People",
+    description:
+      "Manage authenticated supporters and consent-aware profile records.",
+    icon: Users,
+    source:
+      "Clerk user identities joined only to authorised first-party profile data",
+    requirements: [
+      "Restricted administrator access",
+      "Documented consent purpose",
+      "Audited profile read permissions",
+    ],
+  },
+  volunteers: {
+    title: "Volunteers",
+    description:
+      "Review applications only after they are stored in a durable protected system.",
+    icon: ShieldCheck,
+    source: "Persistent volunteer application records",
+    requirements: [
+      "Production database connection",
+      "Role-based access",
+      "Safeguarding and retention workflow",
+    ],
+    publicHref: "/volunteer",
+  },
+  events: {
+    title: "Events",
+    description:
+      "Publish event details and connect real registration and attendance records.",
+    icon: CalendarDays,
+    source: "Published event content plus a durable registration system",
+    requirements: [
+      "Approved event documents",
+      "Registration storage",
+      "Attendance and consent handling",
+    ],
+    publicHref: "/events",
+  },
+  stories: {
+    title: "Stories & blog",
+    description:
+      "Publish consent-approved stories through the configured content system.",
+    icon: BookOpen,
+    source: "Published story documents in the configured Sanity dataset",
+    requirements: [
+      "Editorial review",
+      "Documented subject consent",
+      "Approved images and attribution",
+    ],
+    publicHref: "/stories",
+  },
+  media: {
+    title: "Media library",
+    description:
+      "Use approved assets with traceable usage rights and attribution.",
+    icon: FileImage,
+    source: "Sanity assets with rights, consent, and attribution metadata",
+    requirements: [
+      "Rights metadata",
+      "Consent records where required",
+      "Accessible captions and alt text",
+    ],
+    publicHref: "/gallery",
+  },
+  analytics: {
+    title: "Analytics",
+    description:
+      "Report only measurements produced by a configured analytics source.",
+    icon: BarChart3,
+    source:
+      "A consent-compliant analytics provider joined to verified operational records",
+    requirements: [
+      "Documented metric definitions",
+      "Consent-compliant collection",
+      "Production event validation",
+    ],
+  },
+  settings: {
+    title: "Settings",
+    description:
+      "Review production configuration in the provider dashboards and deployment environment.",
+    icon: Settings,
+    source:
+      "Vercel environment variables and the Clerk, database, payment, email, and Sanity dashboards",
+    requirements: [
+      "Separate production credentials",
+      "Secret rotation ownership",
+      "Health checks and webhook monitoring",
+    ],
+  },
+};
+
+export default async function AdminSectionPage({
+  params,
+}: {
+  params: Promise<{ section: string }>;
+}) {
   const { section } = await params;
-  const data = sections[section] ?? sections.campaigns;
+  const data = sections[section];
+  const editorialContentPublished = isEditorialContentPublished();
+
+  if (!data) {
+    notFound();
+  }
+
   const Icon = data.icon;
+
   return (
-    <div className="mx-auto max-w-[1400px]">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"><div><span className="grid size-11 place-items-center rounded-2xl bg-forest/10 text-forest"><Icon className="size-5" /></span><h1 className="mt-5 font-display text-4xl font-bold tracking-tight">{data.title}</h1><p className="mt-2 text-sm text-ink/45">{data.description}</p></div><button type="button" className="button-primary min-h-11"><Plus className="size-4" /> Add new</button></header>
-      <section className="mt-8 overflow-hidden rounded-3xl border border-ink/8 bg-white shadow-[0_12px_35px_rgba(15,50,43,.05)] dark:bg-white/[0.055]">
-        <div className="flex items-center justify-between border-b border-ink/8 p-5 sm:px-7"><p className="text-sm font-bold">Recent records</p><button type="button" className="text-xs font-bold text-forest">Export CSV</button></div>
-        <div className="overflow-x-auto"><table className="w-full min-w-[680px] text-left"><thead><tr className="border-b border-ink/8 bg-ink/[0.025]">{data.columns.map((column) => <th key={column} scope="col" className="px-7 py-3 text-[0.62rem] font-extrabold uppercase tracking-[0.14em] text-ink/38">{column}</th>)}</tr></thead><tbody>{data.rows.map((row) => <tr key={row[0]} className="border-b border-ink/7 last:border-0 hover:bg-forest/[0.025]">{row.map((cell, index) => <td key={cell} className={`px-7 py-4 text-sm ${index === 0 ? "font-bold" : "text-ink/52"}`}>{index === row.length - 1 ? <span className="rounded-full bg-forest/[0.08] px-2.5 py-1 text-[0.65rem] font-bold text-forest">{cell}</span> : cell}</td>)}</tr>)}</tbody></table></div>
+    <div className="mx-auto max-w-[1200px]">
+      <header>
+        <Link
+          href="/admin"
+          className="inline-flex items-center gap-2 text-xs font-bold text-ink/48 transition hover:text-forest"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" /> Operations
+          overview
+        </Link>
+        <span className="mt-6 grid size-12 place-items-center rounded-2xl bg-forest/10 text-forest">
+          <Icon className="size-6" aria-hidden="true" />
+        </span>
+        <p className="mt-5 text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
+          Verified records only
+        </p>
+        <h1 className="mt-2 font-display text-4xl font-bold tracking-tight sm:text-5xl">
+          {data.title}
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-ink/52">
+          {data.description}
+        </p>
+      </header>
+
+      <section
+        className="mt-8 rounded-3xl border border-ink/8 bg-white p-6 shadow-[0_12px_35px_rgba(15,50,43,.05)] dark:bg-white/[0.055] sm:p-8"
+        aria-labelledby="empty-state-title"
+      >
+        <div className="flex flex-col gap-6 md:flex-row md:items-start">
+          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-amber-500/10 text-amber-700 dark:text-amber-300">
+            <Database className="size-6" aria-hidden="true" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-amber-800 dark:text-amber-300">
+              Data connection required
+            </p>
+            <h2
+              id="empty-state-title"
+              className="mt-2 font-display text-2xl font-bold sm:text-3xl"
+            >
+              No verified records are connected to this view.
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-ink/55">
+              This page remains empty by design. It will not display sample
+              records, invented people, placeholder totals, or inferred statuses
+              while an authenticated production read path is unavailable.
+            </p>
+          </div>
+        </div>
       </section>
+
+      <section
+        className="mt-5 grid gap-5 lg:grid-cols-2"
+        aria-label={`${data.title} connection requirements`}
+      >
+        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-7">
+          <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
+            System of record
+          </p>
+          <h2 className="mt-3 font-display text-xl font-bold">
+            Required source
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-ink/55">{data.source}</p>
+        </article>
+
+        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-7">
+          <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
+            Before enabling
+          </p>
+          <h2 className="mt-3 font-display text-xl font-bold">
+            Connection checklist
+          </h2>
+          <ul className="mt-4 space-y-3 text-sm leading-6 text-ink/55">
+            {data.requirements.map((requirement) => (
+              <li key={requirement} className="flex gap-3">
+                <ShieldCheck
+                  className="mt-0.5 size-4 shrink-0 text-forest"
+                  aria-hidden="true"
+                />
+                {requirement}
+              </li>
+            ))}
+          </ul>
+        </article>
+      </section>
+
+      <div className="mt-5 flex flex-wrap gap-3">
+        <Link
+          href="/api/health?deep=true"
+          target="_blank"
+          rel="noreferrer"
+          className="button-primary min-h-11"
+        >
+          Open system health{" "}
+          <ExternalLink className="size-4" aria-hidden="true" />
+        </Link>
+        {editorialContentPublished && data.publicHref ? (
+          <Link href={data.publicHref} className="button-secondary min-h-11">
+            View public page
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }

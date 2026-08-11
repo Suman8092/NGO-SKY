@@ -3,12 +3,22 @@
 import {
   AlertCircle,
   CheckCircle2,
-  HeartHandshake,
   LoaderCircle,
   LockKeyhole,
   Send,
 } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
+
+import {
+  type ContactSubject,
+  contactSubjectOptions,
+} from "@/lib/contact-subjects";
+import {
+  type DonationFrequency,
+  paymentProviderForFrequency,
+  paymentProviderLabel,
+  type PublicPaymentReadiness,
+} from "@/lib/payment-readiness";
 
 type SubmissionState = {
   kind: "idle" | "submitting" | "success" | "error";
@@ -103,7 +113,7 @@ function SubmitButton({
 export function ContactForm({
   initialSubject = "General enquiry",
 }: {
-  initialSubject?: string;
+  initialSubject?: ContactSubject;
 }) {
   const [state, setState] = useState<SubmissionState>({ kind: "idle" });
 
@@ -124,8 +134,7 @@ export function ContactForm({
       form.reset();
       setState({
         kind: "success",
-        message:
-          "Thank you—your message is with our team. We usually reply within two working days.",
+        message: "Thank you—your message was accepted by the contact service.",
       });
     } catch (error) {
       setState({
@@ -191,15 +200,9 @@ export function ContactForm({
             name="subject"
             required
           >
-            <option>General enquiry</option>
-            <option>Partnerships</option>
-            <option>Donations & receipts</option>
-            <option>Volunteering</option>
-            <option>Events</option>
-            <option>Media & speaking</option>
-            <option>Safeguarding concern</option>
-            <option>Accessibility</option>
-            <option>Impact report</option>
+            {contactSubjectOptions.map((subject) => (
+              <option key={subject}>{subject}</option>
+            ))}
           </select>
         </label>
       </div>
@@ -572,15 +575,23 @@ async function loadRazorpayCheckout(): Promise<RazorpayConstructor> {
 }
 
 export function DonationForm({
+  initialAmount = 2500,
   initialFrequency = "one_time",
-  campaign,
+  paymentReadiness,
 }: {
-  initialFrequency?: "one_time" | "monthly" | "yearly";
-  campaign?: string;
+  initialAmount?: number;
+  initialFrequency?: DonationFrequency;
+  paymentReadiness: PublicPaymentReadiness;
 }) {
   const [state, setState] = useState<SubmissionState>({ kind: "idle" });
-  const [amount, setAmount] = useState(2500);
+  const [amount, setAmount] = useState(initialAmount);
   const [customAmount, setCustomAmount] = useState("");
+  const [frequency, setFrequency] = useState<DonationFrequency>(() => {
+    if (paymentProviderForFrequency(paymentReadiness, initialFrequency)) {
+      return initialFrequency;
+    }
+    return paymentReadiness.oneTimeProvider ? "one_time" : "monthly";
+  });
   const idempotency = useRef<{ fingerprint: string; key: string } | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -597,13 +608,18 @@ export function DonationForm({
     }
     setState({ kind: "submitting" });
     try {
-      const frequency = String(data.get("frequency") ?? initialFrequency);
+      const provider = paymentProviderForFrequency(paymentReadiness, frequency);
+      if (!provider) {
+        throw new Error(
+          "That giving frequency is not available in this deployment. No payment was taken.",
+        );
+      }
       const donorEmail = String(data.get("email") ?? "").trim();
       const fingerprint = JSON.stringify([
         selectedAmount,
         frequency,
+        provider,
         donorEmail,
-        campaign ?? "",
       ]);
       if (idempotency.current?.fingerprint !== fingerprint) {
         idempotency.current = {
@@ -615,14 +631,12 @@ export function DonationForm({
         amount: selectedAmount,
         currency: "INR",
         frequency,
-        provider: "auto",
-        campaignId: campaign || undefined,
+        provider,
         donor: {
           name: String(data.get("name") ?? "").trim(),
           email: donorEmail,
           phone: String(data.get("phone") ?? "").trim() || undefined,
           country: "India",
-          taxId: String(data.get("taxId") ?? "").trim() || undefined,
         },
         anonymous: data.get("anonymous") === "on",
         message: String(data.get("message") ?? "").trim() || undefined,
@@ -673,9 +687,7 @@ export function DonationForm({
             amount: amountMinor,
             currency,
             name: "Ashaaya Foundation",
-            description: campaign
-              ? `Donation to ${campaign.replaceAll("-", " ")}`
-              : "Donation",
+            description: "Donation",
             order_id: orderId,
             prefill: {
               name: donorName,
@@ -696,7 +708,7 @@ export function DonationForm({
                 setState({
                   kind: "success",
                   message:
-                    "Payment was received for verification. Your final confirmation and receipt will be sent by email after signed verification.",
+                    "Payment details were submitted for verification. Keep the payment reference; final status is set only after signed provider confirmation.",
                 });
               } catch (error) {
                 setState({
@@ -738,19 +750,15 @@ export function DonationForm({
       }
       if (payment?.status === "unavailable") {
         setState({
-          kind: "success",
+          kind: "error",
           message:
-            payment.reason === "demo_mode"
-              ? "Your pledge was recorded in demo mode. No payment was taken because live payments are disabled."
-              : payment.reason === "persistence_required"
-                ? "Your pledge was recorded, but live payment requires the secure database connection. No payment was taken."
-                : "Your pledge was recorded, but the payment provider is not configured. No payment was taken.",
+            "Checkout is currently unavailable. No payment was initiated.",
         });
       } else {
         setState({
-          kind: "success",
+          kind: "error",
           message:
-            "Your donation request was received. If payment is still required, follow the secure payment instructions sent to your email.",
+            "The payment provider did not return a checkout action. No payment was initiated.",
         });
       }
     } catch (error) {
@@ -766,41 +774,46 @@ export function DonationForm({
 
   return (
     <form className="space-y-6" onSubmit={submit}>
-      {campaign ? (
-        <div className="flex items-start gap-3 rounded-2xl border border-teal-200 bg-teal-50 p-4 text-sm text-teal-900 dark:border-teal-400/20 dark:bg-teal-400/10 dark:text-teal-100">
-          <HeartHandshake
-            aria-hidden="true"
-            className="mt-0.5 h-5 w-5 shrink-0"
-          />
-          <p>
-            Your gift is designated for{" "}
-            <strong>{campaign.replaceAll("-", " ")}</strong>. If the campaign
-            becomes fully funded, Ashaaya may contact you before redirecting
-            funds to the closest related need.
-          </p>
-        </div>
-      ) : null}
       <fieldset>
         <legend className={labelClass}>Giving frequency</legend>
+        <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
+          One-time gifts use the configured one-time provider. Monthly and
+          yearly gifts require Stripe recurring checkout.
+        </p>
         <div className="mt-3 grid grid-cols-3 gap-2">
           {[
             { value: "one_time", label: "One time" },
             { value: "monthly", label: "Monthly" },
             { value: "yearly", label: "Yearly" },
-          ].map((option) => (
-            <label className="cursor-pointer" key={option.value}>
-              <input
-                className="peer sr-only"
-                defaultChecked={initialFrequency === option.value}
-                name="frequency"
-                type="radio"
-                value={option.value}
-              />
-              <span className="flex min-h-12 items-center justify-center rounded-2xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-600 transition peer-checked:border-teal-700 peer-checked:bg-teal-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-teal-500 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:peer-checked:bg-teal-500 dark:peer-checked:text-slate-950">
-                {option.label}
-              </span>
-            </label>
-          ))}
+          ].map((option) => {
+            const optionFrequency = option.value as DonationFrequency;
+            const provider = paymentProviderForFrequency(
+              paymentReadiness,
+              optionFrequency,
+            );
+            return (
+              <label
+                className={provider ? "cursor-pointer" : "cursor-not-allowed"}
+                key={option.value}
+              >
+                <input
+                  className="peer sr-only"
+                  checked={frequency === optionFrequency}
+                  disabled={!provider}
+                  name="frequency"
+                  onChange={() => setFrequency(optionFrequency)}
+                  type="radio"
+                  value={option.value}
+                />
+                <span className="flex min-h-14 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-2 text-sm font-bold text-slate-600 transition peer-checked:border-teal-700 peer-checked:bg-teal-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-teal-500 peer-disabled:opacity-45 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:peer-checked:bg-teal-500 dark:peer-checked:text-slate-950">
+                  {option.label}
+                  <small className="mt-0.5 text-[0.6rem] font-semibold opacity-65">
+                    {paymentProviderLabel(provider)}
+                  </small>
+                </span>
+              </label>
+            );
+          })}
         </div>
       </fieldset>
       <fieldset>
@@ -855,7 +868,7 @@ export function DonationForm({
           />
         </label>
         <label className={labelClass}>
-          Email for receipt
+          Email address
           <span aria-hidden="true" className="text-red-600">
             {" "}
             *
@@ -869,28 +882,15 @@ export function DonationForm({
           />
         </label>
       </div>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className={labelClass}>
-          Phone <span className="font-normal text-slate-400">(optional)</span>
-          <input
-            autoComplete="tel"
-            className={fieldClass}
-            name="phone"
-            type="tel"
-          />
-        </label>
-        <label className={labelClass}>
-          PAN / Tax ID{" "}
-          <span className="font-normal text-slate-400">
-            (for eligible receipt)
-          </span>
-          <input
-            autoCapitalize="characters"
-            className={fieldClass}
-            name="taxId"
-          />
-        </label>
-      </div>
+      <label className={labelClass}>
+        Phone <span className="font-normal text-slate-400">(optional)</span>
+        <input
+          autoComplete="tel"
+          className={fieldClass}
+          name="phone"
+          type="tel"
+        />
+      </label>
       <label className={labelClass}>
         Message <span className="font-normal text-slate-400">(optional)</span>
         <textarea
@@ -906,9 +906,7 @@ export function DonationForm({
             name="anonymous"
             type="checkbox"
           />
-          <span>
-            Keep my name private in public supporter acknowledgements.
-          </span>
+          <span>Mark this donation as anonymous in the donation record.</span>
         </label>
         <label className="flex items-start gap-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
           <input
@@ -919,7 +917,7 @@ export function DonationForm({
           />
           <span>
             I consent to processing these details for this donation, required
-            compliance checks, and receipt delivery.{" "}
+            payment verification, and compliance checks.{" "}
             <span className="text-red-600" aria-hidden="true">
               *
             </span>
@@ -933,7 +931,7 @@ export function DonationForm({
       />
       <div className="flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-slate-400">
         <LockKeyhole aria-hidden="true" className="h-3.5 w-3.5" />
-        Payment details are handled by an approved payment provider.
+        Payment details are entered in the selected provider&apos;s checkout.
       </div>
       <SubmissionNotice state={state} />
     </form>

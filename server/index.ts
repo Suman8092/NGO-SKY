@@ -9,6 +9,7 @@ import helmet from "helmet";
 import { type ZodTypeAny, type z } from "zod";
 
 import { fetchPublishedContent } from "../src/lib/server/cms/sanity";
+import { isEditorialContentPublished } from "../src/lib/content-config";
 import { getServerEnv } from "../src/lib/server/env";
 import { ApiError, safeLogError } from "../src/lib/server/errors";
 import {
@@ -177,6 +178,14 @@ export function createServer(): express.Express {
 
   app.get("/api/content", async (request, response, next) => {
     try {
+      if (!isEditorialContentPublished()) {
+        throw new ApiError(
+          503,
+          "CONTENT_UNPUBLISHED",
+          "Editorial content is not available until verification is complete.",
+          { retryAfter: 300 },
+        );
+      }
       const query = parse(contentQuerySchema, request.query);
       const result = await fetchPublishedContent(query.type, query.limit);
       response.setHeader(

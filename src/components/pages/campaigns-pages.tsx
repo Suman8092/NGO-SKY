@@ -720,9 +720,9 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               </div>
               <Link
                 className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-amber-400 px-6 py-3 text-sm font-extrabold text-slate-950 transition hover:-translate-y-0.5 hover:bg-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-                href={`/donate?campaign=${campaign.slug}`}
+                href="/contact?subject=campaign-support"
               >
-                Support this campaign{" "}
+                Ask about supporting this campaign{" "}
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </Link>
               <a
@@ -737,8 +737,8 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                   aria-hidden="true"
                   className="mt-0.5 h-4 w-4 shrink-0 text-teal-700 dark:text-teal-300"
                 />
-                Secure giving and clear campaign reporting. Eligible donors
-                receive tax documentation.
+                Ask the team which verified support options are currently
+                available for this work.
               </p>
             </aside>
           </div>
@@ -915,10 +915,10 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </Link>
       </div>
       <CtaBand
-        description={`Your contribution to ${campaign.title} joins a community committed to practical, accountable change.`}
+        description={`Ask the team about verified ways to support ${campaign.title}.`}
         primaryAction={{
-          href: `/donate?campaign=${campaign.slug}`,
-          label: "Donate to this campaign",
+          href: "/contact?subject=campaign-support",
+          label: "Ask about campaign support",
         }}
         title="Help move this work forward."
       />

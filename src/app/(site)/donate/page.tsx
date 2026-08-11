@@ -1,28 +1,25 @@
 import type { Metadata } from "next";
 
 import { DonatePage } from "@/components/pages/action-pages";
-import {
-  hasMongoConfig,
-  hasRazorpayConfig,
-  hasStripeConfig,
-} from "@/lib/server/env";
+import { getPublicPaymentReadiness } from "@/lib/server/public-payment-readiness";
 
 export const metadata: Metadata = {
   title: "Donate",
   description:
-    "Make a secure one-time, monthly, or annual gift to community-led Ashaaya Foundation programs and campaigns.",
+    "Check whether verified online giving is available for Ashaaya Foundation.",
 };
 
 type Props = {
   searchParams: Promise<{
     frequency?: string | string[];
-    campaign?: string | string[];
+    amount?: string | string[];
     status?: string | string[];
   }>;
 };
 
 export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
+  const paymentReadiness = getPublicPaymentReadiness();
   const rawFrequency = Array.isArray(params.frequency)
     ? params.frequency[0]
     : params.frequency;
@@ -30,20 +27,25 @@ export default async function Page({ searchParams }: Props) {
     rawFrequency === "monthly" || rawFrequency === "yearly"
       ? rawFrequency
       : "one_time";
-  const campaign = Array.isArray(params.campaign)
-    ? params.campaign[0]
-    : params.campaign;
+  const rawAmount = Array.isArray(params.amount)
+    ? params.amount[0]
+    : params.amount;
+  const parsedAmount = Number(rawAmount);
+  const amount =
+    Number.isFinite(parsedAmount) &&
+    parsedAmount >= 100 &&
+    parsedAmount <= 1_000_000
+      ? parsedAmount
+      : undefined;
   const rawStatus = Array.isArray(params.status)
     ? params.status[0]
     : params.status;
   return (
     <DonatePage
-      campaignSlug={campaign}
       checkoutCancelled={rawStatus === "cancelled"}
       frequency={frequency}
-      paymentsUnavailable={
-        !hasMongoConfig() || (!hasStripeConfig() && !hasRazorpayConfig())
-      }
+      initialAmount={amount}
+      paymentReadiness={paymentReadiness}
     />
   );
 }

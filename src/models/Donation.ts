@@ -1,6 +1,7 @@
 import { type Model, type Types, Schema, model, models } from "mongoose";
 
-export type DonationStatus = "pending" | "processing" | "paid" | "failed" | "refunded" | "cancelled";
+export type DonationStatus =
+  "pending" | "processing" | "paid" | "failed" | "refunded" | "cancelled";
 export type PaymentProvider = "stripe" | "razorpay";
 
 export interface DonationDocument {
@@ -9,13 +10,11 @@ export interface DonationDocument {
   currency: "INR" | "USD" | "EUR" | "GBP";
   frequency: "one_time" | "monthly" | "yearly";
   provider: PaymentProvider;
-  campaignId?: string;
   donor: {
     name: string;
     email: string;
     phone?: string;
     country?: string;
-    taxIdLast4?: string;
   };
   anonymous: boolean;
   message?: string;
@@ -36,23 +35,42 @@ export interface DonationDocument {
 const donationSchema = new Schema<DonationDocument>(
   {
     amountMinor: { type: Number, required: true, min: 100, max: 1_000_000_000 },
-    currency: { type: String, enum: ["INR", "USD", "EUR", "GBP"], required: true },
-    frequency: { type: String, enum: ["one_time", "monthly", "yearly"], required: true },
+    currency: {
+      type: String,
+      enum: ["INR", "USD", "EUR", "GBP"],
+      required: true,
+    },
+    frequency: {
+      type: String,
+      enum: ["one_time", "monthly", "yearly"],
+      required: true,
+    },
     provider: { type: String, enum: ["stripe", "razorpay"], required: true },
-    campaignId: { type: String, trim: true, maxlength: 100 },
     donor: {
       name: { type: String, required: true, trim: true, maxlength: 120 },
-      email: { type: String, required: true, trim: true, lowercase: true, maxlength: 254 },
+      email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        maxlength: 254,
+      },
       phone: { type: String, trim: true, maxlength: 20 },
       country: { type: String, trim: true, maxlength: 100 },
-      taxIdLast4: { type: String, maxlength: 4, select: false },
     },
     anonymous: { type: Boolean, required: true, default: false },
     message: { type: String, trim: true, maxlength: 500 },
     consent: { type: Boolean, required: true },
     status: {
       type: String,
-      enum: ["pending", "processing", "paid", "failed", "refunded", "cancelled"],
+      enum: [
+        "pending",
+        "processing",
+        "paid",
+        "failed",
+        "refunded",
+        "cancelled",
+      ],
       default: "pending",
       required: true,
     },

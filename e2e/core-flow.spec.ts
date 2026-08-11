@@ -6,10 +6,10 @@ test("homepage exposes the primary donation journey", async ({ page }) => {
     page.getByRole("heading", { level: 1, name: /hope should not wait/i }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /make hope happen/i }),
+    page.getByRole("link", { name: /support our work/i }),
   ).toBeVisible();
   await page
-    .getByRole("link", { name: /make hope happen/i })
+    .getByRole("link", { name: /support our work/i })
     .first()
     .click();
   await expect(page).toHaveURL(/\/donate/);

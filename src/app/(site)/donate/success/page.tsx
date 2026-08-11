@@ -40,7 +40,7 @@ export default async function Page({ searchParams }: Props) {
           { label: "Donate", href: "/donate" },
           { label: "Donation status" },
         ]}
-        description="Stripe has returned you to Ashaaya. A signed notification from the payment provider—not the browser redirect—sets the final donation status."
+        description="Your payment provider has returned you to Ashaaya. A signed provider notification—not the browser redirect—sets the final donation status."
         eyebrow="Secure payment return"
         title="We’re confirming your gift."
       />
@@ -57,7 +57,7 @@ export default async function Page({ searchParams }: Props) {
               items={[
                 "The provider sends a signed event to Ashaaya.",
                 "The server verifies it before changing donation status.",
-                "A confirmation email follows only after verified payment.",
+                "This page reads the server-confirmed status using the donation reference.",
               ]}
             />
           </div>

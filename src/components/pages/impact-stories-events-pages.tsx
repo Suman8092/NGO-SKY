@@ -346,14 +346,14 @@ export function ImpactPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-teal-700 px-6 py-3 text-sm font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950"
-              href="/contact?subject=impact-report"
+              href="/contact?subject=impact"
             >
               Request the report{" "}
               <Download aria-hidden="true" className="h-4 w-4" />
             </Link>
             <Link
               className="inline-flex min-h-12 items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-bold text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/15 dark:text-white"
-              href="/contact?subject=data-question"
+              href="/contact?subject=impact"
             >
               Ask about our data
             </Link>
@@ -818,7 +818,7 @@ export function EventsPage() {
           />
           <Link
             className="inline-flex items-center gap-2 text-sm font-bold text-teal-700 dark:text-teal-300"
-            href="/contact?subject=event-updates"
+            href="/contact?subject=events"
           >
             <CalendarDays aria-hidden="true" className="h-4 w-4" />
             Get event updates
@@ -862,7 +862,7 @@ export function EventsPage() {
                 </h3>
                 <Link
                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-teal-800 dark:text-slate-300 dark:hover:text-teal-200"
-                  href="/contact?subject=event-resource"
+                  href="/contact?subject=events"
                 >
                   <CirclePlay aria-hidden="true" className="h-4 w-4" />
                   Request the recap

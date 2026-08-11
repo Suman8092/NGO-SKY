@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 
 import { ContactPage } from "@/components/pages/action-pages";
+import { hasManagedSubmissionWorkflow } from "@/lib/server/env";
 
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Contact Ashaaya Foundation about programs, partnerships, donations, volunteering, events, accessibility, or safeguarding.",
+    "Check whether the managed Ashaaya Foundation contact service is available.",
 };
 
 type Props = {
@@ -20,5 +21,10 @@ export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
   const value =
     params.subject ?? params.interest ?? (params.event ? "events" : undefined);
-  return <ContactPage subject={Array.isArray(value) ? value[0] : value} />;
+  return (
+    <ContactPage
+      subject={Array.isArray(value) ? value[0] : value}
+      submissionsAvailable={hasManagedSubmissionWorkflow()}
+    />
+  );
 }

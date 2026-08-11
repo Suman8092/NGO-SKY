@@ -23,7 +23,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import { EmergencyBanner } from "@/components/home/emergency-banner";
 import { Faq } from "@/components/home/faq";
 import { GlobeLazy } from "@/components/home/globe-lazy";
 import { Hero } from "@/components/home/hero";
@@ -32,6 +31,10 @@ import { Counter } from "@/components/motion/counter";
 import { Reveal } from "@/components/motion/reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { isClerkConfigured } from "@/lib/auth-config";
+import { isEditorialContentPublished } from "@/lib/content-config";
+import type { PublicPaymentReadiness } from "@/lib/payment-readiness";
+import { getPublicPaymentReadiness } from "@/lib/server/public-payment-readiness";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -213,9 +216,21 @@ const events = [
 ];
 
 export default function HomePage() {
+  const clerkEnabled = isClerkConfigured();
+  const paymentReadiness = getPublicPaymentReadiness();
+
+  if (!isEditorialContentPublished()) {
+    return (
+      <ProductionHomePage
+        clerkEnabled={clerkEnabled}
+        paymentReadiness={paymentReadiness}
+      />
+    );
+  }
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader clerkEnabled={clerkEnabled} editorialContentPublished />
       <main id="main-content" tabIndex={-1}>
         <Hero />
 
@@ -500,10 +515,10 @@ export default function HomePage() {
                           {campaign.days} days left
                         </span>
                         <Link
-                          href={`/donate?campaign=${campaign.slug}`}
+                          href="/contact?subject=campaign-support"
                           className="text-xs font-extrabold text-forest"
                         >
-                          Donate now
+                          Ask about support
                         </Link>
                       </div>
                     </div>
@@ -513,8 +528,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        <EmergencyBanner />
 
         <section
           className="section-space content-auto"
@@ -675,7 +688,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <DonationCalculator />
+        <DonationCalculator paymentReadiness={paymentReadiness} />
 
         <section
           className="section-space content-auto"
@@ -712,7 +725,7 @@ export default function HomePage() {
                     Find your role <ArrowRight className="size-4" />
                   </Link>
                   <Link
-                    href="/contact?subject=skills"
+                    href="/contact?subject=volunteering"
                     className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#17231f]/20 px-6 text-sm font-bold transition hover:bg-white/20"
                   >
                     Offer a skill
@@ -840,6 +853,178 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+      </main>
+      <SiteFooter />
+    </>
+  );
+}
+
+function ProductionStatusHero() {
+  return (
+    <section className="relative isolate overflow-hidden bg-[#071c18] px-5 pb-24 pt-40 text-white sm:pb-28 sm:pt-48">
+      <div
+        aria-hidden="true"
+        className="absolute -right-40 -top-40 size-[34rem] rounded-full bg-forest/30 blur-[120px]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute -bottom-52 left-1/4 size-[32rem] rounded-full bg-amber-400/10 blur-[130px]"
+      />
+      <div className="relative mx-auto max-w-5xl">
+        <span className="grid size-14 place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-[#70d5b3]">
+          <ShieldCheck className="size-7" aria-hidden="true" />
+        </span>
+        <p className="mt-9 text-xs font-extrabold uppercase tracking-[0.2em] text-[#70d5b3]">
+          Production publication safeguard
+        </p>
+        <h1 className="mt-5 max-w-4xl font-display text-5xl font-semibold leading-[0.96] tracking-[-0.055em] sm:text-7xl">
+          Public information is awaiting verified release.
+        </h1>
+        <p className="mt-7 max-w-2xl text-base leading-8 text-white/62 sm:text-lg">
+          Organisation claims, campaign details, identities, and figures stay
+          private until their supporting records are approved. Each available
+          online action reports its own current readiness.
+        </p>
+        <div className="mt-9 flex flex-wrap gap-3">
+          <Link
+            href="/contact"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#071c18]"
+          >
+            Check contact availability
+          </Link>
+          <Link
+            href="/donate"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/18 bg-white/[0.06] px-6 py-3 text-sm font-bold text-white"
+          >
+            Check donation availability
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProductionDonationStatus({
+  paymentReadiness,
+}: {
+  paymentReadiness: PublicPaymentReadiness;
+}) {
+  if (paymentReadiness.oneTimeProvider || paymentReadiness.recurringProvider) {
+    return <DonationCalculator paymentReadiness={paymentReadiness} />;
+  }
+
+  return (
+    <section
+      className="section-space bg-[#0b2c25] text-white"
+      aria-labelledby="production-donation-status"
+    >
+      <div className="page-shell">
+        <ShieldCheck className="size-8 text-[#70d5b3]" aria-hidden="true" />
+        <p className="mt-7 text-xs font-extrabold uppercase tracking-[0.18em] text-[#70d5b3]">
+          Online giving status
+        </p>
+        <h2
+          id="production-donation-status"
+          className="mt-4 max-w-3xl font-display text-4xl font-semibold tracking-[-0.045em] sm:text-5xl"
+        >
+          Online checkout is not active.
+        </h2>
+        <p className="mt-5 max-w-2xl text-sm leading-7 text-white/58">
+          No amount, pledge, or payment can be submitted until the launch flag,
+          durable records, safe redirect origin, live provider, and signed
+          webhook configuration are ready.
+        </p>
+        <Link
+          href="/contact"
+          className="mt-7 inline-flex min-h-11 items-center justify-center rounded-full border border-white/16 bg-white/[0.07] px-5 text-sm font-bold text-white"
+        >
+          Check contact availability
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function ProductionHomePage({
+  clerkEnabled,
+  paymentReadiness,
+}: {
+  clerkEnabled: boolean;
+  paymentReadiness: PublicPaymentReadiness;
+}) {
+  return (
+    <>
+      <SiteHeader
+        clerkEnabled={clerkEnabled}
+        editorialContentPublished={false}
+      />
+      <main id="main-content" tabIndex={-1}>
+        <ProductionStatusHero />
+
+        <section
+          id="impact"
+          className="section-space bg-paper"
+          aria-labelledby="production-home-title"
+        >
+          <div className="page-shell">
+            <p className="eyebrow">Production publication status</p>
+            <h2
+              id="production-home-title"
+              className="display-title mt-6 max-w-4xl"
+            >
+              Verified organisation content is not published yet.
+            </h2>
+            <p className="mt-6 max-w-3xl text-base leading-8 text-ink/58">
+              This deployment checks each public action separately. Campaigns,
+              figures, stories, and organisation records remain unavailable
+              until their source material is approved for publication.
+            </p>
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {(
+                [
+                  [
+                    BadgeCheck,
+                    "Editorial review pending",
+                    "Draft identities, claims, and figures are withheld from the production site.",
+                  ],
+                  [
+                    HandHeart,
+                    "Contact readiness",
+                    "The contact form appears only when its managed storage and notification workflow is enabled.",
+                  ],
+                  [
+                    ShieldCheck,
+                    "Fail-closed services",
+                    "Authentication and payments remain unavailable until every required production gate passes.",
+                  ],
+                ] as const
+              ).map(([Icon, title, description]) => (
+                <article
+                  key={title}
+                  className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]"
+                >
+                  <Icon className="size-6 text-forest" aria-hidden="true" />
+                  <h3 className="mt-6 font-display text-xl font-bold">
+                    {title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-ink/52">
+                    {description}
+                  </p>
+                </article>
+              ))}
+            </div>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link href="/contact" className="button-primary min-h-11">
+                Check contact availability
+              </Link>
+              <Link href="/donate" className="button-secondary min-h-11">
+                Check donation availability
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <ProductionDonationStatus paymentReadiness={paymentReadiness} />
       </main>
       <SiteFooter />
     </>
