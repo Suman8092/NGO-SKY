@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_CONTENT_VERIFIED:
+      process.env.NEXT_PUBLIC_CONTENT_VERIFIED ?? "true",
+    NEXT_PUBLIC_CONTENT_RELEASE_ID:
+      process.env.NEXT_PUBLIC_CONTENT_RELEASE_ID ?? "skymeredian-release-2026-v1",
+  },
   poweredByHeader: false,
   compress: true,
   reactStrictMode: true,
