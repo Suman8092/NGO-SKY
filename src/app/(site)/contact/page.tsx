@@ -6,7 +6,7 @@ import { hasManagedSubmissionWorkflow } from "@/lib/server/env";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Check whether the managed Ashaaya Foundation contact service is available.",
+    "Check whether the managed Skymeredian Foundation contact service is available.",
 };
 
 type Props = {

@@ -174,6 +174,16 @@ function stringValue(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined;
 }
 
+function numberValue(value: unknown): number | undefined {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0
+    ? value
+    : undefined;
+}
+
+export function razorpayWebhookEventType(payload: unknown): string {
+  return stringValue(objectValue(payload)?.event) ?? "unknown";
+}
+
 export function razorpayWebhookToDonationUpdate(
   payload: unknown,
 ): DonationPaymentUpdate | null {
@@ -191,38 +201,59 @@ export function razorpayWebhookToDonationUpdate(
     stringValue(order?.id) ??
     stringValue(refund?.order_id);
   const paymentId = stringValue(payment?.id) ?? stringValue(refund?.payment_id);
+  const amountMinor =
+    numberValue(payment?.amount) ??
+    numberValue(order?.amount_paid) ??
+    numberValue(order?.amount);
+  const currency =
+    stringValue(payment?.currency) ??
+    stringValue(order?.currency) ??
+    stringValue(refund?.currency);
 
   if (event === "payment.captured" || event === "order.paid") {
     return {
+      provider: "razorpay",
       donationId,
       externalOrderId: orderId,
       externalPaymentId: paymentId,
       status: "paid",
+      amountMinor,
+      currency,
     };
   }
   if (event === "payment.authorized") {
     return {
+      provider: "razorpay",
       donationId,
       externalOrderId: orderId,
       externalPaymentId: paymentId,
       status: "processing",
+      amountMinor,
+      currency,
     };
   }
   if (event === "payment.failed") {
     return {
+      provider: "razorpay",
       donationId,
       externalOrderId: orderId,
       externalPaymentId: paymentId,
       status: "failed",
+      amountMinor,
+      currency,
       failureCode: stringValue(payment?.error_code),
     };
   }
   if (event === "refund.processed") {
     return {
+      provider: "razorpay",
       donationId,
       externalOrderId: orderId,
       externalPaymentId: paymentId,
       status: "refunded",
+      currency,
+      refundAmountMinor: numberValue(refund?.amount),
+      refundMode: "delta",
     };
   }
   return null;

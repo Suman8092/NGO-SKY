@@ -113,12 +113,6 @@ beforeEach(() => {
     amountMinor: 50_000,
     currency: "INR",
   });
-  mocks.createStripeCheckout.mockResolvedValue({
-    provider: "stripe",
-    status: "requires_action",
-    checkoutUrl: "https://checkout.stripe.com/session",
-    sessionId: "cs_test_session",
-  });
   mocks.markDonationPaymentCreated.mockResolvedValue(storedDonation);
 });
 
@@ -167,7 +161,7 @@ describe("donation launch readiness", () => {
     expect(mocks.storeDonation).not.toHaveBeenCalled();
   });
 
-  it("requires Razorpay for one-time INR before persistence", async () => {
+  it("rejects Stripe checkout before persistence", async () => {
     stubEnvironment();
     const { createDonationIntent } = await import("./donations");
 
@@ -178,8 +172,7 @@ describe("donation launch readiness", () => {
       ),
     ).rejects.toMatchObject({
       status: 422,
-      code: "PAYMENT_PROVIDER_REQUIRED",
-      details: { requiredProvider: "razorpay" },
+      code: "STRIPE_CHECKOUT_DISABLED",
     });
     expect(mocks.storeDonation).not.toHaveBeenCalled();
   });
@@ -198,31 +191,42 @@ describe("donation launch readiness", () => {
     expect(mocks.storeDonation).not.toHaveBeenCalled();
   });
 
-  it("routes recurring donations through Stripe", async () => {
+  it("rejects recurring donations instead of routing them through Stripe", async () => {
     stubEnvironment();
-    const recurringRecord = {
-      ...storedDonation,
-      frequency: "monthly" as const,
-      provider: "stripe" as const,
-    };
-    mocks.storeDonation.mockResolvedValueOnce({
-      record: recurringRecord,
-      persistence: "mongodb",
-      created: true,
-    });
     const { createDonationIntent } = await import("./donations");
 
-    const result = await createDonationIntent(
-      {
-        ...oneTimeInrDonation,
-        frequency: "monthly",
-      },
-      metadata,
-    );
+    await expect(
+      createDonationIntent(
+        {
+          ...oneTimeInrDonation,
+          frequency: "monthly",
+        },
+        metadata,
+      ),
+    ).rejects.toMatchObject({
+      status: 422,
+      code: "DONATION_FREQUENCY_UNSUPPORTED",
+    });
 
-    expect(mocks.createStripeCheckout).toHaveBeenCalledWith(recurringRecord);
+    expect(mocks.storeDonation).not.toHaveBeenCalled();
     expect(mocks.createRazorpayOrder).not.toHaveBeenCalled();
-    expect(result.payment).toMatchObject({ provider: "stripe" });
+    expect(mocks.createStripeCheckout).not.toHaveBeenCalled();
+  });
+
+  it("rejects foreign-currency donations before persistence", async () => {
+    stubEnvironment();
+    const { createDonationIntent } = await import("./donations");
+
+    await expect(
+      createDonationIntent(
+        { ...oneTimeInrDonation, currency: "USD" },
+        metadata,
+      ),
+    ).rejects.toMatchObject({
+      status: 422,
+      code: "DONATION_CURRENCY_UNSUPPORTED",
+    });
+    expect(mocks.storeDonation).not.toHaveBeenCalled();
   });
 });
 

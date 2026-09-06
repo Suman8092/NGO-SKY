@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { articles } from "@/content/site";
 
-export const metadata: Metadata = { title: "Insights & field notes", description: "Research, field learning, perspectives, and accountable updates from Ashaaya Foundation." };
+export const metadata: Metadata = { title: "Insights & field notes", description: "Research, field learning, perspectives, and accountable updates from Skymeredian Foundation." };
 
 export default function InsightsPage() {
   const featured = articles.filter((article) => article.featured);

@@ -2,12 +2,6 @@ import type { DonationStatus } from "../../../models";
 
 export type CheckoutResult =
   | {
-      provider: "stripe";
-      status: "requires_action";
-      checkoutUrl: string;
-      sessionId: string;
-    }
-  | {
       provider: "razorpay";
       status: "requires_action";
       orderId: string;
@@ -16,12 +10,13 @@ export type CheckoutResult =
       currency: string;
     }
   | {
-      provider: "stripe" | "razorpay";
+      provider: "razorpay";
       status: "unavailable";
       reason: "demo_mode" | "not_configured" | "persistence_required";
     };
 
 export type DonationPaymentUpdate = {
+  provider: "stripe" | "razorpay";
   donationId?: string;
   externalOrderId?: string;
   externalSessionId?: string;
@@ -30,5 +25,9 @@ export type DonationPaymentUpdate = {
     DonationStatus,
     "processing" | "paid" | "failed" | "refunded"
   >;
+  amountMinor?: number;
+  currency?: string;
+  refundAmountMinor?: number;
+  refundMode?: "delta" | "total";
   failureCode?: string;
 };

@@ -16,7 +16,7 @@ export default function SignInPage() {
         <Link href="/" className="flex items-center gap-3">
           <BrandMark className="text-[#6bd0ae]" />
           <span className="font-display font-extrabold uppercase">
-            Ashaaya Foundation
+            Skymeredian Foundation
           </span>
         </Link>
         <div>

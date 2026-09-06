@@ -6,4 +6,9 @@ export {
   type PaymentProvider,
 } from "./Donation";
 export { NewsletterSubscriberModel } from "./NewsletterSubscriber";
+export {
+  PaymentWebhookEventModel,
+  type PaymentWebhookEventDocument,
+  type PaymentWebhookEventStatus,
+} from "./PaymentWebhookEvent";
 export { VolunteerApplicationModel } from "./VolunteerApplication";

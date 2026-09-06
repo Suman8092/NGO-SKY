@@ -9,7 +9,7 @@ const questions = [
   ["Are receipts or tax documents available?", "This website does not promise a receipt or tax document. Ask through a verified contact channel about current documentation before donating; the online form does not collect PAN details."],
   ["Can I choose where my gift is used?", "You can fund a featured campaign or program. Unrestricted gifts go to the highest verified need, which gives field teams the flexibility to respond quickly and sustain less-visible essentials."],
   ["How do you verify impact figures?", "Field teams log attendance, service delivery, procurement, and participant feedback. Quarterly reconciliations, outcome samples, partner reviews, and annual external audits turn those records into published figures."],
-  ["Can my company or team partner with Ashaaya?", "Yes. We design multi-year program partnerships, employee giving, skills-based volunteering, and transparent reporting packages around shared outcomes—not logo placement alone."],
+  ["Can my company or team partner with Skymeredian?", "Yes. We design multi-year program partnerships, employee giving, skills-based volunteering, and transparent reporting packages around shared outcomes—not logo placement alone."],
 ] as const;
 
 export function Faq() {

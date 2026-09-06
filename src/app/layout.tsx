@@ -26,17 +26,17 @@ const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 const siteUrl = configuredSiteUrl || "http://localhost:3000";
 const editorialContentPublished = isEditorialContentPublished();
 const defaultTitle = editorialContentPublished
-  ? "Ashaaya Foundation — Hope, made practical"
-  : "Ashaaya Foundation — Publication status";
+  ? "Skymeredian Foundation — Hope, made practical"
+  : "Skymeredian Foundation — Publication status";
 const metadataDescription = editorialContentPublished
-  ? "Ashaaya Foundation website, with reviewed organisation information and available services."
-  : "Publication and online-service availability for the Ashaaya Foundation website.";
+  ? "Skymeredian Foundation website, with reviewed organisation information and available services."
+  : "Publication and online-service availability for the Skymeredian Foundation website.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: defaultTitle,
-    template: "%s · Ashaaya Foundation",
+    template: "%s · Skymeredian Foundation",
   },
   description: metadataDescription,
   keywords: editorialContentPublished
@@ -47,12 +47,12 @@ export const metadata: Metadata = {
         "education nonprofit",
         "climate resilience",
       ]
-    : ["Ashaaya Foundation", "website publication status"],
+    : ["Skymeredian Foundation", "website publication status"],
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
-    siteName: "Ashaaya Foundation",
+    siteName: "Skymeredian Foundation",
     title: defaultTitle,
     description: metadataDescription,
   },
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     description: metadataDescription,
   },
   category: "nonprofit",
-  creator: "Ashaaya Foundation",
+  creator: "Skymeredian Foundation",
   manifest: "/manifest.webmanifest",
 };
 
@@ -80,7 +80,7 @@ export const viewport: Viewport = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "Ashaaya Foundation",
+  name: "Skymeredian Foundation",
   url: siteUrl,
 };
 
@@ -108,7 +108,7 @@ export default function RootLayout({
           {children}
         </AppProviders>
         <Script
-          id="ashaaya-organization-schema"
+          id="skymeredian-organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema),

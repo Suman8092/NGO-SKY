@@ -6,6 +6,7 @@ const managedVariables = [
   "DEMO_MODE",
   "DONATIONS_ENABLED",
   "PUBLIC_SUBMISSIONS_ENABLED",
+  "NEWSLETTER_ENABLED",
   "MONGODB_URI",
   "NEXT_PUBLIC_SITE_URL",
   "STRIPE_SECRET_KEY",
@@ -172,8 +173,9 @@ describe("production integration readiness", () => {
       DEMO_MODE: "false",
       PUBLIC_SUBMISSIONS_ENABLED: "true",
       MONGODB_URI: "mongodb://localhost:27017/test",
+      NEXT_PUBLIC_SITE_URL: "https://example.org",
       RESEND_API_KEY: "re_1234567890",
-      RESEND_FROM_EMAIL: "Ashaaya <noreply@example.org>",
+      RESEND_FROM_EMAIL: "Skymeredian Foundation <noreply@example.org>",
       CONTACT_NOTIFICATION_EMAIL: "team@example.org",
     });
 
@@ -182,5 +184,47 @@ describe("production integration readiness", () => {
 
     expect(isPublicSubmissionsEnabled()).toBe(true);
     expect(hasManagedSubmissionWorkflow()).toBe(true);
+  });
+
+  it("keeps newsletter signup behind its separate launch gate", async () => {
+    stubEnvironment({
+      NODE_ENV: "production",
+      VERCEL_ENV: "production",
+      DEMO_MODE: "false",
+      PUBLIC_SUBMISSIONS_ENABLED: "true",
+      MONGODB_URI: "mongodb://localhost:27017/test",
+      NEXT_PUBLIC_SITE_URL: "https://example.org",
+      RESEND_API_KEY: "re_1234567890",
+      RESEND_FROM_EMAIL: "Skymeredian Foundation <noreply@example.org>",
+      CONTACT_NOTIFICATION_EMAIL: "team@example.org",
+    });
+    const { isNewsletterWorkflowEnabled } = await import("./env");
+
+    expect(isNewsletterWorkflowEnabled()).toBe(false);
+
+    vi.resetModules();
+    vi.stubEnv("NEWSLETTER_ENABLED", "true");
+    const enabledEnv = await import("./env");
+    expect(enabledEnv.isNewsletterWorkflowEnabled()).toBe(true);
+  });
+
+  it("does not generate localhost email links from a Vercel preview", async () => {
+    stubEnvironment({
+      NODE_ENV: "production",
+      VERCEL_ENV: "preview",
+      DEMO_MODE: "false",
+      PUBLIC_SUBMISSIONS_ENABLED: "true",
+      MONGODB_URI: "mongodb://localhost:27017/test",
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
+      RESEND_API_KEY: "re_1234567890",
+      RESEND_FROM_EMAIL: "Skymeredian Foundation <noreply@example.org>",
+      CONTACT_NOTIFICATION_EMAIL: "team@example.org",
+    });
+
+    const { getVerifiedSiteOrigin, isPublicSubmissionsEnabled } =
+      await import("./env");
+
+    expect(getVerifiedSiteOrigin()).toBeNull();
+    expect(isPublicSubmissionsEnabled()).toBe(false);
   });
 });

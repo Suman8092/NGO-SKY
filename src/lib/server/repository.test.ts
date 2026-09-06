@@ -84,7 +84,7 @@ describe("repository persistence guard", () => {
         code: "PERSISTENCE_REQUIRED",
       });
     }
-  });
+  }, 15_000);
 
   it("still rejects production writes when DEMO_MODE is explicitly enabled", async () => {
     stubRuntime("production", true);

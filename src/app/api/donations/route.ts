@@ -1,3 +1,6 @@
+import { auth } from "@clerk/nextjs/server";
+
+import { isClerkConfigured } from "@/lib/auth-config";
 import {
   errorResponse,
   getClientIp,
@@ -15,6 +18,12 @@ import { donationSchema } from "@/lib/server/validation";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+async function optionalAccountUserId(): Promise<string | undefined> {
+  if (!isClerkConfigured()) return undefined;
+  const { userId } = await auth();
+  return userId ?? undefined;
+}
+
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
   try {
@@ -25,10 +34,12 @@ export async function POST(request: Request): Promise<Response> {
       windowMs: 10 * 60_000,
     });
     const input = await parseJsonRequest(request, donationSchema);
+    const accountUserId = await optionalAccountUserId();
     const result = await createDonationIntent(input, {
       requestId,
       ip,
       userAgent: request.headers.get("user-agent") ?? undefined,
+      accountUserId,
     });
     const donation = result.record;
     return jsonSuccess(

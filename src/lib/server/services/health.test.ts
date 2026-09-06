@@ -14,6 +14,7 @@ function stubRuntime(
   vi.stubEnv("DEMO_MODE", demoMode ? "true" : "false");
   vi.stubEnv("DONATIONS_ENABLED", "false");
   vi.stubEnv("PUBLIC_SUBMISSIONS_ENABLED", "false");
+  vi.stubEnv("NEWSLETTER_ENABLED", "false");
   vi.stubEnv("MONGODB_URI", mongoUri);
   vi.stubEnv("STRIPE_SECRET_KEY", "");
   vi.stubEnv("STRIPE_WEBHOOK_SECRET", "");
@@ -77,5 +78,17 @@ describe("production health", () => {
     expect(snapshot.body.configuration.invalidFields).toContain(
       "RAZORPAY_KEY_ID",
     );
+  });
+
+  it("never reports the disabled Stripe checkout path as ready", async () => {
+    stubRuntime("test", "mongodb://localhost:27017/test");
+    vi.stubEnv("DONATIONS_ENABLED", "true");
+    vi.stubEnv("STRIPE_SECRET_KEY", "sk_test_1234567890123456");
+    vi.stubEnv("STRIPE_WEBHOOK_SECRET", "whsec_1234567890123456");
+    const { getHealthSnapshot } = await import("./health");
+
+    const snapshot = await getHealthSnapshot();
+
+    expect(snapshot.body.integrations.stripe).toBe("disabled");
   });
 });

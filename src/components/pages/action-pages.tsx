@@ -110,7 +110,7 @@ export function VolunteerPage({
       <PageHero
         breadcrumbs={[{ label: "Volunteer" }]}
         description="Bring your time, care, and capability to work that communities have already said matters—and receive the support to contribute well."
-        eyebrow="Volunteer with Ashaaya"
+        eyebrow="Volunteer with Skymeredian"
         primaryAction={{ href: "#roles", label: "Explore open roles" }}
         secondaryAction={
           submissionsAvailable
@@ -476,22 +476,16 @@ export function ContactPage({
 }
 
 export function DonatePage({
-  frequency = "one_time",
   checkoutCancelled = false,
   initialAmount,
   paymentReadiness,
 }: {
-  frequency?: "one_time" | "monthly" | "yearly";
   checkoutCancelled?: boolean;
   initialAmount?: number;
   paymentReadiness: PublicPaymentReadiness;
 }) {
-  const paymentsUnavailable =
-    !paymentReadiness.oneTimeProvider && !paymentReadiness.recurringProvider;
+  const paymentsUnavailable = !paymentReadiness.oneTimeProvider;
   const oneTimeLabel = paymentProviderLabel(paymentReadiness.oneTimeProvider);
-  const recurringLabel = paymentProviderLabel(
-    paymentReadiness.recurringProvider,
-  );
 
   return (
     <main>
@@ -536,9 +530,9 @@ export function DonatePage({
             </div>
             <div>
               <p className="text-sm font-bold text-teal-300">
-                {recurringLabel}
+                Domestic INR
               </p>
-              <p className="mt-1 text-xs text-slate-400">monthly / yearly</p>
+              <p className="mt-1 text-xs text-slate-400">supported scope</p>
             </div>
           </div>
         </div>
@@ -630,7 +624,6 @@ export function DonatePage({
           ) : (
             <DonationForm
               initialAmount={initialAmount}
-              initialFrequency={frequency}
               paymentReadiness={paymentReadiness}
             />
           )}
@@ -689,7 +682,7 @@ type SearchItem = {
 
 const searchItems: SearchItem[] = [
   {
-    title: "About Ashaaya",
+    title: "About Skymeredian",
     description: "Our mission, values, journey, and governance commitments.",
     href: "/about",
     type: "Page",
@@ -777,7 +770,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
       <section className="border-b border-slate-200 bg-slate-50 pb-16 pt-32 dark:border-white/10 dark:bg-slate-950 sm:pb-20 sm:pt-36">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
           <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
-            Search Ashaaya
+            Search Skymeredian
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white sm:text-6xl">
             What are you looking for?

@@ -13,12 +13,7 @@ import {
   type ContactSubject,
   contactSubjectOptions,
 } from "@/lib/contact-subjects";
-import {
-  type DonationFrequency,
-  paymentProviderForFrequency,
-  paymentProviderLabel,
-  type PublicPaymentReadiness,
-} from "@/lib/payment-readiness";
+import type { PublicPaymentReadiness } from "@/lib/payment-readiness";
 
 type SubmissionState = {
   kind: "idle" | "submitting" | "success" | "error";
@@ -228,7 +223,7 @@ export function ContactForm({
           type="checkbox"
         />
         <span>
-          I consent to Ashaaya Foundation using these details to respond to my
+          I consent to Skymeredian Foundation using these details to respond to my
           enquiry.{" "}
           <span className="text-red-600" aria-hidden="true">
             *
@@ -576,22 +571,15 @@ async function loadRazorpayCheckout(): Promise<RazorpayConstructor> {
 
 export function DonationForm({
   initialAmount = 2500,
-  initialFrequency = "one_time",
   paymentReadiness,
 }: {
   initialAmount?: number;
-  initialFrequency?: DonationFrequency;
   paymentReadiness: PublicPaymentReadiness;
 }) {
   const [state, setState] = useState<SubmissionState>({ kind: "idle" });
   const [amount, setAmount] = useState(initialAmount);
   const [customAmount, setCustomAmount] = useState("");
-  const [frequency, setFrequency] = useState<DonationFrequency>(() => {
-    if (paymentProviderForFrequency(paymentReadiness, initialFrequency)) {
-      return initialFrequency;
-    }
-    return paymentReadiness.oneTimeProvider ? "one_time" : "monthly";
-  });
+  const frequency = "one_time" as const;
   const idempotency = useRef<{ fingerprint: string; key: string } | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -608,7 +596,7 @@ export function DonationForm({
     }
     setState({ kind: "submitting" });
     try {
-      const provider = paymentProviderForFrequency(paymentReadiness, frequency);
+      const provider = paymentReadiness.oneTimeProvider;
       if (!provider) {
         throw new Error(
           "That giving frequency is not available in this deployment. No payment was taken.",
@@ -647,20 +635,14 @@ export function DonationForm({
       const payment = result.payment as
         | undefined
         | {
-            provider?: "stripe" | "razorpay";
+            provider?: "razorpay";
             status?: "requires_action" | "unavailable";
-            checkoutUrl?: string;
             orderId?: string;
             keyId?: string;
             amountMinor?: number;
             currency?: string;
             reason?: "demo_mode" | "not_configured" | "persistence_required";
           };
-      const checkoutUrl = payment?.checkoutUrl;
-      if (checkoutUrl) {
-        window.location.assign(checkoutUrl);
-        return;
-      }
       if (
         payment?.provider === "razorpay" &&
         payment.status === "requires_action"
@@ -686,7 +668,7 @@ export function DonationForm({
             key: keyId,
             amount: amountMinor,
             currency,
-            name: "Ashaaya Foundation",
+            name: "Skymeredian Foundation",
             description: "Donation",
             order_id: orderId,
             prefill: {
@@ -775,45 +757,14 @@ export function DonationForm({
   return (
     <form className="space-y-6" onSubmit={submit}>
       <fieldset>
-        <legend className={labelClass}>Giving frequency</legend>
+        <legend className={labelClass}>Supported checkout</legend>
         <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
-          One-time gifts use the configured one-time provider. Monthly and
-          yearly gifts require Stripe recurring checkout.
+          Online checkout is limited to domestic, one-time INR donations through
+          the configured live Razorpay account. Recurring and foreign-source
+          donations are not offered by this form.
         </p>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {[
-            { value: "one_time", label: "One time" },
-            { value: "monthly", label: "Monthly" },
-            { value: "yearly", label: "Yearly" },
-          ].map((option) => {
-            const optionFrequency = option.value as DonationFrequency;
-            const provider = paymentProviderForFrequency(
-              paymentReadiness,
-              optionFrequency,
-            );
-            return (
-              <label
-                className={provider ? "cursor-pointer" : "cursor-not-allowed"}
-                key={option.value}
-              >
-                <input
-                  className="peer sr-only"
-                  checked={frequency === optionFrequency}
-                  disabled={!provider}
-                  name="frequency"
-                  onChange={() => setFrequency(optionFrequency)}
-                  type="radio"
-                  value={option.value}
-                />
-                <span className="flex min-h-14 flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-2 text-sm font-bold text-slate-600 transition peer-checked:border-teal-700 peer-checked:bg-teal-700 peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-teal-500 peer-disabled:opacity-45 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:peer-checked:bg-teal-500 dark:peer-checked:text-slate-950">
-                  {option.label}
-                  <small className="mt-0.5 text-[0.6rem] font-semibold opacity-65">
-                    {paymentProviderLabel(provider)}
-                  </small>
-                </span>
-              </label>
-            );
-          })}
+        <div className="mt-3 rounded-2xl border border-teal-700/25 bg-teal-50 px-4 py-3 text-sm font-bold text-teal-900 dark:border-teal-300/20 dark:bg-teal-300/10 dark:text-teal-100">
+          One-time · INR · Razorpay
         </div>
       </fieldset>
       <fieldset>

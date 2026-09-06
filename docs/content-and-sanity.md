@@ -107,9 +107,9 @@ Do not combine people reached, services delivered, households, sessions, or esti
 
 ## CMS caching and revalidation
 
-The content endpoint marks Sanity responses `s-maxage=300, stale-while-revalidate=3600` and demo responses `no-store`. The signed webhook accepts the five supported content types and calls `revalidateTag`.
+The Next.js content reader caches each Sanity document type in the server Data Cache for five minutes and attaches the matching `campaign`, `program`, `successStory`, `post`, or `event` tag. API responses remain `no-store`, so there is no independent response-cache layer that can outlive a tag purge. The signed webhook accepts only those five document types and calls `revalidateTag` for the matching cached read. The five-minute revalidation window is the fallback when a webhook is delayed or missed.
 
-A page or data fetch must attach the corresponding cache tag for tag revalidation to invalidate it. Verify this behavior in the deployed cache before promising instant publication or withdrawal. For urgent consent withdrawal, use the deployment platform's purge controls or a fresh release if the tagged path is not proven.
+Verify signed delivery and the following cache miss in the deployed environment before promising immediate publication or withdrawal. For urgent consent withdrawal, use the deployment platform's purge controls or a fresh release if the tagged path is not proven.
 
 ## Schema changes
 

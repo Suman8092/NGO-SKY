@@ -9,6 +9,7 @@ import {
   CircleDollarSign,
   FileImage,
   HeartHandshake,
+  Inbox,
   LayoutDashboard,
   LifeBuoy,
   LogOut,
@@ -32,6 +33,7 @@ const adminLinks = [
   ["Donations", "/admin/donations", CircleDollarSign],
   ["People", "/admin/users", Users],
   ["Volunteers", "/admin/volunteers", ShieldCheck],
+  ["Submissions", "/admin/submissions", Inbox],
   ["Events", "/admin/events", CalendarDays],
   ["Stories", "/admin/stories", BookOpen],
   ["Media", "/admin/media", FileImage],
@@ -96,7 +98,7 @@ export function DashboardSidebar({
           >
             <BrandMark className="text-[#63c9a8]" />
             <span className="font-display text-sm font-extrabold uppercase leading-tight">
-              Ashaaya
+              Skymeredian
               <span className="block text-[0.53rem] tracking-[0.2em] text-white/35">
                 {role === "admin" ? "Operations" : "My account"}
               </span>

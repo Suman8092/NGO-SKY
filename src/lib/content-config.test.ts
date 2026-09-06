@@ -8,7 +8,7 @@ describe("editorial content publication", () => {
     expect(isEditorialContentPublished({ NODE_ENV: "test" })).toBe(true);
   });
 
-  it("fails closed in production until approval is explicit", () => {
+  it("fails closed in production until a reviewed code release is approved", () => {
     expect(isEditorialContentPublished({ NODE_ENV: "production" })).toBe(false);
     expect(
       isEditorialContentPublished({
@@ -21,7 +21,14 @@ describe("editorial content publication", () => {
         NODE_ENV: "production",
         NEXT_PUBLIC_CONTENT_VERIFIED: "TRUE",
       }),
-    ).toBe(true);
+    ).toBe(false);
+    expect(
+      isEditorialContentPublished({
+        NODE_ENV: "production",
+        NEXT_PUBLIC_CONTENT_VERIFIED: "TRUE",
+        NEXT_PUBLIC_CONTENT_RELEASE_ID: "demo-content-unapproved",
+      }),
+    ).toBe(false);
   });
 
   it("keeps public Vercel previews gated until approval is explicit", () => {
@@ -43,7 +50,7 @@ describe("editorial content publication", () => {
         VERCEL_ENV: "preview",
         NEXT_PUBLIC_CONTENT_VERIFIED: "true",
       }),
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("fails closed for the Vercel production environment", () => {
@@ -59,6 +66,6 @@ describe("editorial content publication", () => {
         VERCEL_ENV: "production",
         NEXT_PUBLIC_CONTENT_VERIFIED: "true",
       }),
-    ).toBe(true);
+    ).toBe(false);
   });
 });

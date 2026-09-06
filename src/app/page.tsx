@@ -202,7 +202,7 @@ const events = [
   {
     date: "06",
     month: "SEP",
-    title: "Ashaaya Open House: Bengaluru",
+    title: "Skymeredian Open House: Bengaluru",
     type: "Community gathering",
     location: "Indiranagar · 11:00 IST",
   },
@@ -311,7 +311,7 @@ export default function HomePage() {
               </Reveal>
               <Reveal delay={0.14}>
                 <p className="prose-premium mt-7 max-w-2xl">
-                  Ashaaya does not arrive with a ready-made solution. We listen,
+                  Skymeredian does not arrive with a ready-made solution. We listen,
                   fund local leadership, connect specialists when asked, and
                   stay long enough for progress to belong to the community.
                 </p>
@@ -909,7 +909,7 @@ function ProductionDonationStatus({
 }: {
   paymentReadiness: PublicPaymentReadiness;
 }) {
-  if (paymentReadiness.oneTimeProvider || paymentReadiness.recurringProvider) {
+  if (paymentReadiness.oneTimeProvider) {
     return <DonationCalculator paymentReadiness={paymentReadiness} />;
   }
 

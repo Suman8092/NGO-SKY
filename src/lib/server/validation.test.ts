@@ -46,7 +46,7 @@ describe("public API validation", () => {
     expect(result.source).toBe("website");
   });
 
-  it("accepts numeric donation strings but rejects unsupported Razorpay recurrence", () => {
+  it("accepts numeric one-time INR gifts and rejects unsupported payment variants", () => {
     const valid = donationSchema.parse({
       amount: "2500.50",
       currency: "INR",
@@ -63,6 +63,12 @@ describe("public API validation", () => {
       frequency: "monthly",
     });
     expect(invalid.success).toBe(false);
+    expect(
+      donationSchema.safeParse({ ...valid, currency: "USD" }).success,
+    ).toBe(false);
+    expect(
+      donationSchema.safeParse({ ...valid, provider: "stripe" }).success,
+    ).toBe(false);
   });
 
   it("rejects unvalidated campaign designations and donor tax identifiers", () => {

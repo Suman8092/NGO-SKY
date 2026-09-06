@@ -3,18 +3,15 @@ import {
   hasMongoConfig,
   hasRazorpayConfig,
   hasSafePaymentRedirectOrigin,
-  hasStripeConfig,
   isDonationsEnabled,
   isForcedDemoMode,
   isProductionRuntime,
 } from "../env";
-import { sendDonationConfirmation } from "../email/resend";
 import { ApiError } from "../errors";
 import {
   createRazorpayOrder,
   verifyRazorpayPaymentSignature,
 } from "../payments/razorpay";
-import { createStripeCheckout } from "../payments/stripe";
 import type { CheckoutResult } from "../payments/types";
 import {
   applyDonationPaymentStatus,
@@ -25,14 +22,31 @@ import {
   type RequestMetadata,
 } from "../repository";
 import type { DonationInput } from "../validation";
-import type { DonationPaymentUpdate } from "../payments/types";
 
-type CheckoutProvider = "stripe" | "razorpay";
+type CheckoutProvider = "razorpay";
 
-function requiredProvider(input: DonationInput): CheckoutProvider {
-  return input.frequency === "one_time" && input.currency === "INR"
-    ? "razorpay"
-    : "stripe";
+function assertSupportedDonation(input: DonationInput): void {
+  if (input.currency !== "INR") {
+    throw new ApiError(
+      422,
+      "DONATION_CURRENCY_UNSUPPORTED",
+      "Online donations currently support INR only.",
+    );
+  }
+  if (input.frequency !== "one_time") {
+    throw new ApiError(
+      422,
+      "DONATION_FREQUENCY_UNSUPPORTED",
+      "Online donations currently support one-time gifts only.",
+    );
+  }
+  if (input.provider === "stripe") {
+    throw new ApiError(
+      422,
+      "STRIPE_CHECKOUT_DISABLED",
+      "Stripe checkout is not offered. Use Razorpay for a one-time INR donation.",
+    );
+  }
 }
 
 export function assertDonationLaunchBasics(): void {
@@ -68,13 +82,6 @@ export function assertDonationLaunchBasics(): void {
 }
 
 function assertProviderReady(provider: CheckoutProvider): void {
-  if (provider === "stripe" && !hasStripeConfig()) {
-    throw new ApiError(
-      503,
-      "STRIPE_NOT_CONFIGURED",
-      "Stripe checkout is not available.",
-    );
-  }
   if (provider === "razorpay" && !hasRazorpayConfig()) {
     throw new ApiError(
       503,
@@ -100,17 +107,16 @@ function publicDonationSummary(donation: DonationRecord) {
 async function startCheckout(
   donation: DonationRecord,
 ): Promise<CheckoutResult> {
-  if (donation.provider === "stripe") {
-    const checkout = await createStripeCheckout(donation);
-    if (
-      checkout.status === "requires_action" &&
-      checkout.provider === "stripe"
-    ) {
-      await markDonationPaymentCreated(donation.id, {
-        externalSessionId: checkout.sessionId,
-      });
-    }
-    return checkout;
+  if (
+    donation.provider !== "razorpay" ||
+    donation.currency !== "INR" ||
+    donation.frequency !== "one_time"
+  ) {
+    throw new ApiError(
+      409,
+      "DONATION_PAYMENT_CONFIGURATION_INVALID",
+      "This donation is not eligible for the supported checkout flow.",
+    );
   }
 
   if (donation.externalOrderId) {
@@ -148,14 +154,13 @@ export async function createDonationIntent(
   metadata: RequestMetadata,
 ) {
   assertDonationLaunchBasics();
-  const provider = requiredProvider(input);
+  assertSupportedDonation(input);
+  const provider: CheckoutProvider = "razorpay";
   if (input.provider !== "auto" && input.provider !== provider) {
     throw new ApiError(
       422,
       "PAYMENT_PROVIDER_REQUIRED",
-      provider === "razorpay"
-        ? "One-time INR donations require Razorpay."
-        : "This donation requires Stripe.",
+      "One-time INR donations require Razorpay.",
       { details: { requiredProvider: provider } },
     );
   }
@@ -218,6 +223,13 @@ export async function startDonationCheckout(
   expectedProvider: "stripe" | "razorpay",
 ) {
   assertDonationCheckoutRetryAllowed();
+  if (expectedProvider === "stripe") {
+    throw new ApiError(
+      410,
+      "STRIPE_CHECKOUT_DISABLED",
+      "Stripe checkout is not offered.",
+    );
+  }
   assertDonationLaunchBasics();
   assertProviderReady(expectedProvider);
 
@@ -297,15 +309,4 @@ export async function acknowledgeRazorpayPayment(input: {
     message:
       "Payment received for verification. Final status is confirmed by the signed webhook.",
   };
-}
-
-export async function processDonationPaymentUpdate(
-  update: DonationPaymentUpdate,
-) {
-  const donation = await applyDonationPaymentStatus(update);
-  const email =
-    donation?.status === "paid"
-      ? await sendDonationConfirmation(donation)
-      : { status: "skipped" as const, delivered: 0, attempted: 0 };
-  return { donation, email };
 }

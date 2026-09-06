@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { recognitions, trustMarkers } from "@/content/site";
 
-export const metadata: Metadata = { title: "Governance & accountability", description: "Ashaaya Foundation's governance, audited reporting, safeguarding commitments, and fund allocation." };
+export const metadata: Metadata = { title: "Governance & accountability", description: "Skymeredian Foundation's governance, audited reporting, safeguarding commitments, and fund allocation." };
 
 export default function GovernancePage() {
   return (

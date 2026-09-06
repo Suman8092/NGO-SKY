@@ -14,6 +14,8 @@ import { isEditorialContentPublished } from "@/lib/content-config";
 
 const isDashboardRoute = createRouteMatcher(["/dashboard/:path*"]);
 const isAdminRoute = createRouteMatcher(["/admin/:path*"]);
+const isDonationApiRoute = createRouteMatcher(["/api/donations/:path*"]);
+const isHealthApiRoute = createRouteMatcher(["/api/health"]);
 const isEditorialAssetRoute = createRouteMatcher(["/images/:path*"]);
 const isEditorialRoute = createRouteMatcher([
   "/about/:path*",
@@ -74,12 +76,21 @@ export default function middleware(
     });
   }
 
-  if (!isDashboardRoute(request) && !isAdminRoute(request)) {
+  if (
+    !isDashboardRoute(request) &&
+    !isAdminRoute(request) &&
+    !isDonationApiRoute(request) &&
+    !isHealthApiRoute(request)
+  ) {
     return NextResponse.next();
   }
 
   if (clerkConfigured) {
     return protectedMiddleware(request, event);
+  }
+
+  if (isDonationApiRoute(request) || isHealthApiRoute(request)) {
+    return NextResponse.next();
   }
 
   if (demoModeEnabled) {
@@ -97,6 +108,8 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/admin/:path*",
+    "/api/donations/:path*",
+    "/api/health",
     "/about/:path*",
     "/programs/:path*",
     "/campaigns/:path*",

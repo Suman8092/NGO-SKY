@@ -19,11 +19,13 @@ export interface DonationDocument {
   anonymous: boolean;
   message?: string;
   consent: true;
+  accountUserId?: string;
   status: DonationStatus;
   idempotencyKey?: string;
   externalOrderId?: string;
   externalSessionId?: string;
   externalPaymentId?: string;
+  refundedAmountMinor?: number;
   failureCode?: string;
   paidAt?: Date;
   requestId: string;
@@ -61,6 +63,7 @@ const donationSchema = new Schema<DonationDocument>(
     anonymous: { type: Boolean, required: true, default: false },
     message: { type: String, trim: true, maxlength: 500 },
     consent: { type: Boolean, required: true },
+    accountUserId: { type: String, trim: true, maxlength: 100 },
     status: {
       type: String,
       enum: [
@@ -78,6 +81,11 @@ const donationSchema = new Schema<DonationDocument>(
     externalOrderId: { type: String, maxlength: 120 },
     externalSessionId: { type: String, maxlength: 120 },
     externalPaymentId: { type: String, maxlength: 120 },
+    refundedAmountMinor: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
     failureCode: { type: String, maxlength: 100 },
     paidAt: Date,
     requestId: { type: String, required: true, maxlength: 100 },
@@ -88,6 +96,7 @@ const donationSchema = new Schema<DonationDocument>(
 
 donationSchema.index({ idempotencyKey: 1 }, { unique: true, sparse: true });
 donationSchema.index({ "donor.email": 1, createdAt: -1 });
+donationSchema.index({ accountUserId: 1, createdAt: -1 }, { sparse: true });
 donationSchema.index({ status: 1, createdAt: -1 });
 donationSchema.index({ externalOrderId: 1 }, { sparse: true });
 donationSchema.index({ externalSessionId: 1 }, { sparse: true });

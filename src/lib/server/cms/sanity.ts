@@ -3,7 +3,8 @@ import { createClient, type SanityClient } from "@sanity/client";
 import { getServerEnv, hasSanityConfig } from "../env";
 import { ApiError } from "../errors";
 
-export type ContentKind = "campaigns" | "programs" | "stories" | "posts" | "events";
+export type ContentKind =
+  "campaigns" | "programs" | "stories" | "posts" | "events";
 export type ContentResult<T> = {
   data: T[];
   source: "sanity" | "unconfigured";
@@ -37,15 +38,22 @@ function client(): SanityClient | null {
   if (!hasSanityConfig()) return null;
   if (sanityClient) return sanityClient;
   const env = getServerEnv();
-  const projectId = env.SANITY_PROJECT_ID ?? env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  const dataset = env.SANITY_DATASET ?? env.NEXT_PUBLIC_SANITY_DATASET;
+  const projectId =
+    env.SANITY_PROJECT_ID ??
+    env.SANITY_STUDIO_API_PROJECT_ID ??
+    env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  const dataset =
+    env.SANITY_DATASET ??
+    env.SANITY_STUDIO_API_DATASET ??
+    env.NEXT_PUBLIC_SANITY_DATASET;
+  const readToken = env.SANITY_API_READ_TOKEN ?? env.SANITY_API_TOKEN;
   if (!projectId || !dataset) return null;
   sanityClient = createClient({
     projectId,
     dataset,
     apiVersion: env.SANITY_API_VERSION,
-    token: env.SANITY_API_TOKEN,
-    useCdn: !env.SANITY_API_TOKEN,
+    token: readToken,
+    useCdn: !readToken,
     perspective: "published",
   });
   return sanityClient;
@@ -61,6 +69,11 @@ export async function fetchPublishedContent<T extends Record<string, unknown>>(
     const data = await sanity.fetch<T[]>(queries[kind], { limit });
     return { data, source: "sanity" };
   } catch (cause) {
-    throw new ApiError(502, "CMS_UNAVAILABLE", "Published content is temporarily unavailable.", { cause });
+    throw new ApiError(
+      502,
+      "CMS_UNAVAILABLE",
+      "Published content is temporarily unavailable.",
+      { cause },
+    );
   }
 }

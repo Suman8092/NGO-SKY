@@ -727,7 +727,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               </Link>
               <a
                 className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:border-teal-500 hover:text-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/10 dark:text-slate-200 dark:hover:text-teal-200"
-                href={`mailto:?subject=${encodeURIComponent(`Support ${campaign.title}`)}&body=${encodeURIComponent(`I thought you might care about this Ashaaya Foundation campaign: /campaigns/${campaign.slug}`)}`}
+                href={`mailto:?subject=${encodeURIComponent(`Support ${campaign.title}`)}&body=${encodeURIComponent(`I thought you might care about this Skymeredian Foundation campaign: /campaigns/${campaign.slug}`)}`}
               >
                 <Share2 aria-hidden="true" className="h-4 w-4" />
                 Share with a friend

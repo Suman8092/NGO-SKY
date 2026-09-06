@@ -6,7 +6,6 @@ import {
   hasMongoConfig,
   hasRazorpayConfig,
   hasSafePaymentRedirectOrigin,
-  hasStripeConfig,
   isDonationsEnabled,
 } from "./env";
 
@@ -15,11 +14,10 @@ export function getPublicPaymentReadiness(): PublicPaymentReadiness {
   const checkoutEnabled =
     isDonationsEnabled() && persistenceReady && hasSafePaymentRedirectOrigin();
   const razorpayReady = checkoutEnabled && hasRazorpayConfig();
-  const stripeReady = checkoutEnabled && hasStripeConfig();
 
   return {
     persistenceReady,
     oneTimeProvider: razorpayReady ? "razorpay" : null,
-    recurringProvider: stripeReady ? "stripe" : null,
+    recurringProvider: null,
   };
 }

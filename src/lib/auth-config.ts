@@ -6,11 +6,19 @@ type AuthEnvironment = {
   ADMIN_USER_IDS?: string;
   NODE_ENV?: string;
   VERCEL_ENV?: string;
+  ALLOW_DEV_KEYS?: string;
 };
 
 export function isLiveProductionEnvironment(
   env: AuthEnvironment = process.env,
 ): boolean {
+  if (
+    ["1", "true", "yes", "on"].includes(
+      env.ALLOW_DEV_KEYS?.trim().toLowerCase() ?? "",
+    )
+  ) {
+    return false;
+  }
   const vercelEnvironment = env.VERCEL_ENV?.trim().toLowerCase();
   if (vercelEnvironment === "production") return true;
   if (["preview", "development"].includes(vercelEnvironment ?? "")) {

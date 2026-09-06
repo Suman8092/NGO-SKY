@@ -9,10 +9,11 @@ import {
   storeNewsletterSubscription,
   storeVolunteerApplication,
   type RequestMetadata,
+  unsubscribeNewsletterSubscription,
 } from "../repository";
 import {
   hasManagedSubmissionWorkflow,
-  isPublicSubmissionsEnabled,
+  isNewsletterWorkflowEnabled,
 } from "../env";
 import { ApiError } from "../errors";
 import type {
@@ -32,7 +33,7 @@ export function assertSubmissionWorkflow(
 ) {
   const available =
     kind === "newsletter"
-      ? isPublicSubmissionsEnabled()
+      ? isNewsletterWorkflowEnabled()
       : hasManagedSubmissionWorkflow();
   if (available) return;
   throw new ApiError(
@@ -62,11 +63,20 @@ export async function subscribeToNewsletter(
 ) {
   assertSubmissionWorkflow("newsletter");
   const stored = await storeNewsletterSubscription(input, metadata);
+  const { unsubscribeToken, ...publicStored } = stored;
   const email =
-    stored.persistence === "mongodb" && stored.created
-      ? await sendNewsletterWelcome(input, stored.record.id)
+    stored.persistence === "mongodb" && unsubscribeToken
+      ? await sendNewsletterWelcome(
+          input,
+          stored.record.id,
+          unsubscribeToken,
+        )
       : skippedEmail;
-  return { ...stored, email };
+  return { ...publicStored, email };
+}
+
+export function unsubscribeFromNewsletter(token: string) {
+  return unsubscribeNewsletterSubscription(token);
 }
 
 export async function submitVolunteerApplication(

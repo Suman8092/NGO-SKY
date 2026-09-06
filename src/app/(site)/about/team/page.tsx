@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { team } from "@/content/site";
 
-export const metadata: Metadata = { title: "Our team", description: "Meet the leaders, program practitioners, and trustees accountable for Ashaaya Foundation's work." };
+export const metadata: Metadata = { title: "Our team", description: "Meet the leaders, program practitioners, and trustees accountable for Skymeredian Foundation's work." };
 
 export default function TeamPage() {
   return (

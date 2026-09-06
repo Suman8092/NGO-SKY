@@ -1,4 +1,4 @@
-import { fetchPublishedContent } from "@/lib/server/cms/sanity";
+import { fetchCachedPublishedContent } from "@/lib/server/cms/sanity-cache";
 import { isEditorialContentPublished } from "@/lib/content-config";
 import { ApiError } from "@/lib/server/errors";
 import {
@@ -40,7 +40,7 @@ export async function GET(request: Request): Promise<Response> {
         "Use a supported content type and limit.",
       );
     }
-    const result = await fetchPublishedContent(
+    const result = await fetchCachedPublishedContent(
       parsed.data.type,
       parsed.data.limit,
     );
@@ -49,12 +49,6 @@ export async function GET(request: Request): Promise<Response> {
         source: result.source,
         type: parsed.data.type,
         count: result.data.length,
-      },
-      headers: {
-        "Cache-Control":
-          result.source === "sanity"
-            ? "public, s-maxage=300, stale-while-revalidate=3600"
-            : "no-store",
       },
     });
   } catch (error) {

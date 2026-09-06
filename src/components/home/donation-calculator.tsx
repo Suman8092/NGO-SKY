@@ -6,8 +6,6 @@ import Link from "next/link";
 import { useState } from "react";
 
 import {
-  type DonationFrequency,
-  paymentProviderForFrequency,
   paymentProviderLabel,
   type PublicPaymentReadiness,
 } from "@/lib/payment-readiness";
@@ -20,10 +18,7 @@ export function DonationCalculator({
   paymentReadiness: PublicPaymentReadiness;
 }) {
   const [amount, setAmount] = useState(1200);
-  const [frequency, setFrequency] = useState<DonationFrequency>(() =>
-    paymentReadiness.recurringProvider ? "monthly" : "one_time",
-  );
-  const provider = paymentProviderForFrequency(paymentReadiness, frequency);
+  const provider = paymentReadiness.oneTimeProvider;
 
   return (
     <section
@@ -44,31 +39,8 @@ export function DonationCalculator({
             is enabled only when the live provider and durable records are
             verified.
           </p>
-          <div className="mt-8 inline-flex rounded-full border border-white/12 bg-white/[0.06] p-1">
-            {(
-              [
-                {
-                  value: "monthly",
-                  label: "Monthly",
-                  available: Boolean(paymentReadiness.recurringProvider),
-                },
-                {
-                  value: "one_time",
-                  label: "One time",
-                  available: Boolean(paymentReadiness.oneTimeProvider),
-                },
-              ] as const
-            ).map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                disabled={!option.available}
-                onClick={() => setFrequency(option.value)}
-                className={`rounded-full px-5 py-2.5 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-35 ${frequency === option.value ? "bg-white text-[#0b2c25]" : "text-white/58 hover:text-white"}`}
-              >
-                {option.label}
-              </button>
-            ))}
+          <div className="mt-8 inline-flex rounded-full border border-white/12 bg-white/[0.06] px-5 py-3 text-sm font-bold text-white/72">
+            Domestic one-time INR
           </div>
         </div>
 
@@ -113,19 +85,19 @@ export function DonationCalculator({
           </div>
 
           <motion.div
-            key={`${amount}-${frequency}`}
+            key={amount}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-6 rounded-2xl bg-white/[0.06] p-4 text-sm text-white/62"
           >
             {provider
-              ? `${paymentProviderLabel(provider)} is configured for ${frequency === "one_time" ? "one-time" : "monthly"} checkout in this deployment.`
-              : "Online checkout is not active for this frequency; no payment can be submitted."}
+              ? `${paymentProviderLabel(provider)} is configured for one-time INR checkout in this deployment.`
+              : "Online checkout is not active; no payment can be submitted."}
           </motion.div>
           <Link
             href={
               provider
-                ? `/donate?amount=${amount}&frequency=${frequency}`
+                ? `/donate?amount=${amount}`
                 : "/contact?subject=donation-support"
             }
             className="mt-6 flex min-h-14 w-full items-center justify-center gap-2 rounded-full bg-[#f3bd67] px-6 text-sm font-extrabold text-[#13211d] transition hover:-translate-y-0.5 hover:bg-[#ffd182]"

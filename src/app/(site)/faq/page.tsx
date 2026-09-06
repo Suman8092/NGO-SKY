@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { faqs } from "@/content/site";
 
-export const metadata: Metadata = { title: "Frequently asked questions", description: "Clear answers about donations, impact, volunteering, governance, and Ashaaya Foundation." };
+export const metadata: Metadata = { title: "Frequently asked questions", description: "Clear answers about donations, impact, volunteering, governance, and Skymeredian Foundation." };
 
 export default function FaqPage() {
   return (

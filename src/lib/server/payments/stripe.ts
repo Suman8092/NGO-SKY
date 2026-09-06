@@ -2,8 +2,7 @@ import Stripe from "stripe";
 
 import { getServerEnv, hasStripeConfig } from "../env";
 import { ApiError } from "../errors";
-import type { DonationRecord } from "../repository";
-import type { CheckoutResult, DonationPaymentUpdate } from "./types";
+import type { DonationPaymentUpdate } from "./types";
 
 let stripeClient: Stripe | undefined;
 
@@ -24,90 +23,13 @@ function getStripe(): Stripe {
   return stripeClient;
 }
 
-export async function createStripeCheckout(
-  donation: DonationRecord,
-): Promise<CheckoutResult> {
-  if (donation.provider !== "stripe") {
-    throw new ApiError(
-      409,
-      "PAYMENT_PROVIDER_MISMATCH",
-      "This donation is not assigned to Stripe.",
-    );
-  }
-  if (donation.status === "paid" || donation.status === "refunded") {
-    throw new ApiError(
-      409,
-      "DONATION_ALREADY_SETTLED",
-      "This donation has already been settled.",
-    );
-  }
-
-  const env = getServerEnv();
-  const stripe = getStripe();
-  const siteOrigin = new URL(env.NEXT_PUBLIC_SITE_URL).origin;
-  const recurring =
-    donation.frequency === "monthly"
-      ? ({ interval: "month" } as const)
-      : donation.frequency === "yearly"
-        ? ({ interval: "year" } as const)
-        : undefined;
-  const metadata = {
-    donationId: donation.id,
-    frequency: donation.frequency,
-  };
-  const lineItem: Stripe.Checkout.SessionCreateParams.LineItem = {
-    quantity: 1,
-    price_data: {
-      currency: donation.currency.toLowerCase(),
-      unit_amount: donation.amountMinor,
-      product_data: {
-        name: "General donation",
-        description: "A charitable contribution to Ashaaya Foundation",
-      },
-      ...(recurring ? { recurring } : {}),
-    },
-  };
-  const params: Stripe.Checkout.SessionCreateParams = {
-    mode: recurring ? "subscription" : "payment",
-    line_items: [lineItem],
-    client_reference_id: donation.id,
-    customer_email: donation.donor.email,
-    success_url: `${siteOrigin}/donate/success?donation_id=${encodeURIComponent(donation.id)}&session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${siteOrigin}/donate?status=cancelled`,
-    metadata,
-    allow_promotion_codes: false,
-    billing_address_collection: "auto",
-    ...(recurring
-      ? { subscription_data: { metadata } }
-      : { payment_intent_data: { metadata } }),
-  };
-
-  try {
-    const session = await stripe.checkout.sessions.create(params, {
-      idempotencyKey: `donation-checkout-${donation.id}`,
-    });
-    if (!session.url) {
-      throw new ApiError(
-        502,
-        "STRIPE_SESSION_INVALID",
-        "Stripe did not return a checkout URL.",
-      );
-    }
-    return {
-      provider: "stripe",
-      status: "requires_action",
-      checkoutUrl: session.url,
-      sessionId: session.id,
-    };
-  } catch (cause) {
-    if (cause instanceof ApiError) throw cause;
-    throw new ApiError(
-      502,
-      "STRIPE_REQUEST_FAILED",
-      "Stripe checkout could not be created.",
-      { cause },
-    );
-  }
+export async function createStripeCheckout(donation: unknown): Promise<never> {
+  void donation;
+  throw new ApiError(
+    410,
+    "STRIPE_CHECKOUT_DISABLED",
+    "Stripe checkout is not offered. Online donations support one-time INR payments through Razorpay only.",
+  );
 }
 
 export function constructStripeEvent(
@@ -156,6 +78,7 @@ export function stripeEventToDonationUpdate(
   ) {
     const session = event.data.object as Stripe.Checkout.Session;
     return {
+      provider: "stripe",
       donationId:
         session.metadata?.donationId ??
         session.client_reference_id ??
@@ -173,6 +96,8 @@ export function stripeEventToDonationUpdate(
               event.type === "checkout.session.async_payment_succeeded"
             ? "paid"
             : "processing",
+      amountMinor: session.amount_total ?? undefined,
+      currency: session.currency?.toUpperCase(),
     };
   }
 
@@ -183,9 +108,15 @@ export function stripeEventToDonationUpdate(
   ) {
     const intent = event.data.object as Stripe.PaymentIntent;
     return {
+      provider: "stripe",
       donationId: intent.metadata.donationId,
       externalPaymentId: intent.id,
       status: event.type === "payment_intent.succeeded" ? "paid" : "failed",
+      amountMinor:
+        event.type === "payment_intent.succeeded"
+          ? intent.amount_received
+          : intent.amount,
+      currency: intent.currency.toUpperCase(),
       failureCode:
         event.type === "payment_intent.canceled"
           ? "payment_canceled"
@@ -196,12 +127,17 @@ export function stripeEventToDonationUpdate(
   if (event.type === "charge.refunded") {
     const charge = event.data.object as Stripe.Charge;
     return {
+      provider: "stripe",
       donationId: charge.metadata.donationId,
       externalPaymentId:
         typeof charge.payment_intent === "string"
           ? charge.payment_intent
           : undefined,
       status: "refunded",
+      amountMinor: charge.amount,
+      currency: charge.currency.toUpperCase(),
+      refundAmountMinor: charge.amount_refunded,
+      refundMode: "total",
     };
   }
 

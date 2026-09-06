@@ -1,7 +1,9 @@
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
-import { isClerkConfigured } from "@/lib/auth-config";
+import { isClerkConfigured, isDemoModeEnabled } from "@/lib/auth-config";
 import { isEditorialContentPublished } from "@/lib/content-config";
 
 export const metadata: Metadata = {
@@ -9,12 +11,20 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function UserDashboardLayout({
+export default async function UserDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const clerkEnabled = isClerkConfigured();
+  const demoModeEnabled = isDemoModeEnabled();
+  if (!clerkEnabled && !demoModeEnabled) {
+    redirect("/sign-in?reason=auth-unavailable");
+  }
+  if (clerkEnabled) {
+    const { userId } = await auth();
+    if (!userId) redirect("/sign-in");
+  }
   const editorialContentPublished = isEditorialContentPublished();
 
   return (

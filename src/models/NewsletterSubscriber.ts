@@ -9,6 +9,8 @@ export interface NewsletterSubscriberDocument {
   status: "active" | "unsubscribed" | "bounced" | "complained";
   subscribedAt: Date;
   unsubscribedAt?: Date;
+  unsubscribeTokenHash?: string;
+  unsubscribeTokenIssuedAt?: Date;
   requestId: string;
   ipHash?: string;
   createdAt: Date;
@@ -36,6 +38,12 @@ const newsletterSubscriberSchema = new Schema<NewsletterSubscriberDocument>(
     },
     subscribedAt: { type: Date, required: true, default: Date.now },
     unsubscribedAt: Date,
+    unsubscribeTokenHash: {
+      type: String,
+      maxlength: 64,
+      select: false,
+    },
+    unsubscribeTokenIssuedAt: Date,
     requestId: { type: String, required: true, maxlength: 100 },
     ipHash: { type: String, maxlength: 64 },
   },
@@ -43,6 +51,14 @@ const newsletterSubscriberSchema = new Schema<NewsletterSubscriberDocument>(
 );
 
 newsletterSubscriberSchema.index({ status: 1, subscribedAt: -1 });
+newsletterSubscriberSchema.index(
+  { unsubscribeTokenHash: 1 },
+  {
+    unique: true,
+    sparse: true,
+    name: "newsletter_unsubscribe_token_hash_unique",
+  },
+);
 
 export const NewsletterSubscriberModel =
   (models.NewsletterSubscriber as

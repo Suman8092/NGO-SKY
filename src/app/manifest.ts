@@ -1,10 +1,15 @@
 import type { MetadataRoute } from "next";
 
+import { isEditorialContentPublished } from "@/lib/content-config";
+
 export default function manifest(): MetadataRoute.Manifest {
+  const editorialContentPublished = isEditorialContentPublished();
   return {
-    name: "Ashaaya Foundation",
-    short_name: "Ashaaya",
-    description: "Hope, made practical.",
+    name: "Skymeredian Foundation",
+    short_name: "Skymeredian",
+    description: editorialContentPublished
+      ? "Skymeredian Foundation website."
+      : "Skymeredian Foundation website publication status.",
     start_url: "/",
     display: "standalone",
     background_color: "#f8f7f1",

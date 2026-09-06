@@ -14,9 +14,9 @@ const photo = (
 });
 
 export const brand: SiteContent["brand"] = {
-  name: "Ashaaya Foundation",
-  legalName: "Ashaaya Foundation",
-  shortName: "Ashaaya",
+  name: "Skymeredian Foundation",
+  legalName: "Skymeredian Foundation",
+  shortName: "Skymeredian",
   tagline: "Hope, made practical.",
   promise:
     "We turn generous intent into durable, community-owned progress—and show the work clearly.",
@@ -37,7 +37,7 @@ export const brand: SiteContent["brand"] = {
       "International gifts are accepted through our designated giving route",
   },
   contact: {
-    email: "hello@ashaaya.org",
+    email: "hello@skymeredian.org",
     phone: "+91 80 4718 2020",
     donorSupportHours: "Monday–Saturday, 9:00–18:00 IST",
   },
@@ -45,32 +45,32 @@ export const brand: SiteContent["brand"] = {
     {
       platform: "instagram",
       label: "Instagram",
-      href: "https://instagram.com/ashaayafoundation",
+      href: "https://instagram.com/skymeredianfoundation",
       external: true,
     },
     {
       platform: "linkedin",
       label: "LinkedIn",
-      href: "https://linkedin.com/company/ashaaya-foundation",
+      href: "https://linkedin.com/company/skymeredian-foundation",
       external: true,
     },
     {
       platform: "youtube",
       label: "YouTube",
-      href: "https://youtube.com/@ashaayafoundation",
+      href: "https://youtube.com/@skymeredianfoundation",
       external: true,
     },
     {
       platform: "facebook",
       label: "Facebook",
-      href: "https://facebook.com/ashaayafoundation",
+      href: "https://facebook.com/skymeredianfoundation",
       external: true,
     },
   ],
 };
 
 export const siteSeo: SiteContent["seo"] = {
-  title: "Ashaaya Foundation — Hope, made practical",
+  title: "Skymeredian Foundation — Hope, made practical",
   description:
     "Back locally led solutions in education, health, livelihoods, relief, and climate resilience. Follow every rupee from contribution to outcome.",
   canonicalPath: "/",
@@ -85,7 +85,7 @@ export const siteSeo: SiteContent["seo"] = {
   ],
   image: photo(
     "photo-1469571486292-0ba58a3f068b",
-    "Ashaaya field team and community volunteers walking together",
+    "Skymeredian field team and community volunteers walking together",
     1200,
     630,
   ),
@@ -99,7 +99,7 @@ export const primaryNavigation: SiteContent["navigation"] = [
       {
         label: "Our story",
         href: "/about",
-        description: "Why Ashaaya exists and how we work",
+        description: "Why Skymeredian exists and how we work",
       },
       {
         label: "People",
@@ -199,7 +199,7 @@ export const hero: SiteContent["hero"] = {
   title: "Hope should not wait for the perfect moment.",
   highlightedPhrase: "It should arrive today.",
   description:
-    "Across India's hardest-to-reach communities, Ashaaya backs practical ideas that keep children learning, families healthy, incomes growing, and ecosystems alive.",
+    "Across India's hardest-to-reach communities, Skymeredian backs practical ideas that keep children learning, families healthy, incomes growing, and ecosystems alive.",
   primaryCta: { label: "Make hope happen", href: "/donate" },
   secondaryCta: { label: "See where your gift goes", href: "/impact" },
   image: photo(
@@ -355,7 +355,7 @@ export const about: SiteContent["about"] = {
   eyebrow: "Built close to the problem",
   title: "A foundation designed to make itself less necessary.",
   introduction:
-    "Ashaaya began with a simple observation: communities already hold extraordinary knowledge, but too often lack flexible capital, technical access, and a fair seat at the table. We bring those pieces together, then transfer ownership locally.",
+    "Skymeredian began with a simple observation: communities already hold extraordinary knowledge, but too often lack flexible capital, technical access, and a fair seat at the table. We bring those pieces together, then transfer ownership locally.",
   founderStory: {
     name: "Meera Rao",
     role: "Founder & Chief Executive",
@@ -363,18 +363,18 @@ export const about: SiteContent["about"] = {
       "Dignity is not an extra layer of the work. It is the way the work must be done.",
     paragraphs: [
       "In 2019, after a decade designing public-health systems, Meera returned to a flood-affected district in Assam where local boat operators had converted their vessels into makeshift classrooms. The idea was ingenious; the funding cycle was not. By the time a conventional grant could arrive, the river would have shifted and another school term would be lost.",
-      "Ashaaya was formed in 2020 to move at the speed of community knowledge. Its first grant put learning kits, trained facilitators, and safe boats on the water within five weeks. The model has since grown into ten connected programs, each built around local leadership, transparent budgets, and an agreed path to community ownership.",
+      "Skymeredian was formed in 2020 to move at the speed of community knowledge. Its first grant put learning kits, trained facilitators, and safe boats on the water within five weeks. The model has since grown into ten connected programs, each built around local leadership, transparent budgets, and an agreed path to community ownership.",
     ],
     image: photo(
       "photo-1494790108377-be9c29b29330",
-      "Meera Rao, founder of Ashaaya Foundation",
+      "Meera Rao, founder of Skymeredian Foundation",
       1200,
       1500,
     ),
   },
   governanceStatement:
     "Our board reviews finance and safeguarding quarterly; program outcomes are published twice a year, and material incidents are disclosed with the corrective action taken.",
-  annualReportHref: "/reports/ashaaya-annual-report-2025-26.pdf",
+  annualReportHref: "/reports/skymeredian-annual-report-2025-26.pdf",
 };
 
 export const brandValues: SiteContent["values"] = [
@@ -416,7 +416,7 @@ export const brandValues: SiteContent["values"] = [
 export const timeline: SiteContent["timeline"] = [
   {
     year: "2020",
-    title: "Ashaaya launches on the Brahmaputra",
+    title: "Skymeredian launches on the Brahmaputra",
     description:
       "Three community-run learning boats reconnect 480 children after seasonal flooding.",
     metric: "480 learners",
@@ -1141,7 +1141,7 @@ export const emergencyAppeal: SiteContent["emergencyAppeal"] = {
   label: "Rapid response active",
   title: "Coastal families need clean water before the next high tide.",
   summary:
-    "Ashaaya's Odisha teams are delivering water treatment and emergency cash now. Field verification is live, and the first 860 households have already received support.",
+    "Skymeredian's Odisha teams are delivering water treatment and emergency cash now. Field verification is live, and the first 860 households have already received support.",
   location: "Coastal Odisha",
   responseStartedAt: "2026-07-29T06:30:00+05:30",
   updateTimestamp: "2026-08-05T08:15:00+05:30",
@@ -1176,7 +1176,7 @@ export const impactStories: SiteContent["stories"] = [
       },
       {
         label: "The idea",
-        text: "Boat operators, parents, and teachers mapped a safe loop between four settlements. Ashaaya funded the vessel fit-out, educator pay, solar charging, and offline learning library; the island committee set the timetable and safety rules.",
+        text: "Boat operators, parents, and teachers mapped a safe loop between four settlements. Skymeredian funded the vessel fit-out, educator pay, solar charging, and offline learning library; the island committee set the timetable and safety rules.",
       },
       {
         label: "Now",
@@ -1252,7 +1252,7 @@ export const impactStories: SiteContent["stories"] = [
       },
       {
         label: "The build",
-        text: "Residents traced historic runoff routes, then chose a recharge trench, native grasses, and rules for irrigation withdrawals. Ashaaya paid local crews and installed a simple water-level gauge.",
+        text: "Residents traced historic runoff routes, then chose a recharge trench, native grasses, and rules for irrigation withdrawals. Skymeredian paid local crews and installed a simple water-level gauge.",
       },
       {
         label: "After two monsoons",
@@ -1547,7 +1547,7 @@ export const events: SiteContent["events"] = [
     end: "2026-09-12T18:15:00+05:30",
     timezone: "Asia/Kolkata",
     location: "Online",
-    venue: "Ashaaya Live",
+    venue: "Skymeredian Live",
     format: "online",
     status: "open",
     category: "Learning session",
@@ -1627,7 +1627,7 @@ export const events: SiteContent["events"] = [
     end: "2026-06-20T16:30:00+05:30",
     timezone: "Asia/Kolkata",
     location: "Guwahati, Assam",
-    venue: "Ashaaya Northeast Hub",
+    venue: "Skymeredian Northeast Hub",
     format: "hybrid",
     status: "completed",
     category: "Training",
@@ -1651,7 +1651,7 @@ export const team: SiteContent["team"] = [
     name: "Meera Rao",
     role: "Founder & Chief Executive",
     group: "leadership",
-    bio: "Meera builds public-interest systems that can move quickly without moving carelessly. Before Ashaaya, she led district health and climate-adaptation programs across India for twelve years.",
+    bio: "Meera builds public-interest systems that can move quickly without moving carelessly. Before Skymeredian, she led district health and climate-adaptation programs across India for twelve years.",
     expertise: ["Systems design", "Public health", "Partnerships"],
     languages: ["English", "Hindi", "Kannada"],
     image: photo(
@@ -1735,7 +1735,7 @@ export const team: SiteContent["team"] = [
     name: "Kabir Mirza",
     role: "Trustee, Community Institutions",
     group: "governance",
-    bio: "Kabir has spent two decades strengthening cooperatives and resident-led institutions. He safeguards Ashaaya's commitment to place decisions close to the work.",
+    bio: "Kabir has spent two decades strengthening cooperatives and resident-led institutions. He safeguards Skymeredian's commitment to place decisions close to the work.",
     expertise: ["Cooperatives", "Rural enterprise", "Community governance"],
     languages: ["English", "Hindi", "Urdu", "Gujarati"],
     image: photo(
@@ -1788,7 +1788,7 @@ export const recognitions: SiteContent["recognitions"] = [
 export const testimonials: SiteContent["testimonials"] = [
   {
     quote:
-      "Ashaaya did not arrive with a finished answer. They brought a budget to the table and asked us to design the route.",
+      "Skymeredian did not arrive with a finished answer. They brought a budget to the table and asked us to design the route.",
     name: "Rumi Pegu",
     context: "Community educator",
     location: "Majuli, Assam",
@@ -1826,7 +1826,7 @@ export const faqs: SiteContent["faqs"] = [
   {
     id: "donation-use",
     category: "donations",
-    question: "How will Ashaaya use my donation?",
+    question: "How will Skymeredian use my donation?",
     answer:
       "You can give to the highest-priority fund or choose an active campaign. Campaign pages show their planned allocation before you give. If a restricted campaign is fully funded, we will ask permission before moving your gift; otherwise it remains reserved for that purpose or is refunded where feasible.",
     links: [
@@ -1894,7 +1894,7 @@ export const faqs: SiteContent["faqs"] = [
     category: "volunteering",
     question: "Do volunteers have to pay to participate?",
     answer:
-      "No. Ashaaya does not charge application or placement fees. Approved role-related travel and field expenses are reimbursed under the role brief, and essential training is provided at no cost.",
+      "No. Skymeredian does not charge application or placement fees. Approved role-related travel and field expenses are reimbursed under the role brief, and essential training is provided at no cost.",
   },
   {
     id: "field-visits",
@@ -1908,7 +1908,7 @@ export const faqs: SiteContent["faqs"] = [
     category: "governance",
     question: "How can I raise a safeguarding or ethics concern?",
     answer:
-      "Use the confidential reporting form or email ethics@ashaaya.org. Reports may be anonymous, are restricted to trained reviewers, and are acknowledged within two working days. Immediate danger should always be reported first to the appropriate local emergency service.",
+      "Use the confidential reporting form or email ethics@skymeredian.org. Reports may be anonymous, are restricted to trained reviewers, and are acknowledged within two working days. Immediate danger should always be reported first to the appropriate local emergency service.",
     links: [{ label: "Make a confidential report", href: "/speak-up" }],
   },
   {
@@ -1926,7 +1926,7 @@ export const faqs: SiteContent["faqs"] = [
 export const offices: SiteContent["offices"] = [
   {
     id: "office-bengaluru",
-    name: "Ashaaya House",
+    name: "Skymeredian House",
     type: "registered-office",
     addressLines: ["18 Community Lane", "Shanthinagar"],
     city: "Bengaluru",
@@ -1934,7 +1934,7 @@ export const offices: SiteContent["offices"] = [
     postalCode: "560027",
     country: "India",
     coordinates: { latitude: 12.9582, longitude: 77.5922 },
-    email: "hello@ashaaya.org",
+    email: "hello@skymeredian.org",
     phone: "+91 80 4718 2020",
     hours: "Monday–Friday, 9:30–17:30; visits by appointment",
     directionsHref: "https://maps.google.com/?q=Shanthinagar+Bengaluru",
@@ -1949,7 +1949,7 @@ export const offices: SiteContent["offices"] = [
     postalCode: "781001",
     country: "India",
     coordinates: { latitude: 26.1924, longitude: 91.7519 },
-    email: "northeast@ashaaya.org",
+    email: "northeast@skymeredian.org",
     phone: "+91 361 418 2040",
     hours: "Monday–Saturday, 9:00–17:00; field schedules vary",
     directionsHref: "https://maps.google.com/?q=Uzan+Bazar+Guwahati",
@@ -1964,7 +1964,7 @@ export const offices: SiteContent["offices"] = [
     postalCode: "751007",
     country: "India",
     coordinates: { latitude: 20.2917, longitude: 85.8468 },
-    email: "eastcoast@ashaaya.org",
+    email: "eastcoast@skymeredian.org",
     phone: "+91 674 418 2060",
     hours:
       "Monday–Saturday, 9:00–17:00; emergency desk operates 24/7 when activated",
@@ -2037,7 +2037,7 @@ export const volunteer: SiteContent["volunteer"] = {
     "A named supervisor and structured feedback",
     "Approved field expenses reimbursed",
     "Service certificate after agreed outcomes are completed",
-    "Access to Ashaaya's quarterly learning sessions",
+    "Access to Skymeredian's quarterly learning sessions",
   ],
   requirements: [
     "Respect participant privacy and dignity at all times",
@@ -2197,12 +2197,12 @@ export const articles: SiteContent["articles"] = [
     featured: false,
   },
   {
-    slug: "ashaaya-quarterly-field-note-april-june-2026",
+    slug: "skymeredian-quarterly-field-note-april-june-2026",
     title: "Quarterly field note: April–June 2026",
     excerpt:
       "Three milestones ahead, two behind, one target retired—and the evidence that changed our next quarter's plan.",
     category: "news",
-    author: "Ashaaya Learning Team",
+    author: "Skymeredian Learning Team",
     publishedAt: "2026-07-10",
     readTime: "10 min read",
     image: photo(
@@ -2236,7 +2236,7 @@ export const newsletter: SiteContent["newsletter"] = {
   description:
     "One considered email with a field story, a number worth interrogating, and a practical way to help. No daily asks and no manufactured urgency.",
   consentLabel:
-    "I agree to receive Ashaaya Field Notes and can unsubscribe at any time.",
+    "I agree to receive Skymeredian Field Notes and can unsubscribe at any time.",
   successMessage:
     "You are on the list. Your first Field Note will arrive on the next second Thursday.",
   sampleTopics: ["What changed", "What we learned", "Where help is needed"],
@@ -2246,7 +2246,7 @@ export const footerGroups: SiteContent["footer"] = [
   {
     title: "Explore",
     links: [
-      { label: "About Ashaaya", href: "/about" },
+      { label: "About Skymeredian", href: "/about" },
       { label: "Programs", href: "/programs" },
       { label: "Impact dashboard", href: "/impact" },
       { label: "Stories", href: "/stories" },

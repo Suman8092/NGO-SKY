@@ -6,7 +6,7 @@ import { hasManagedSubmissionWorkflow } from "@/lib/server/env";
 export const metadata: Metadata = {
   title: "Volunteer With Us",
   description:
-    "Explore Ashaaya Foundation volunteer information and check whether managed applications are open.",
+    "Explore Skymeredian Foundation volunteer information and check whether managed applications are open.",
 };
 
 type Props = { searchParams: Promise<{ interest?: string | string[] }> };

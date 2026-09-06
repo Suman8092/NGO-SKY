@@ -20,15 +20,17 @@ const envSchema = z.object({
     z.string().regex(/^(?:production|preview|development)$/),
   ),
   DEMO_MODE: booleanFromEnv.default(false),
+  ALLOW_DEV_KEYS: booleanFromEnv.default(false),
   DONATIONS_ENABLED: booleanFromEnv.default(false),
   PUBLIC_SUBMISSIONS_ENABLED: booleanFromEnv.default(false),
+  NEWSLETTER_ENABLED: booleanFromEnv.default(false),
   MONGODB_URI: optionalString(
     z
       .string()
       .regex(/^mongodb(?:\+srv)?:\/\//i, "Expected a MongoDB connection URI"),
   ),
   MONGODB_DB_NAME: optionalString(z.string().min(1).max(64)).default(
-    "ashaaya-foundation",
+    "skymeredian-foundation",
   ),
   NEXT_PUBLIC_SITE_URL: optionalString(z.string().url()).default(
     "http://localhost:3000",
@@ -55,6 +57,12 @@ const envSchema = z.object({
       .regex(/^[a-z0-9-]+$/i)
       .max(80),
   ),
+  SANITY_STUDIO_API_PROJECT_ID: optionalString(
+    z
+      .string()
+      .regex(/^[a-z0-9-]+$/i)
+      .max(80),
+  ),
   NEXT_PUBLIC_SANITY_PROJECT_ID: optionalString(
     z
       .string()
@@ -62,6 +70,12 @@ const envSchema = z.object({
       .max(80),
   ),
   SANITY_DATASET: optionalString(
+    z
+      .string()
+      .regex(/^[a-z0-9_-]+$/i)
+      .max(80),
+  ),
+  SANITY_STUDIO_API_DATASET: optionalString(
     z
       .string()
       .regex(/^[a-z0-9_-]+$/i)
@@ -76,6 +90,7 @@ const envSchema = z.object({
   SANITY_API_VERSION: optionalString(
     z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   ).default("2025-02-19"),
+  SANITY_API_READ_TOKEN: optionalString(z.string().min(8)),
   SANITY_API_TOKEN: optionalString(z.string().min(8)),
   SANITY_REVALIDATE_SECRET: optionalString(z.string().min(16)),
   PORT: z.coerce.number().int().min(1).max(65_535).default(4000),
@@ -113,8 +128,42 @@ function isSafePublicHttpsUrl(value: string | undefined): boolean {
   }
 }
 
+function isLocalSiteOrigin(value: string | undefined): boolean {
+  if (!value) return false;
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+    const local =
+      hostname === "localhost" ||
+      hostname.endsWith(".localhost") ||
+      hostname === "127.0.0.1" ||
+      hostname.startsWith("127.") ||
+      hostname === "0.0.0.0" ||
+      hostname === "::1" ||
+      hostname === "[::1]";
+    return (
+      local &&
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      !url.username &&
+      !url.password &&
+      url.pathname === "/" &&
+      !url.search &&
+      !url.hash
+    );
+  } catch {
+    return false;
+  }
+}
+
 function productionSafetyIssues(): string[] {
   if (!isProductionRuntime()) return [];
+  if (
+    ["1", "true", "yes", "on"].includes(
+      process.env.ALLOW_DEV_KEYS?.trim().toLowerCase() ?? "",
+    )
+  ) {
+    return [];
+  }
 
   const issues: string[] = [];
   const demoMode = ["1", "true", "yes", "on"].includes(
@@ -125,6 +174,9 @@ function productionSafetyIssues(): string[] {
   );
   const publicSubmissionsEnabled = ["1", "true", "yes", "on"].includes(
     process.env.PUBLIC_SUBMISSIONS_ENABLED?.trim().toLowerCase() ?? "",
+  );
+  const newsletterEnabled = ["1", "true", "yes", "on"].includes(
+    process.env.NEWSLETTER_ENABLED?.trim().toLowerCase() ?? "",
   );
   const mongoUri = process.env.MONGODB_URI?.trim();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -148,6 +200,12 @@ function productionSafetyIssues(): string[] {
   }
   if (publicSubmissionsEnabled && !contactNotificationEmail) {
     issues.push("CONTACT_NOTIFICATION_EMAIL");
+  }
+  if (publicSubmissionsEnabled && !isSafePublicHttpsUrl(siteUrl)) {
+    issues.push("NEXT_PUBLIC_SITE_URL");
+  }
+  if (newsletterEnabled && !publicSubmissionsEnabled) {
+    issues.push("NEWSLETTER_ENABLED");
   }
   if (stripeSecret && !stripeSecret.startsWith("sk_live_")) {
     issues.push("STRIPE_SECRET_KEY");
@@ -211,7 +269,8 @@ export function isPublicSubmissionsEnabled(): boolean {
   return (
     env.PUBLIC_SUBMISSIONS_ENABLED &&
     hasMongoConfig() &&
-    hasResendConfig()
+    hasResendConfig() &&
+    Boolean(getVerifiedSiteOrigin())
   );
 }
 
@@ -222,11 +281,25 @@ export function hasManagedSubmissionWorkflow(): boolean {
   );
 }
 
+export function isNewsletterWorkflowEnabled(): boolean {
+  return getServerEnv().NEWSLETTER_ENABLED && isPublicSubmissionsEnabled();
+}
+
 export function hasSafePaymentRedirectOrigin(): boolean {
   return (
     !isProductionRuntime() ||
     isSafePublicHttpsUrl(getServerEnv().NEXT_PUBLIC_SITE_URL)
   );
+}
+
+export function getVerifiedSiteOrigin(): string | null {
+  const siteUrl = getServerEnv().NEXT_PUBLIC_SITE_URL;
+  const runsOnVercel = Boolean(process.env.VERCEL_ENV?.trim());
+  const allowed =
+    isSafePublicHttpsUrl(siteUrl) ||
+    (!runsOnVercel && !isProductionRuntime() && isLocalSiteOrigin(siteUrl));
+  if (!allowed) return null;
+  return new URL(siteUrl).origin;
 }
 
 export function hasMongoConfig(): boolean {
@@ -272,8 +345,12 @@ export function hasSanityConfig(): boolean {
   return (
     !env.DEMO_MODE &&
     Boolean(
-      (env.SANITY_PROJECT_ID ?? env.NEXT_PUBLIC_SANITY_PROJECT_ID) &&
-      (env.SANITY_DATASET ?? env.NEXT_PUBLIC_SANITY_DATASET),
+      (env.SANITY_PROJECT_ID ??
+        env.SANITY_STUDIO_API_PROJECT_ID ??
+        env.NEXT_PUBLIC_SANITY_PROJECT_ID) &&
+      (env.SANITY_DATASET ??
+        env.SANITY_STUDIO_API_DATASET ??
+        env.NEXT_PUBLIC_SANITY_DATASET),
     )
   );
 }

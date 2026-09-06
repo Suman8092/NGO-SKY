@@ -121,18 +121,25 @@ export const donationSchema = z
   })
   .strict()
   .superRefine((value, context) => {
-    if (value.provider === "razorpay" && value.currency !== "INR") {
+    if (value.currency !== "INR") {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["currency"],
-        message: "Razorpay donations must use INR",
+        message: "Online donations currently support INR only",
       });
     }
-    if (value.provider === "razorpay" && value.frequency !== "one_time") {
+    if (value.frequency !== "one_time") {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["frequency"],
-        message: "Recurring donations use Stripe",
+        message: "Online donations currently support one-time gifts only",
+      });
+    }
+    if (value.provider === "stripe") {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["provider"],
+        message: "Stripe checkout is not offered",
       });
     }
   });

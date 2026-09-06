@@ -5,7 +5,7 @@ import { StoriesPage } from "@/components/pages/impact-stories-events-pages";
 export const metadata: Metadata = {
   title: "Stories of Possibility",
   description:
-    "Meet people and collectives moving possibility forward through Ashaaya Foundation community-led programs.",
+    "Meet people and collectives moving possibility forward through Skymeredian Foundation community-led programs.",
 };
 
 export default function Page() {

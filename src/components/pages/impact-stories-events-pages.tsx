@@ -635,7 +635,7 @@ const upcomingEvents: EventItem[] = [
     time: "5:00–8:00 PM IST",
     location: "Bengaluru · Venue shared on registration",
     description:
-      "An evening of food, field stories, and small-group conversations with community partners shaping Ashaaya’s next year.",
+      "An evening of food, field stories, and small-group conversations with community partners shaping Skymeredian’s next year.",
     format: "In person",
     href: "/contact?event=the-long-table",
     featured: true,
@@ -877,7 +877,7 @@ export function EventsPage() {
         <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
           <div>
             <SectionHeading
-              description="Ashaaya events are designed for participation, not passive audiences. We welcome community organisations, schools, workplaces, and thoughtful hosts."
+              description="Skymeredian events are designed for participation, not passive audiences. We welcome community organisations, schools, workplaces, and thoughtful hosts."
               eyebrow="Create something together"
               title="Host, sponsor, or bring an event to your city"
             />

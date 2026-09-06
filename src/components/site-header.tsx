@@ -24,7 +24,7 @@ const navigation = [
     label: "Who we are",
     href: "/about",
     links: [
-      ["Our story", "/about", "Why Ashaaya exists"],
+      ["Our story", "/about", "Why Skymeredian exists"],
       ["Impact & evidence", "/impact", "What changed, and how we know"],
       ["Stories", "/stories", "Voices from the field"],
     ],
@@ -98,11 +98,11 @@ export function SiteHeader({
           <Link
             href="/"
             className="group flex shrink-0 items-center gap-3"
-            aria-label="Ashaaya Foundation home"
+            aria-label="Skymeredian Foundation home"
           >
             <BrandMark className="transition-transform duration-500 group-hover:rotate-6" />
             <span className="font-display text-[0.93rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em]">
-              Ashaaya
+              Skymeredian
               <span className="block text-[0.56rem] font-semibold tracking-[0.2em] text-ink/55">
                 Foundation
               </span>
@@ -196,7 +196,7 @@ export function SiteHeader({
               <button
                 type="button"
                 className="hidden size-10 place-items-center rounded-full border border-ink/10 bg-paper/60 transition hover:border-forest/30 sm:grid"
-                aria-label="Search Ashaaya"
+                aria-label="Search Skymeredian"
                 onClick={() => setSearchOpen(true)}
               >
                 <Search className="size-[18px]" aria-hidden="true" />

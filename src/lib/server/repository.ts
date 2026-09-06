@@ -18,6 +18,11 @@ import {
   putDemoRecord,
   updateDemoRecord,
 } from "./memory-store";
+import {
+  createNewsletterUnsubscribeToken,
+  hashNewsletterUnsubscribeToken,
+  isNewsletterUnsubscribeToken,
+} from "./newsletter-tokens";
 import type {
   ContactInput,
   DonationInput,
@@ -31,6 +36,7 @@ export type RequestMetadata = {
   requestId: string;
   ip?: string;
   userAgent?: string;
+  accountUserId?: string;
 };
 
 export type StoredResult<T> = {
@@ -38,6 +44,19 @@ export type StoredResult<T> = {
   persistence: PersistenceMode;
   created: boolean;
 };
+
+export type NewsletterSubscriptionRecord = {
+  id: string;
+  status: "active";
+  subscribedAt: string;
+};
+
+export type NewsletterSubscriptionStoredResult =
+  StoredResult<NewsletterSubscriptionRecord> & {
+    unsubscribeToken?: string;
+  };
+
+export type NewsletterUnsubscribeResult = "unsubscribed" | "invalid";
 
 export type DonationRecord = {
   id: string;
@@ -157,9 +176,7 @@ export async function storeContact(
 export async function storeNewsletterSubscription(
   input: NewsletterInput,
   metadata: RequestMetadata,
-): Promise<
-  StoredResult<{ id: string; status: "active"; subscribedAt: string }>
-> {
+): Promise<NewsletterSubscriptionStoredResult> {
   const connection = await connectMongo();
   if (!connection) {
     assertInMemoryWriteAllowed();
@@ -182,38 +199,211 @@ export async function storeNewsletterSubscription(
     };
   }
 
-  const existing = await NewsletterSubscriberModel.findOne({
-    email: input.email,
-  })
-    .select("_id status")
-    .lean();
-  const activated = !existing || existing.status !== "active";
-  const document = await NewsletterSubscriberModel.findOneAndUpdate(
-    { email: input.email },
-    {
-      $set: {
-        name: input.name,
-        source: input.source,
-        consent: true,
-        status: "active",
-        requestId: metadata.requestId,
-        ipHash: digest(metadata.ip),
-        ...(activated ? { subscribedAt: new Date() } : {}),
-      },
-      $unset: { unsubscribedAt: 1 },
-    },
-    { upsert: true, new: true, setDefaultsOnInsert: true },
-  ).orFail();
+  let reactivationAllowed: boolean | undefined;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const existing = await NewsletterSubscriberModel.findOne({
+      email: input.email,
+    })
+      .select("_id status subscribedAt +unsubscribeTokenHash")
+      .lean();
 
-  return {
-    record: {
-      id: document._id.toString(),
+    if (!existing) {
+      reactivationAllowed ??= false;
+      const unsubscribe = createNewsletterUnsubscribeToken();
+      try {
+        const document = await NewsletterSubscriberModel.create({
+          name: input.name,
+          email: input.email,
+          source: input.source,
+          consent: true,
+          status: "active",
+          requestId: metadata.requestId,
+          ipHash: digest(metadata.ip),
+          unsubscribeTokenHash: unsubscribe.hash,
+          unsubscribeTokenIssuedAt: new Date(),
+        });
+        return {
+          record: {
+            id: document._id.toString(),
+            status: "active",
+            subscribedAt: document.subscribedAt.toISOString(),
+          },
+          persistence: "mongodb",
+          created: true,
+          unsubscribeToken: unsubscribe.token,
+        };
+      } catch (error) {
+        if (isDuplicateKey(error)) continue;
+        throw error;
+      }
+    }
+
+    if (existing.status === "bounced" || existing.status === "complained") {
+      throw new ApiError(
+        409,
+        "SUBSCRIPTION_SUPPRESSED",
+        "This email address cannot currently be subscribed.",
+      );
+    }
+
+    const reactivated = existing.status === "unsubscribed";
+    if (reactivated && reactivationAllowed === false) {
+      throw new ApiError(
+        409,
+        "SUBSCRIPTION_CHANGED",
+        "The subscription changed while this request was being processed. Please try again.",
+      );
+    }
+    reactivationAllowed ??= reactivated;
+
+    const existingTokenHash =
+      typeof existing.unsubscribeTokenHash === "string"
+        ? existing.unsubscribeTokenHash
+        : undefined;
+    const tokenHashFieldPresent = existingTokenHash !== undefined;
+    const hasUsableTokenHash =
+      tokenHashFieldPresent && /^[a-f0-9]{64}$/i.test(existingTokenHash);
+    const needsToken = !hasUsableTokenHash;
+    if (reactivated || needsToken) {
+      const unsubscribe = createNewsletterUnsubscribeToken();
+      const now = new Date();
+      const document = await NewsletterSubscriberModel.findOneAndUpdate(
+        {
+          _id: existing._id,
+          status: existing.status,
+          ...(tokenHashFieldPresent
+            ? { unsubscribeTokenHash: existingTokenHash }
+            : {
+                $or: [
+                  { unsubscribeTokenHash: { $exists: false } },
+                  { unsubscribeTokenHash: null },
+                ],
+              }),
+        },
+        {
+          $set: {
+            name: input.name,
+            source: input.source,
+            consent: true,
+            status: "active",
+            requestId: metadata.requestId,
+            ipHash: digest(metadata.ip),
+            unsubscribeTokenHash: unsubscribe.hash,
+            unsubscribeTokenIssuedAt: now,
+            ...(reactivated ? { subscribedAt: now } : {}),
+          },
+          $unset: { unsubscribedAt: 1 },
+        },
+        { new: true },
+      );
+
+      if (!document) continue;
+      return {
+        record: {
+          id: document._id.toString(),
+          status: "active",
+          subscribedAt: document.subscribedAt.toISOString(),
+        },
+        persistence: "mongodb",
+        created: reactivated,
+        unsubscribeToken: unsubscribe.token,
+      };
+    }
+
+    const document = await NewsletterSubscriberModel.findOneAndUpdate(
+      {
+        _id: existing._id,
+        status: "active",
+        unsubscribeTokenHash: existing.unsubscribeTokenHash,
+      },
+      {
+        $set: {
+          name: input.name,
+          source: input.source,
+          consent: true,
+          requestId: metadata.requestId,
+          ipHash: digest(metadata.ip),
+        },
+      },
+      { new: true },
+    );
+
+    if (!document) continue;
+    return {
+      record: {
+        id: document._id.toString(),
+        status: "active",
+        subscribedAt: document.subscribedAt.toISOString(),
+      },
+      persistence: "mongodb",
+      created: false,
+    };
+  }
+
+  throw new ApiError(
+    409,
+    "SUBSCRIPTION_CHANGED",
+    "The subscription changed while this request was being processed. Please try again.",
+  );
+}
+
+function assertDonationIdempotencyMatch(
+  document: DonationDocument,
+  input: DonationInput,
+  provider: PaymentProvider,
+  amountMinor: number,
+  accountUserId?: string,
+): void {
+  const storedAccountUserId = document.accountUserId?.trim() || undefined;
+  const expectedAccountUserId = accountUserId?.trim() || undefined;
+  const matches =
+    document.donor.email === input.donor.email &&
+    document.amountMinor === amountMinor &&
+    document.currency === input.currency &&
+    document.frequency === input.frequency &&
+    document.provider === provider &&
+    storedAccountUserId === expectedAccountUserId;
+
+  if (!matches) {
+    throw new ApiError(
+      409,
+      "IDEMPOTENCY_CONFLICT",
+      "This idempotency key is already bound to a different donation request.",
+    );
+  }
+}
+
+export async function unsubscribeNewsletterSubscription(
+  token: string,
+): Promise<NewsletterUnsubscribeResult> {
+  if (!isNewsletterUnsubscribeToken(token)) return "invalid";
+
+  const connection = await connectMongo();
+  if (!connection) {
+    throw new ApiError(
+      503,
+      "PERSISTENCE_REQUIRED",
+      "Durable database storage is required to update this subscription.",
+      { retryAfter: 30 },
+    );
+  }
+
+  const document = await NewsletterSubscriberModel.findOneAndUpdate(
+    {
       status: "active",
-      subscribedAt: document.subscribedAt.toISOString(),
+      unsubscribeTokenHash: hashNewsletterUnsubscribeToken(token),
     },
-    persistence: "mongodb",
-    created: activated,
-  };
+    {
+      $set: { status: "unsubscribed", unsubscribedAt: new Date() },
+      $unset: {
+        unsubscribeTokenHash: 1,
+        unsubscribeTokenIssuedAt: 1,
+      },
+    },
+    { new: true },
+  );
+
+  return document ? "unsubscribed" : "invalid";
 }
 
 export async function storeVolunteerApplication(
@@ -289,12 +479,20 @@ export async function storeDonation(
     const existing = await DonationModel.findOne({
       idempotencyKey: input.idempotencyKey,
     });
-    if (existing)
+    if (existing) {
+      assertDonationIdempotencyMatch(
+        existing,
+        input,
+        provider,
+        amountMinor,
+        metadata.accountUserId,
+      );
       return {
         record: donationRecord(existing),
         persistence: "mongodb",
         created: false,
       };
+    }
   }
 
   try {
@@ -312,6 +510,7 @@ export async function storeDonation(
       anonymous: input.anonymous,
       message: input.message,
       consent: true,
+      accountUserId: metadata.accountUserId,
       status: "pending",
       idempotencyKey: input.idempotencyKey,
       requestId: metadata.requestId,
@@ -327,6 +526,13 @@ export async function storeDonation(
       const existing = await DonationModel.findOne({
         idempotencyKey: input.idempotencyKey,
       }).orFail();
+      assertDonationIdempotencyMatch(
+        existing,
+        input,
+        provider,
+        amountMinor,
+        metadata.accountUserId,
+      );
       return {
         record: donationRecord(existing),
         persistence: "mongodb",

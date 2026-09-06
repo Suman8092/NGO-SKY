@@ -6,12 +6,11 @@ import { getPublicPaymentReadiness } from "@/lib/server/public-payment-readiness
 export const metadata: Metadata = {
   title: "Donate",
   description:
-    "Check whether verified online giving is available for Ashaaya Foundation.",
+    "Check whether verified online giving is available for Skymeredian Foundation.",
 };
 
 type Props = {
   searchParams: Promise<{
-    frequency?: string | string[];
     amount?: string | string[];
     status?: string | string[];
   }>;
@@ -20,13 +19,6 @@ type Props = {
 export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
   const paymentReadiness = getPublicPaymentReadiness();
-  const rawFrequency = Array.isArray(params.frequency)
-    ? params.frequency[0]
-    : params.frequency;
-  const frequency =
-    rawFrequency === "monthly" || rawFrequency === "yearly"
-      ? rawFrequency
-      : "one_time";
   const rawAmount = Array.isArray(params.amount)
     ? params.amount[0]
     : params.amount;
@@ -43,7 +35,6 @@ export default async function Page({ searchParams }: Props) {
   return (
     <DonatePage
       checkoutCancelled={rawStatus === "cancelled"}
-      frequency={frequency}
       initialAmount={amount}
       paymentReadiness={paymentReadiness}
     />

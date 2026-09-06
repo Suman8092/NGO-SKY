@@ -1,5 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="18" fill="#0f766e"/>
-  <path d="M17 39c9-2 15-8 19-18 6 4 10 11 11 21-9-5-18-5-30-3Z" fill="#f8f7f1"/>
-  <path d="M22 43c7-7 13-12 22-16" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="sm-icon-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#082b26"/>
+      <stop offset="100%" stopColor="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="sm-icon-glow" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#38bdf8"/>
+      <stop offset="50%" stopColor="#34d399"/>
+      <stop offset="100%" stopColor="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#sm-icon-bg)"/>
+  <path d="M14 43.5C22 34 32 26.5 48 23.5C42 31.5 33.5 37.5 20 42.2C17.5 43 15.5 43.4 14 43.5Z" fill="#f8f7f1"/>
+  <path d="M17 48C26 44 36 36 45 25" stroke="url(#sm-icon-glow)" stroke-width="4.2" stroke-linecap="round"/>
+  <circle cx="47" cy="19" r="4.2" fill="#f59e0b"/>
+  <path d="M22 49.5C31 49 40 45 49 38" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2.5 4" opacity="0.5"/>
 </svg>

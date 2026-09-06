@@ -5,7 +5,7 @@ import { CampaignsPage } from "@/components/pages/campaigns-pages";
 export const metadata: Metadata = {
   title: "Campaigns",
   description:
-    "Support transparent, community-led Ashaaya Foundation campaigns and follow progress from contribution to outcome.",
+    "Support transparent, community-led Skymeredian Foundation campaigns and follow progress from contribution to outcome.",
 };
 
 type Props = { searchParams: Promise<{ category?: string | string[] }> };

@@ -6,11 +6,43 @@ export function BrandMark({ className }: { className?: string }) {
       viewBox="0 0 48 48"
       className={cn("size-10", className)}
       role="img"
-      aria-label="Ashaaya Foundation"
+      aria-label="Skymeredian Foundation"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      <rect width="48" height="48" rx="15" fill="currentColor" className="text-forest" />
-      <path d="M11.5 29.8C18 28.2 22.8 23.7 26.2 15c5 3.1 8.1 8.3 8.9 16.8-7.2-3.6-14.4-4-23.6-2Z" fill="#f8f7f1" />
-      <path d="M15.8 33.4c5.3-5.1 10.3-9.1 17.4-12.1" fill="none" stroke="#f59e0b" strokeWidth="3.1" strokeLinecap="round" />
+      <defs>
+        <linearGradient id="sm-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#082b26" />
+          <stop offset="100%" stopColor="#0f766e" />
+        </linearGradient>
+        <linearGradient id="sm-glow" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#38bdf8" />
+          <stop offset="50%" stopColor="#34d399" />
+          <stop offset="100%" stopColor="#fbbf24" />
+        </linearGradient>
+      </defs>
+      <rect width="48" height="48" rx="14" fill="url(#sm-bg)" />
+      {/* Horizon & Meridian Swoosh */}
+      <path
+        d="M10 32.5C16.5 25.5 24 20 36 17.5C31.5 23.5 25 28 15 31.5C13.2 32.1 11.5 32.4 10 32.5Z"
+        fill="#f8f7f1"
+      />
+      <path
+        d="M13 36C20 33 27 27 34 18.5"
+        stroke="url(#sm-glow)"
+        strokeWidth="3.2"
+        strokeLinecap="round"
+      />
+      {/* Zenith Sun / Star */}
+      <circle cx="35" cy="14" r="3.2" fill="#f59e0b" />
+      <path
+        d="M17 37C23.5 36.5 30 33.5 37 28.5"
+        stroke="#ffffff"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeDasharray="2 3"
+        opacity="0.5"
+      />
     </svg>
   );
 }

@@ -6,7 +6,7 @@ import { NewsletterForm } from "@/components/newsletter-form";
 import { isEditorialContentPublished } from "@/lib/content-config";
 import {
   hasManagedSubmissionWorkflow,
-  isPublicSubmissionsEnabled,
+  isNewsletterWorkflowEnabled,
 } from "@/lib/server/env";
 
 const columns = [
@@ -42,7 +42,7 @@ const columns = [
 export function SiteFooter() {
   const editorialContentPublished = isEditorialContentPublished();
   const newsletterAvailable =
-    editorialContentPublished && isPublicSubmissionsEnabled();
+    editorialContentPublished && isNewsletterWorkflowEnabled();
   const managedContactAvailable = hasManagedSubmissionWorkflow();
   const visibleColumns = editorialContentPublished
     ? columns
@@ -104,7 +104,7 @@ export function SiteFooter() {
             <Link href="/" className="inline-flex items-center gap-3">
               <BrandMark className="text-[#5dc3a1]" />
               <span className="font-display text-lg font-extrabold uppercase tracking-tight">
-                Ashaaya{" "}
+                Skymeredian{" "}
                 <span className="block text-[0.55rem] tracking-[0.22em] text-white/45">
                   Foundation
                 </span>
@@ -142,7 +142,7 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-5 border-t border-white/10 pt-7 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Ashaaya Foundation</p>
+          <p>© 2026 Skymeredian Foundation</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             {editorialContentPublished ? (
               <>

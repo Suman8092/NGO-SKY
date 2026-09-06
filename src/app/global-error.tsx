@@ -13,7 +13,7 @@ export default function GlobalError({
       <body className="flex min-h-screen items-center justify-center bg-[#f5f3ee] p-6 text-[#171717]">
         <main className="w-full max-w-xl rounded-3xl border border-black/10 bg-white p-8 text-center shadow-xl shadow-black/5 sm:p-12">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#6b5b45]">
-            Ashaaya Foundation
+            Skymeredian Foundation
           </p>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
             We could not load this page.

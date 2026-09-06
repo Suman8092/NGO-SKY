@@ -4,6 +4,7 @@ import {
   BriefcaseBusiness,
   Building2,
   Eye,
+  FileDown,
   HandHeart,
   HeartPulse,
   Home,
@@ -61,7 +62,7 @@ const values = [
 const milestones = [
   {
     year: "2017",
-    title: "Ashaaya begins",
+    title: "Skymeredian begins",
     detail:
       "A neighbourhood learning circle becomes a registered public-interest initiative.",
   },
@@ -97,8 +98,8 @@ export function AboutPage() {
       <PageHero
         accent="emerald"
         breadcrumbs={[{ label: "About us" }]}
-        description="Ashaaya Foundation works alongside communities to remove the barriers that keep opportunity out of reach—and to build solutions that endure long after a project ends."
-        eyebrow="About Ashaaya"
+        description="Skymeredian Foundation works alongside communities to remove the barriers that keep opportunity out of reach—and to build solutions that endure long after a project ends."
+        eyebrow="About Skymeredian"
         primaryAction={{ href: "/impact", label: "See our impact" }}
         secondaryAction={{ href: "/contact", label: "Meet our team" }}
         title={
@@ -265,6 +266,27 @@ export function AboutPage() {
               ]}
             />
           </div>
+
+          <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div>
+              <h3 className="font-display text-lg font-bold text-white">
+                Statutory Transparency & Audited Financials
+              </h3>
+              <p className="mt-1 text-sm text-teal-100/70">
+                Download the complete, independent audit statement and program outcomes report for FY 2025–26.
+              </p>
+            </div>
+            <a
+              href="/reports/skymeredian-annual-report-2025-26.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download="skymeredian-annual-report-2025-26.pdf"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-teal-950 shadow-md transition hover:bg-teal-50"
+            >
+              <FileDown className="size-4" aria-hidden="true" />
+              Download Annual Report (PDF)
+            </a>
+          </div>
         </div>
       </section>
 
@@ -411,7 +433,7 @@ export function ProgramsPage() {
             className="absolute -bottom-16 -left-12 h-56 w-56 rounded-full bg-amber-400/15 blur-3xl"
           />
           <p className="relative text-xs font-extrabold uppercase tracking-[0.2em] text-teal-300">
-            The Ashaaya model
+            The Skymeredian model
           </p>
           <p className="relative mt-5 max-w-sm text-3xl font-semibold leading-tight tracking-[-0.035em]">
             Care becomes durable when every part of life can move forward

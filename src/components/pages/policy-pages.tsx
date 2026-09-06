@@ -61,7 +61,7 @@ function PolicyPage({
           <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-slate-200 pt-5 text-xs text-slate-500 dark:border-white/10 dark:text-slate-400">
             <span>Last reviewed: 5 August 2026</span>
             <span>Version 2.1</span>
-            <span>Applies to: ashaaya.org and related services</span>
+            <span>Applies to: skymeredian.org and related services</span>
           </div>
         </div>
       </section>
@@ -128,9 +128,9 @@ function PolicyPage({
               Write to{" "}
               <a
                 className="font-bold text-teal-300 underline underline-offset-4"
-                href="mailto:privacy@ashaaya.org"
+                href="mailto:privacy@skymeredian.org"
               >
-                privacy@ashaaya.org
+                privacy@skymeredian.org
               </a>{" "}
               or use our contact form. We will route accessibility requests,
               privacy rights, and formal notices to the appropriate person.
@@ -139,7 +139,7 @@ function PolicyPage({
               className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-amber-300"
               href="/contact"
             >
-              Contact Ashaaya{" "}
+              Contact Skymeredian{" "}
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
@@ -156,7 +156,7 @@ const privacySections: PolicySection[] = [
     content: (
       <>
         <p>
-          Ashaaya Foundation (“Ashaaya”, “we”, “us”) is a public-interest
+          Skymeredian Foundation (“Skymeredian”, “we”, “us”) is a public-interest
           organisation. This policy explains how we handle personal information
           when you visit our website, donate, register for an event, volunteer,
           contact us, subscribe to updates, or otherwise interact with our
@@ -203,7 +203,7 @@ const privacySections: PolicySection[] = [
         </ul>
         <p>
           Complete payment-card or bank credentials are processed by approved
-          payment providers and are not stored by Ashaaya.
+          payment providers and are not stored by Skymeredian.
         </p>
       </>
     ),
@@ -319,9 +319,9 @@ const privacySections: PolicySection[] = [
           Send a request to{" "}
           <a
             className="font-bold text-teal-700 underline underline-offset-4 dark:text-teal-300"
-            href="mailto:privacy@ashaaya.org"
+            href="mailto:privacy@skymeredian.org"
           >
-            privacy@ashaaya.org
+            privacy@skymeredian.org
           </a>
           . We may need to verify your identity and clarify the scope before
           acting. We will not penalise anyone for making a good-faith privacy
@@ -398,9 +398,9 @@ const termsSections: PolicySection[] = [
     title: "Using this website",
     content: (
       <p>
-        These terms apply when you access ashaaya.org, submit a form, register
+        These terms apply when you access skymeredian.org, submit a form, register
         for an event, make a donation, or use a related digital service operated
-        by Ashaaya Foundation. By using a service, you agree to these terms and
+        by Skymeredian Foundation. By using a service, you agree to these terms and
         the notices shown for that activity. If you do not agree, please do not
         continue with that service.
       </p>
@@ -476,7 +476,7 @@ const termsSections: PolicySection[] = [
         We provide acknowledgements and eligible tax documentation based on the
         information supplied and applicable requirements. Tax treatment depends
         on the donor, jurisdiction, registration status, and nature of the gift.
-        Ashaaya does not provide personal tax advice; consult a qualified
+        Skymeredian does not provide personal tax advice; consult a qualified
         adviser where needed.
       </p>
     ),
@@ -490,7 +490,7 @@ const termsSections: PolicySection[] = [
           You may not interfere with site security, attempt unauthorised access,
           introduce malicious code, scrape personal information, overload
           services, submit abusive or discriminatory content, misrepresent
-          affiliation with Ashaaya, or use our brand to solicit funds without
+          affiliation with Skymeredian, or use our brand to solicit funds without
           written approval.
         </p>
         <p>
@@ -507,7 +507,7 @@ const termsSections: PolicySection[] = [
     title: "Content and intellectual property",
     content: (
       <p>
-        Unless otherwise stated, Ashaaya owns or is licensed to use the website
+        Unless otherwise stated, Skymeredian owns or is licensed to use the website
         design, text, graphics, reports, marks, and media. You may share public
         pages and quote brief portions with attribution for non-commercial
         purposes. Do not alter context, imply endorsement, use identifiable
@@ -524,7 +524,7 @@ const termsSections: PolicySection[] = [
         Links and embedded tools may lead to services operated by payment, map,
         video, social, registration, or other providers. Their terms and privacy
         practices apply when you use them. A link does not necessarily mean
-        Ashaaya controls or endorses every statement on that service.
+        Skymeredian controls or endorses every statement on that service.
       </p>
     ),
   },
@@ -546,7 +546,7 @@ const termsSections: PolicySection[] = [
     content: (
       <p>
         Nothing in these terms excludes responsibility that cannot lawfully be
-        excluded. To the extent permitted by law, Ashaaya is not responsible for
+        excluded. To the extent permitted by law, Skymeredian is not responsible for
         indirect loss arising solely from reliance on general website
         information, third-party services, or events outside reasonable control.
         These terms do not reduce statutory consumer, donor, data-protection, or
@@ -559,9 +559,9 @@ const termsSections: PolicySection[] = [
     title: "Questions, concerns, and governing rules",
     content: (
       <p>
-        These terms are interpreted under the laws applicable to Ashaaya
+        These terms are interpreted under the laws applicable to Skymeredian
         Foundation and the relevant service, without overriding mandatory rights
-        that apply where you live. Please contact legal@ashaaya.org first so we
+        that apply where you live. Please contact legal@skymeredian.org first so we
         can try to resolve concerns fairly and promptly. Formal notices may also
         be sent through the contact details published on this site.
       </p>
@@ -572,7 +572,7 @@ const termsSections: PolicySection[] = [
 export function TermsPage() {
   return (
     <PolicyPage
-      description="The ground rules for using our website, making a donation, joining an event, and engaging with Ashaaya online."
+      description="The ground rules for using our website, making a donation, joining an event, and engaging with Skymeredian online."
       eyebrow="Clear expectations, mutual respect"
       icon={Scale}
       note="These terms are written in plain language. Mandatory rights under applicable law continue to apply."
@@ -588,7 +588,7 @@ const accessibilitySections: PolicySection[] = [
     title: "Our commitment",
     content: (
       <p>
-        Ashaaya Foundation wants every person to access information, make
+        Skymeredian Foundation wants every person to access information, make
         choices, and take action with dignity. We treat accessibility as an
         ongoing product and content practice—not a one-time certification. Our
         teams consider disabled people, older adults, low-bandwidth users,
@@ -698,7 +698,7 @@ const accessibilitySections: PolicySection[] = [
     content: (
       <>
         <p>
-          Email accessibility@ashaaya.org or use the contact form with
+          Email accessibility@skymeredian.org or use the contact form with
           “Accessibility” in the message. Helpful details include the page or
           task, what you expected, what happened, your browser or assistive
           technology if you are comfortable sharing it, and the best way to
@@ -744,7 +744,7 @@ export function AccessibilityPage() {
   return (
     <>
       <PolicyPage
-        description="How we design, test, improve, and provide alternatives so more people can use Ashaaya’s digital services."
+        description="How we design, test, improve, and provide alternatives so more people can use Skymeredian’s digital services."
         eyebrow="Access belongs to everyone"
         icon={Accessibility}
         note="If an essential task is blocked, contact us for an immediate alternative. You do not need to diagnose the technical issue first."
@@ -808,7 +808,7 @@ export function AccessibilityPage() {
           label: "Report an access barrier",
         }}
         secondaryAction={{
-          href: "mailto:accessibility@ashaaya.org",
+          href: "mailto:accessibility@skymeredian.org",
           label: "Email accessibility team",
         }}
         title="Found something that gets in the way?"

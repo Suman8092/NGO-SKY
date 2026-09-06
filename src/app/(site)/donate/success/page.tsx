@@ -11,7 +11,7 @@ import {
 export const metadata: Metadata = {
   title: "Donation status",
   description:
-    "Check the server-confirmed status of a secure Ashaaya Foundation donation.",
+    "Check the server-confirmed status of a secure Skymeredian Foundation donation.",
   robots: { index: false, follow: false },
 };
 
@@ -40,7 +40,7 @@ export default async function Page({ searchParams }: Props) {
           { label: "Donate", href: "/donate" },
           { label: "Donation status" },
         ]}
-        description="Your payment provider has returned you to Ashaaya. A signed provider notification—not the browser redirect—sets the final donation status."
+        description="Your payment provider has returned you to Skymeredian. A signed provider notification—not the browser redirect—sets the final donation status."
         eyebrow="Secure payment return"
         title="We’re confirming your gift."
       />
@@ -55,7 +55,7 @@ export default async function Page({ searchParams }: Props) {
           <div className="mt-7">
             <CheckList
               items={[
-                "The provider sends a signed event to Ashaaya.",
+                "The provider sends a signed event to Skymeredian.",
                 "The server verifies it before changing donation status.",
                 "This page reads the server-confirmed status using the donation reference.",
               ]}

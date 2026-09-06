@@ -19,16 +19,15 @@ describe("public payment readiness", () => {
     expect(paymentProviderForFrequency(readiness, "yearly")).toBeNull();
   });
 
-  it("uses Stripe for supported recurring gifts only", () => {
+  it("never exposes a recurring checkout provider", () => {
     const readiness: PublicPaymentReadiness = {
       persistenceReady: true,
-      oneTimeProvider: null,
-      recurringProvider: "stripe",
+      oneTimeProvider: "razorpay",
+      recurringProvider: null,
     };
 
-    expect(paymentProviderForFrequency(readiness, "one_time")).toBeNull();
-    expect(paymentProviderForFrequency(readiness, "monthly")).toBe("stripe");
-    expect(paymentProviderLabel("stripe")).toBe("Stripe");
+    expect(paymentProviderForFrequency(readiness, "monthly")).toBeNull();
+    expect(paymentProviderForFrequency(readiness, "yearly")).toBeNull();
     expect(paymentProviderLabel(null)).toBe("Unavailable");
   });
 });

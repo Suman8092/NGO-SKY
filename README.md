@@ -1,4 +1,4 @@
-# Ashaaya Foundation
+# Skymeredian Foundation
 
 A premium, accessible NGO platform built with Next.js 15, React 19, TypeScript, Tailwind CSS, MongoDB, Sanity, Clerk, Stripe, Razorpay, and Resend. The application combines an editorial marketing experience with validated submission APIs, donation orchestration, signed payment webhooks, explicit launch gates, and fail-closed production behavior.
 

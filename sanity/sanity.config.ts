@@ -8,24 +8,27 @@ function requiredEnvironmentValue(
   value: string | undefined,
 ): string {
   if (!value) {
-    throw new Error(`${name} is required to start Ashaaya Studio.`);
+    throw new Error(`${name} is required to start Skymeredian Studio.`);
   }
   return value;
 }
 
 const projectId = requiredEnvironmentValue(
-  "SANITY_STUDIO_PROJECT_ID",
-  process.env.SANITY_STUDIO_PROJECT_ID ??
+  "SANITY_STUDIO_API_PROJECT_ID or SANITY_STUDIO_PROJECT_ID",
+  process.env.SANITY_STUDIO_API_PROJECT_ID ??
+    process.env.SANITY_STUDIO_PROJECT_ID ??
     process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
 );
 const dataset = requiredEnvironmentValue(
-  "SANITY_STUDIO_DATASET",
-  process.env.SANITY_STUDIO_DATASET ?? process.env.NEXT_PUBLIC_SANITY_DATASET,
+  "SANITY_STUDIO_API_DATASET or SANITY_STUDIO_DATASET",
+  process.env.SANITY_STUDIO_API_DATASET ??
+    process.env.SANITY_STUDIO_DATASET ??
+    process.env.NEXT_PUBLIC_SANITY_DATASET,
 );
 
 export default defineConfig({
-  name: "ashaaya",
-  title: "Ashaaya Foundation",
+  name: "skymeredian",
+  title: "Skymeredian Foundation",
   projectId,
   dataset,
   plugins: [structureTool()],

@@ -5,7 +5,7 @@ import { SearchPage } from "@/components/pages/action-pages";
 export const metadata: Metadata = {
   title: "Search",
   description:
-    "Search Ashaaya Foundation programs, campaigns, events, stories, and ways to help.",
+    "Search Skymeredian Foundation programs, campaigns, events, stories, and ways to help.",
   robots: { index: false, follow: true },
 };
 

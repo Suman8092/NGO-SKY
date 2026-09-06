@@ -2,7 +2,7 @@
 
 ## System shape
 
-Ashaaya is a single Next.js application with an optional Express adapter. The browser receives server-rendered App Router pages and selectively hydrated client components. Route Handlers own the public API. Business logic, persistence, provider adapters, and validation are kept outside page components.
+Skymeredian is a single Next.js application with an optional Express adapter. The browser receives server-rendered App Router pages and selectively hydrated client components. Route Handlers own the public API. Business logic, persistence, provider adapters, and validation are kept outside page components.
 
 ```text
 src/app                 routes, metadata, errors, and API boundary

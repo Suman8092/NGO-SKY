@@ -1,6 +1,14 @@
 import { Resend } from "resend";
 
-import { getServerEnv, hasResendConfig } from "../env";
+import {
+  getServerEnv,
+  getVerifiedSiteOrigin,
+  hasResendConfig,
+} from "../env";
+import {
+  hashNewsletterUnsubscribeToken,
+  isNewsletterUnsubscribeToken,
+} from "../newsletter-tokens";
 import type { DonationRecord } from "../repository";
 import type { ContactInput, NewsletterInput, VolunteerInput } from "../validation";
 
@@ -32,15 +40,40 @@ function escapeHtml(value: string): string {
   });
 }
 
-async function deliver(messages: Array<{ to: string; subject: string; html: string; key: string }>): Promise<EmailDeliverySummary> {
+function resolveSender(configuredFrom: string | undefined): string | null {
+  if (!configuredFrom) return null;
+  const trimmed = configuredFrom.trim();
+  if (/@(gmail|yahoo|outlook|hotmail)\.com$/i.test(trimmed)) {
+    return "Skymeredian Foundation <onboarding@resend.dev>";
+  }
+  return trimmed;
+}
+async function deliver(
+  messages: Array<{
+    to: string;
+    subject: string;
+    html: string;
+    text?: string;
+    headers?: Record<string, string>;
+    key: string;
+  }>,
+): Promise<EmailDeliverySummary> {
   const resend = client();
-  const from = getServerEnv().RESEND_FROM_EMAIL;
+  const rawFrom = getServerEnv().RESEND_FROM_EMAIL;
+  const from = resolveSender(rawFrom);
   if (!resend || !from || messages.length === 0) return { status: "skipped", delivered: 0, attempted: 0 };
 
   const outcomes = await Promise.allSettled(
     messages.map((message) =>
       resend.emails.send(
-        { from, to: message.to, subject: message.subject, html: message.html },
+        {
+          from,
+          to: message.to,
+          subject: message.subject,
+          html: message.html,
+          text: message.text,
+          headers: message.headers,
+        },
         { headers: { "Idempotency-Key": message.key } },
       ),
     ),
@@ -65,7 +98,7 @@ export function sendContactAcknowledgements(
       to: input.email,
       subject: "We received your message",
       key: `contact-ack-${submissionId}`,
-      html: `<p>Hello ${escapeHtml(input.name)},</p><p>Thank you for contacting Ashaaya Foundation. Our team has received your message and will respond as soon as possible.</p><p>Reference: ${escapeHtml(submissionId)}</p>`,
+      html: `<p>Hello ${escapeHtml(input.name)},</p><p>Thank you for contacting Skymeredian Foundation. Our team has received your message and will respond as soon as possible.</p><p>Reference: ${escapeHtml(submissionId)}</p>`,
     },
     ...(admin
       ? [
@@ -84,13 +117,33 @@ export function sendContactAcknowledgements(
 export function sendNewsletterWelcome(
   input: NewsletterInput,
   subscriptionId: string,
+  unsubscribeToken: string,
 ): Promise<EmailDeliverySummary> {
+  const origin = getVerifiedSiteOrigin();
+  if (!origin || !isNewsletterUnsubscribeToken(unsubscribeToken)) {
+    return Promise.resolve({
+      status: "skipped",
+      delivered: 0,
+      attempted: 0,
+    });
+  }
+
+  const unsubscribeUrl = new URL("/newsletter/unsubscribe", origin);
+  unsubscribeUrl.searchParams.set("token", unsubscribeToken);
+  const tokenFingerprint = hashNewsletterUnsubscribeToken(
+    unsubscribeToken,
+  ).slice(0, 16);
+  const unsubscribeHref = unsubscribeUrl.toString();
+  const greeting = `Hello${input.name ? ` ${input.name}` : ""},`;
+
   return deliver([
     {
       to: input.email,
-      subject: "Welcome to the Ashaaya Foundation community",
-      key: `newsletter-welcome-${subscriptionId}`,
-      html: `<p>Hello${input.name ? ` ${escapeHtml(input.name)}` : ""},</p><p>Thank you for joining our impact newsletter. You will receive thoughtful updates about programs, field stories, and ways to help.</p>`,
+      subject: "Your Skymeredian Foundation email updates",
+      key: `newsletter-welcome-${subscriptionId}-${tokenFingerprint}`,
+      html: `<p>Hello${input.name ? ` ${escapeHtml(input.name)}` : ""},</p><p>This confirms that this address is subscribed to Skymeredian Foundation email updates.</p><p>You can stop these emails at any time by using this secure link: <a href="${escapeHtml(unsubscribeHref)}">unsubscribe from email updates</a>.</p><p>If you did not request this, use the same link to unsubscribe.</p>`,
+      text: `${greeting}\n\nThis confirms that this address is subscribed to Skymeredian Foundation email updates.\n\nYou can stop these emails at any time using this secure link:\n${unsubscribeHref}\n\nIf you did not request this, use the same link to unsubscribe.`,
+      headers: { "List-Unsubscribe": `<${unsubscribeHref}>` },
     },
   ]);
 }

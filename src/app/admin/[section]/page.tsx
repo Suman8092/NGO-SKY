@@ -9,6 +9,7 @@ import {
   ExternalLink,
   FileImage,
   HeartHandshake,
+  Inbox,
   Settings,
   ShieldCheck,
   Users,
@@ -16,7 +17,28 @@ import {
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import {
+  AnalyticsDashboard,
+  AuthPeopleRecords,
+  CampaignRecords,
+  DonationRecords,
+  EventRecords,
+  MediaRecords,
+  SettingsConsole,
+  StoryRecords,
+  SubmissionRecords,
+  VolunteerRecords,
+} from "@/components/dashboard/operational-records";
 import { isEditorialContentPublished } from "@/lib/content-config";
+import { getAdminAuthPeople } from "@/lib/server/auth-records";
+import {
+  getAdminDonationRecords,
+  getAdminSubmissionRecords,
+  getAdminVolunteerRecords,
+  getDetailedAnalytics,
+} from "@/lib/server/operations";
+
+export const dynamic = "force-dynamic";
 
 type SectionDefinition = {
   title: string;
@@ -44,7 +66,7 @@ const sections: Record<string, SectionDefinition> = {
   donations: {
     title: "Donations",
     description:
-      "Reconcile confirmed payments, receipts, refunds, and donor intent.",
+      "Review persisted donation intents and provider-confirmed payment states.",
     icon: CircleDollarSign,
     source:
       "Persistent donation records updated by signed payment-provider webhooks",
@@ -79,6 +101,18 @@ const sections: Record<string, SectionDefinition> = {
       "Safeguarding and retention workflow",
     ],
     publicHref: "/volunteer",
+  },
+  submissions: {
+    title: "Submissions",
+    description:
+      "Review protected contact enquiries and newsletter consent records.",
+    icon: Inbox,
+    source: "Persistent contact and newsletter subscription records",
+    requirements: [
+      "Production database connection",
+      "Restricted administrator access",
+      "Approved retention, response, and deletion workflow",
+    ],
   },
   events: {
     title: "Events",
@@ -161,6 +195,28 @@ export default async function AdminSectionPage({
   }
 
   const Icon = data.icon;
+  const operationalView =
+    section === "donations" ? (
+      <DonationRecords result={await getAdminDonationRecords()} />
+    ) : section === "volunteers" ? (
+      <VolunteerRecords result={await getAdminVolunteerRecords()} />
+    ) : section === "submissions" ? (
+      <SubmissionRecords result={await getAdminSubmissionRecords()} />
+    ) : section === "users" ? (
+      <AuthPeopleRecords result={await getAdminAuthPeople()} />
+    ) : section === "campaigns" ? (
+      <CampaignRecords />
+    ) : section === "events" ? (
+      <EventRecords />
+    ) : section === "stories" ? (
+      <StoryRecords />
+    ) : section === "media" ? (
+      <MediaRecords />
+    ) : section === "analytics" ? (
+      <AnalyticsDashboard result={await getDetailedAnalytics()} />
+    ) : section === "settings" ? (
+      <SettingsConsole />
+    ) : null;
 
   return (
     <div className="mx-auto max-w-[1200px]">
@@ -186,32 +242,38 @@ export default async function AdminSectionPage({
         </p>
       </header>
 
-      <section
-        className="mt-8 rounded-3xl border border-ink/8 bg-white p-6 shadow-[0_12px_35px_rgba(15,50,43,.05)] dark:bg-white/[0.055] sm:p-8"
-        aria-labelledby="empty-state-title"
-      >
-        <div className="flex flex-col gap-6 md:flex-row md:items-start">
-          <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-amber-500/10 text-amber-700 dark:text-amber-300">
-            <Database className="size-6" aria-hidden="true" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-amber-800 dark:text-amber-300">
-              Data connection required
-            </p>
-            <h2
-              id="empty-state-title"
-              className="mt-2 font-display text-2xl font-bold sm:text-3xl"
-            >
-              No verified records are connected to this view.
-            </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-ink/55">
-              This page remains empty by design. It will not display sample
-              records, invented people, placeholder totals, or inferred statuses
-              while an authenticated production read path is unavailable.
-            </p>
+      {operationalView ? (
+        <section className="mt-8" aria-label={`${data.title} records`}>
+          {operationalView}
+        </section>
+      ) : (
+        <section
+          className="mt-8 rounded-3xl border border-ink/8 bg-white p-6 shadow-[0_12px_35px_rgba(15,50,43,.05)] dark:bg-white/[0.055] sm:p-8"
+          aria-labelledby="empty-state-title"
+        >
+          <div className="flex flex-col gap-6 md:flex-row md:items-start">
+            <span className="grid size-14 shrink-0 place-items-center rounded-2xl bg-amber-500/10 text-amber-700 dark:text-amber-300">
+              <Database className="size-6" aria-hidden="true" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-amber-800 dark:text-amber-300">
+                Data connection required
+              </p>
+              <h2
+                id="empty-state-title"
+                className="mt-2 font-display text-2xl font-bold sm:text-3xl"
+              >
+                No verified records are connected to this view.
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-ink/55">
+                This page remains empty by design. It will not display sample
+                records, invented people, placeholder totals, or inferred
+                statuses while an approved production source is unavailable.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section
         className="mt-5 grid gap-5 lg:grid-cols-2"

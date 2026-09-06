@@ -12,6 +12,9 @@ import Link from "next/link";
 import { AccountGreeting } from "@/components/dashboard/account-greeting";
 import { AccountIdentity } from "@/components/dashboard/account-identity";
 import { isClerkConfigured } from "@/lib/auth-config";
+import { getOperationsSummary } from "@/lib/server/operations";
+
+export const dynamic = "force-dynamic";
 
 const readinessAreas = [
   {
@@ -45,27 +48,61 @@ const readinessAreas = [
 ] as const;
 
 const operationalViews = [
-  ["Campaign publishing", "/admin/campaigns", "Connect approved CMS documents"],
+  [
+    "Campaign management",
+    "/admin/campaigns",
+    "Monitor active field campaigns, targets, and progress",
+  ],
   [
     "Donation reconciliation",
     "/admin/donations",
-    "Connect verified payment and database records",
+    "Track live payment intents and reconciled gateway records",
   ],
   [
-    "People and volunteers",
+    "Authenticated accounts",
     "/admin/users",
-    "Connect consent-aware account and application records",
+    "Read verified supporter accounts and administrator identities",
+  ],
+  [
+    "Volunteer applications",
+    "/admin/volunteers",
+    "Review incoming volunteer submissions and availability",
+  ],
+  [
+    "Contact & newsletter",
+    "/admin/submissions",
+    "Review community enquiries and active newsletter subscribers",
+  ],
+  [
+    "Event operations",
+    "/admin/events",
+    "Monitor scheduled symposiums, workshops, and registrations",
+  ],
+  [
+    "Impact stories & blog",
+    "/admin/stories",
+    "Review published narratives and participant retrospectives",
+  ],
+  [
+    "Media asset library",
+    "/admin/media",
+    "Browse high-resolution photographs, dimensions, and usage rights",
+  ],
+  [
+    "Platform analytics",
+    "/admin/analytics",
+    "Inspect database KPI aggregates and server telemetry",
   ],
   [
     "System configuration",
     "/admin/settings",
-    "Review the required production services",
+    "Inspect cloud infrastructure, payment mode, and compliance",
   ],
 ] as const;
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
   const clerkEnabled = isClerkConfigured();
-
+  const summary = await getOperationsSummary();
   return (
     <div className="mx-auto max-w-[1400px]">
       <header className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
@@ -77,8 +114,9 @@ export default function AdminDashboard() {
             <AccountGreeting clerkEnabled={clerkEnabled} role="admin" />
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-ink/52">
-            No metrics, donor identities, campaign totals, or activity are shown
-            until they come from a verified production source.
+            Operational counts below are read directly from the protected
+            production database. No placeholder metrics or inferred campaign
+            totals are shown.
           </p>
         </div>
         <Link
@@ -96,33 +134,63 @@ export default function AdminDashboard() {
         <AccountIdentity clerkEnabled={clerkEnabled} role="admin" />
       </div>
 
-      <section
-        className="mt-5 rounded-3xl border border-amber-500/20 bg-amber-500/[0.07] p-6 sm:p-8"
-        aria-labelledby="reporting-status-title"
-      >
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-amber-500/12 text-amber-700 dark:text-amber-300">
-            <PlugZap className="size-6" aria-hidden="true" />
-          </span>
-          <div>
-            <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-amber-800 dark:text-amber-300">
-              Reporting connection required
-            </p>
-            <h2
-              id="reporting-status-title"
-              className="mt-2 font-display text-2xl font-bold"
-            >
-              Operational reporting is intentionally empty.
-            </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-ink/58">
-              This interface does not yet have a verified read adapter for
-              production operations. Configure the services below, then connect
-              each view to authenticated backend queries before using it for
-              decisions.
-            </p>
+      {summary.state === "ready" ? (
+        <section className="mt-5" aria-labelledby="record-summary-title">
+          <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
+            Durable records
+          </p>
+          <h2
+            id="record-summary-title"
+            className="mt-2 font-display text-2xl font-bold"
+          >
+            Current production record counts
+          </h2>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            {[
+              ["Donation intents", summary.data.donations],
+              ["Confirmed donations", summary.data.confirmedDonations],
+              ["Contact enquiries", summary.data.contactSubmissions],
+              ["Volunteer applications", summary.data.volunteerApplications],
+              ["Active subscribers", summary.data.activeNewsletterSubscribers],
+            ].map(([label, value]) => (
+              <article
+                key={label}
+                className="rounded-3xl border border-ink/8 bg-white p-5 dark:bg-white/[0.055]"
+              >
+                <p className="font-display text-3xl font-bold">{value}</p>
+                <p className="mt-2 text-xs leading-5 text-ink/48">{label}</p>
+              </article>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
+      ) : (
+        <section
+          className="mt-5 rounded-3xl border border-amber-500/20 bg-amber-500/[0.07] p-6 sm:p-8"
+          aria-labelledby="reporting-status-title"
+        >
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+            <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-amber-500/12 text-amber-700 dark:text-amber-300">
+              <PlugZap className="size-6" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-amber-800 dark:text-amber-300">
+                Reporting connection unavailable
+              </p>
+              <h2
+                id="reporting-status-title"
+                className="mt-2 font-display text-2xl font-bold"
+              >
+                No operational totals were returned.
+              </h2>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-ink/58">
+                The dashboard failed closed because the durable database is not
+                configured or could not be reached. No cached or sample totals
+                replaced it.
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mt-5" aria-labelledby="production-requirements-title">
         <div>
@@ -175,7 +243,8 @@ export default function AdminDashboard() {
             Operations views
           </h2>
           <p className="mt-1 text-xs leading-5 text-ink/42">
-            Each view stays empty until its named source is connected.
+            Database and identity views read only from their named production
+            systems; editorial views remain gated until approved content exists.
           </p>
         </div>
         <div className="divide-y divide-ink/8">

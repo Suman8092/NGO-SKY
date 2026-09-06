@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: campaign.title,
     description: campaign.shortDescription,
     openGraph: {
-      title: `${campaign.title} | Ashaaya Foundation`,
+      title: `${campaign.title} | Skymeredian Foundation`,
       description: campaign.shortDescription,
       type: "article",
     },

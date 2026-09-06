@@ -1,38 +1,18 @@
-import {
-  errorResponse,
-  getClientIp,
-  getRequestId,
-  jsonSuccess,
-  parseJsonRequest,
-} from "@/lib/server/http";
-import { enforceRateLimit } from "@/lib/server/rate-limit";
-import {
-  assertDonationCheckoutRetryAllowed,
-  startDonationCheckout,
-} from "@/lib/server/services/donations";
-import { donationReferenceSchema } from "@/lib/server/validation";
+import { ApiError } from "@/lib/server/errors";
+import { errorResponse, getRequestId } from "@/lib/server/http";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
-  try {
-    assertDonationCheckoutRetryAllowed();
-    await enforceRateLimit("stripe-checkout", getClientIp(request), {
-      limit: 10,
-      windowMs: 10 * 60_000,
-    });
-    const { donationId } = await parseJsonRequest(
-      request,
-      donationReferenceSchema,
-    );
-    const result = await startDonationCheckout(donationId, "stripe");
-    return jsonSuccess(result, {
-      status: 201,
-      meta: { paymentInitiated: true },
-    });
-  } catch (error) {
-    return errorResponse(error, requestId, "stripe-checkout");
-  }
+  return errorResponse(
+    new ApiError(
+      410,
+      "STRIPE_CHECKOUT_DISABLED",
+      "Stripe checkout is not offered. Online donations support one-time INR payments through Razorpay only.",
+    ),
+    requestId,
+    "stripe-checkout",
+  );
 }
