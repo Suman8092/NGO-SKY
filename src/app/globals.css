@@ -3,23 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --paper: 248 247 241;
-  --ink: 18 32 29;
-  --forest: 12 82 71;
-  --moss: 42 123 99;
-  --ember: 235 139 52;
-  --mist: 226 236 230;
-  --line: rgba(18, 32, 29, 0.13);
+  --paper: 248 250 253;
+  --ink: 16 35 61;
+  --forest: 0 79 151;
+  --moss: 38 132 21;
+  --ember: 242 140 0;
+  --mist: 229 239 250;
+  --line: rgba(16, 35, 61, 0.14);
 }
 
 .dark {
-  --paper: 12 22 20;
-  --ink: 239 243 236;
-  --forest: 61 174 146;
-  --moss: 93 195 161;
-  --ember: 247 166 78;
-  --mist: 29 49 44;
-  --line: rgba(239, 243, 236, 0.13);
+  --paper: 8 18 34;
+  --ink: 238 245 255;
+  --forest: 111 182 255;
+  --moss: 132 211 92;
+  --ember: 255 167 53;
+  --mist: 24 43 67;
+  --line: rgba(238, 245, 255, 0.15);
 }
 
 * {
@@ -37,7 +37,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 90% -10%, rgba(20, 184, 166, 0.08), transparent 34rem),
+    radial-gradient(circle at 90% -10%, rgba(0, 84, 159, 0.08), transparent 34rem),
     rgb(var(--paper));
   color: rgb(var(--ink));
   font-family: var(--font-inter), Arial, sans-serif;
@@ -109,7 +109,7 @@ body::before {
   }
 
   .button-primary {
-    @apply relative inline-flex min-h-12 items-center justify-center gap-2 overflow-hidden rounded-full bg-forest px-6 py-3 text-sm font-bold text-white shadow-lg shadow-forest/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#075f52] hover:shadow-xl focus-visible:outline-ember dark:text-[#071813];
+    @apply relative inline-flex min-h-12 items-center justify-center gap-2 overflow-hidden rounded-full bg-forest px-6 py-3 text-sm font-bold text-white shadow-lg shadow-forest/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#00427d] hover:shadow-xl focus-visible:outline-ember dark:text-[#071327];
   }
 
   .button-secondary {
@@ -171,5 +171,11 @@ body::before {
 ::-webkit-scrollbar-thumb {
   border: 3px solid rgb(var(--paper));
   border-radius: 999px;
-  background: rgba(15, 118, 110, 0.55);
+  background: rgba(0, 84, 159, 0.55);
+}
+
+/* Keep the supplied transparent artwork legible on dark brand surfaces. */
+.brand-on-dark img,
+.dark .brand-logo img {
+  filter: brightness(1.8) drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.6));
 }

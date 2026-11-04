@@ -69,7 +69,7 @@ export function DashboardSidebar({
     <>
       <button
         type="button"
-        className="fixed left-4 top-4 z-50 grid size-11 place-items-center rounded-full bg-[#0c2d26] text-white shadow-xl lg:hidden"
+        className="fixed left-4 top-4 z-50 grid size-11 place-items-center rounded-full bg-[#0c263c] text-white shadow-xl lg:hidden"
         onClick={() => setOpen(true)}
         aria-label="Open dashboard navigation"
         aria-expanded={open}
@@ -86,7 +86,7 @@ export function DashboardSidebar({
       ) : null}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col border-r border-white/8 bg-[#071c18] p-5 text-white transition-transform lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col border-r border-white/8 bg-[#07182b] p-5 text-white transition-transform lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -98,7 +98,7 @@ export function DashboardSidebar({
             onClick={() => setOpen(false)}
           >
             <div>
-              <BrandMark className="w-44" priority />
+              <BrandMark className="brand-on-dark w-44" priority />
               <span className="mt-3 block text-xs font-semibold tracking-wide text-white/60">
                 {role === "admin" ? "Operations" : "My account"}
               </span>
@@ -128,7 +128,7 @@ export function DashboardSidebar({
                 className={cn(
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition",
                   active
-                    ? "bg-[#63c9a8] text-[#071c18]"
+                    ? "bg-[#91c4ff] text-[#07182b]"
                     : "text-white/55 hover:bg-white/[0.06] hover:text-white",
                 )}
               >
@@ -171,7 +171,7 @@ function ClerkAccount({ role }: { role: "admin" | "user" }) {
 
   return (
     <div className="flex items-center gap-3 rounded-2xl bg-white/[0.045] p-3">
-      <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#f3bd67] font-display text-xs font-extrabold text-[#17231f]">
+      <div className="grid size-9 shrink-0 place-items-center rounded-full bg-[#ff9f1c] font-display text-xs font-extrabold text-[#171f32]">
         {isLoaded ? initials || "AC" : "…"}
       </div>
       <div className="min-w-0 flex-1">

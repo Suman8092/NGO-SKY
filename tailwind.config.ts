@@ -1,3 +1,4 @@
+import colors from "tailwindcss/colors";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -6,6 +7,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        teal: { ...colors.blue, 50: "#eef6ff", 100: "#dcecff", 500: "#0879c5", 600: "#00549f", 700: "#00427d", 800: "#07376a", 900: "#092c52", 950: "#071b34" },
+        emerald: colors.green,
+        amber: colors.orange,
         ink: "rgb(var(--ink) / <alpha-value>)",
         paper: "rgb(var(--paper) / <alpha-value>)",
         forest: "rgb(var(--forest) / <alpha-value>)",
@@ -18,8 +22,8 @@ const config: Config = {
         display: ["var(--font-jakarta)", "sans-serif"],
       },
       boxShadow: {
-        soft: "0 24px 80px rgba(12, 53, 45, 0.10)",
-        lift: "0 20px 50px rgba(10, 35, 30, 0.16)",
+        soft: "0 24px 80px rgba(0, 55, 106, 0.10)",
+        lift: "0 20px 50px rgba(6, 27, 52, 0.16)",
       },
       opacity: {
         7: "0.07",

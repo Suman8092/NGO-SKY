@@ -30,16 +30,16 @@ export function DonationCalculator({
 
   return (
     <section
-      className="section-space relative overflow-hidden bg-gradient-to-b from-[#0a2721] via-[#07201b] to-[#051814] text-white"
+      className="section-space relative overflow-hidden bg-gradient-to-b from-[#0a2136] via-[#071b2f] to-[#051427] text-white"
       aria-labelledby="giving-title"
     >
       <div
         aria-hidden="true"
-        className="absolute -left-32 top-10 size-[32rem] rounded-full bg-[#70d5b3]/10 blur-[130px] pointer-events-none"
+        className="absolute -left-32 top-10 size-[32rem] rounded-full bg-[#91c4ff]/10 blur-[130px] pointer-events-none"
       />
       <div className="page-shell relative grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#70d5b3]/25 bg-[#70d5b3]/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#70d5b3]">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#91c4ff]/25 bg-[#91c4ff]/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#91c4ff]">
             <ShieldCheck className="size-3.5" />
             Transparent Philanthropy
           </span>
@@ -54,7 +54,7 @@ export function DonationCalculator({
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-xs font-bold text-white/80 backdrop-blur-md">
-              <span className="size-2 rounded-full bg-[#70d5b3]" />
+              <span className="size-2 rounded-full bg-[#91c4ff]" />
               Domestic one-time INR
             </span>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-medium text-white/60">
@@ -64,7 +64,7 @@ export function DonationCalculator({
         </div>
 
         <div className="relative overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/[0.07] p-6 shadow-2xl backdrop-blur-2xl sm:p-9">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#70d5b3]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#91c4ff]">
             Select Giving Tier
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -75,7 +75,7 @@ export function DonationCalculator({
                 onClick={() => setAmount(option)}
                 className={`relative rounded-2xl border px-4 py-4 font-display text-xl font-bold transition duration-300 ${
                   amount === option
-                    ? "border-[#f3bd67] bg-gradient-to-b from-[#ffd385] to-[#f3bd67] text-[#091f1a] shadow-[0_8px_25px_rgba(243,189,103,0.35)] scale-[1.02]"
+                    ? "border-[#ff9f1c] bg-gradient-to-b from-[#ffb347] to-[#ff9f1c] text-[#091a2e] shadow-[0_8px_25px_rgba(243,189,103,0.35)] scale-[1.02]"
                     : "border-white/12 bg-white/[0.05] text-white hover:border-white/30 hover:bg-white/10"
                 }`}
               >
@@ -91,7 +91,7 @@ export function DonationCalculator({
           </div>
 
           <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-xs leading-relaxed text-white/80">
-            <strong className="block text-[#f3bd67] font-semibold mb-1">Impact Equivalent:</strong>
+            <strong className="block text-[#ff9f1c] font-semibold mb-1">Impact Equivalent:</strong>
             {currentImpact}
           </div>
 
@@ -101,7 +101,7 @@ export function DonationCalculator({
           >
             Or specify custom amount (INR)
           </label>
-          <div className="mt-2 flex items-center rounded-2xl border border-white/15 bg-black/20 px-4 focus-within:border-[#f3bd67] focus-within:ring-2 focus-within:ring-[#f3bd67]/20 transition">
+          <div className="mt-2 flex items-center rounded-2xl border border-white/15 bg-black/20 px-4 focus-within:border-[#ff9f1c] focus-within:ring-2 focus-within:ring-[#ff9f1c]/20 transition">
             <span className="text-xl font-bold text-white/50">₹</span>
             <input
               id="custom-amount"
@@ -122,7 +122,7 @@ export function DonationCalculator({
             animate={{ opacity: 1, y: 0 }}
             className="mt-5 flex items-center gap-2.5 rounded-2xl bg-white/[0.05] px-4 py-3 text-xs text-white/70"
           >
-            <span className="size-1.5 rounded-full bg-[#70d5b3] shrink-0" />
+            <span className="size-1.5 rounded-full bg-[#91c4ff] shrink-0" />
             <span>
               {provider
                 ? `Verified live gateway: ${paymentProviderLabel(provider)} with encrypted TLS.`
@@ -135,7 +135,7 @@ export function DonationCalculator({
                 ? `/donate?amount=${amount}`
                 : "/contact?subject=donation-support"
             }
-            className="group mt-6 flex min-h-14 w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[#ffd385] to-[#f3bd67] px-6 text-sm font-extrabold text-[#091f1a] shadow-[0_12px_36px_rgba(243,189,103,0.3)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(243,189,103,0.45)]"
+            className="group mt-6 flex min-h-14 w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ff9f1c] px-6 text-sm font-extrabold text-[#091a2e] shadow-[0_12px_36px_rgba(243,189,103,0.3)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_45px_rgba(243,189,103,0.45)]"
           >
             {provider
               ? `Proceed with ₹${amount.toLocaleString("en-IN")}`
@@ -143,7 +143,7 @@ export function DonationCalculator({
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
           </Link>
           <p className="mt-4 flex items-center justify-center gap-2 text-center text-[0.68rem] text-white/45">
-            <ShieldCheck className="size-3.5 text-[#70d5b3]" aria-hidden="true" /> 256-bit bank-grade encryption · Instant 80G tax receipt
+            <ShieldCheck className="size-3.5 text-[#91c4ff]" aria-hidden="true" /> 256-bit bank-grade encryption · Instant 80G tax receipt
           </p>
         </div>
       </div>

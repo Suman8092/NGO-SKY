@@ -139,7 +139,7 @@ export function ImpactPage() {
         title={
           <>
             Every number should answer a{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               human question.
             </span>
           </>
@@ -190,7 +190,7 @@ export function ImpactPage() {
         </p>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
@@ -208,7 +208,7 @@ export function ImpactPage() {
               >
                 <outcome.icon
                   aria-hidden="true"
-                  className="h-7 w-7 text-forest dark:text-[#70d5b3]"
+                  className="h-7 w-7 text-forest dark:text-[#91c4ff]"
                 />
                 <p className="mt-8 text-4xl font-semibold tracking-[-0.045em] text-ink">
                   {outcome.value}
@@ -254,12 +254,12 @@ export function ImpactPage() {
                 key={step.title}
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 0 || index === 3 ? "bg-white/10 text-teal-100" : "bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]"}`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 0 || index === 3 ? "bg-white/10 text-teal-100" : "bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]"}`}
                 >
                   <step.icon aria-hidden="true" className="h-6 w-6" />
                 </div>
                 <p
-                  className={`mt-8 text-xs font-extrabold uppercase tracking-[0.16em] ${index === 0 || index === 3 ? "text-teal-200" : "text-forest dark:text-[#70d5b3]"}`}
+                  className={`mt-8 text-xs font-extrabold uppercase tracking-[0.16em] ${index === 0 || index === 3 ? "text-teal-200" : "text-forest dark:text-[#91c4ff]"}`}
                 >
                   Step 0{index + 1}
                 </p>
@@ -449,7 +449,7 @@ export function StoriesPage() {
         title={
           <>
             Change has a voice.{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               We are here to listen.
             </span>
           </>
@@ -510,7 +510,7 @@ export function StoriesPage() {
       </section>
 
       <section
-        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28"
+        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28"
         id="community-stories"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -527,12 +527,12 @@ export function StoriesPage() {
                 key={story.title}
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 1 || index === 5 ? "bg-white/10 text-teal-100" : "bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]"}`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 1 || index === 5 ? "bg-white/10 text-teal-100" : "bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]"}`}
                 >
                   <story.icon aria-hidden="true" className="h-6 w-6" />
                 </div>
                 <div
-                  className={`mt-8 flex items-center gap-1.5 text-xs font-bold ${index === 1 || index === 5 ? "text-teal-200" : "text-forest dark:text-[#70d5b3]"}`}
+                  className={`mt-8 flex items-center gap-1.5 text-xs font-bold ${index === 1 || index === 5 ? "text-teal-200" : "text-forest dark:text-[#91c4ff]"}`}
                 >
                   <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
                   {story.location} · {story.category}
@@ -707,11 +707,11 @@ export function EventCard({ event }: { event: EventItem }) {
       >
         <CalendarDays
           aria-hidden="true"
-          className={`h-7 w-7 ${event.featured ? "text-amber-300" : "text-forest dark:text-[#70d5b3]"}`}
+          className={`h-7 w-7 ${event.featured ? "text-amber-300" : "text-forest dark:text-[#91c4ff]"}`}
         />
         <div className="mt-8">
           <p
-            className={`text-xs font-bold uppercase tracking-[0.16em] ${event.featured ? "text-teal-200" : "text-forest dark:text-[#70d5b3]"}`}
+            className={`text-xs font-bold uppercase tracking-[0.16em] ${event.featured ? "text-teal-200" : "text-forest dark:text-[#91c4ff]"}`}
           >
             {event.type}
           </p>
@@ -749,7 +749,7 @@ export function EventCard({ event }: { event: EventItem }) {
           </span>
         </div>
         <Link
-          className={`mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${event.featured ? "bg-amber-400 text-slate-950 hover:bg-amber-300" : "bg-forest text-white hover:bg-[#075f52] dark:bg-teal-500 dark:text-slate-950"}`}
+          className={`mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${event.featured ? "bg-amber-400 text-slate-950 hover:bg-amber-300" : "bg-forest text-white hover:bg-[#00427d] dark:bg-teal-500 dark:text-slate-950"}`}
           href={event.href}
         >
           Reserve your place{" "}
@@ -772,12 +772,12 @@ export function EventsPage() {
         title={
           <>
             Come closer to the{" "}
-            <span className="text-forest dark:text-[#70d5b3]">change.</span>
+            <span className="text-forest dark:text-[#91c4ff]">change.</span>
           </>
         }
       >
         <div className={`rounded-xl p-8 ${pageSurface}`}>
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#70d5b3]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#91c4ff]">
             Next gathering
           </p>
           <div className="mt-6 flex items-center gap-5">
@@ -799,7 +799,7 @@ export function EventsPage() {
             curious about building change differently.
           </p>
           <Link
-            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#91c4ff]"
             href="/contact?event=the-long-table"
           >
             View details <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -818,7 +818,7 @@ export function EventsPage() {
             title="Upcoming events"
           />
           <Link
-            className="inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]"
+            className="inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#91c4ff]"
             href="/contact?subject=events"
           >
             <CalendarDays aria-hidden="true" className="h-4 w-4" />
@@ -832,7 +832,7 @@ export function EventsPage() {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -849,13 +849,13 @@ export function EventsPage() {
                 <div className="flex items-center justify-between">
                   <event.icon
                     aria-hidden="true"
-                    className="h-7 w-7 text-forest dark:text-[#70d5b3]"
+                    className="h-7 w-7 text-forest dark:text-[#91c4ff]"
                   />
                   <span className="text-xs font-bold text-slate-400">
                     {event.date}
                   </span>
                 </div>
-                <p className="mt-8 text-xs font-extrabold uppercase tracking-[0.16em] text-forest dark:text-[#70d5b3]">
+                <p className="mt-8 text-xs font-extrabold uppercase tracking-[0.16em] text-forest dark:text-[#91c4ff]">
                   {event.format}
                 </p>
                 <h3 className="mt-3 text-xl font-bold text-ink">

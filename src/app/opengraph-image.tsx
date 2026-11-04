@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   const logo = await readFile(
-    join(process.cwd(), "public/brand/foundation-logo-horizontal.png"),
+    join(process.cwd(), "public/brand/foundation-logo-transparent.png"),
   );
   const logoSource = `data:image/png;base64,${logo.toString("base64")}`;
   return new ImageResponse(
@@ -20,9 +20,9 @@ export default async function OpenGraphImage() {
         flexDirection: "column",
         justifyContent: "space-between",
         padding: 72,
-        color: "#f8f7f1",
+        color: "#10233d",
         background:
-          "linear-gradient(135deg, #071f1b 0%, #0f766e 70%, #2a9d7f 100%)",
+          "linear-gradient(135deg, #eef6ff 0%, #ffffff 65%, #edf7e8 100%)",
       }}
     >
       <div
@@ -41,7 +41,7 @@ export default async function OpenGraphImage() {
             height: 150,
             position: "relative",
             overflow: "hidden",
-            background: "white",
+            background: "transparent",
             borderRadius: 8,
           }}
         >

@@ -23,7 +23,7 @@ export function EventCardWithRsvp({
       <article
         className={`grid overflow-hidden rounded-[2rem] border transition-all duration-300 hover:shadow-lift ${
           event.featured
-            ? "border-teal-800 bg-[#07241e] text-white shadow-2xl lg:grid-cols-[13rem_1fr]"
+            ? "border-teal-800 bg-[#071e33] text-white shadow-2xl lg:grid-cols-[13rem_1fr]"
             : "border-ink/[0.08] bg-white/80 backdrop-blur-xl dark:border-white/[0.08] dark:bg-white/[0.04]"
         }`}
       >
@@ -37,7 +37,7 @@ export function EventCardWithRsvp({
           <CalendarDays
             aria-hidden="true"
             className={`h-7 w-7 ${
-              event.featured ? "text-amber-300" : "text-forest dark:text-[#70d5b3]"
+              event.featured ? "text-amber-300" : "text-forest dark:text-[#91c4ff]"
             }`}
           />
           <div className="mt-8">
@@ -45,7 +45,7 @@ export function EventCardWithRsvp({
               className={`text-xs font-bold uppercase tracking-[0.16em] ${
                 event.featured
                   ? "text-teal-200"
-                  : "text-forest dark:text-[#70d5b3]"
+                  : "text-forest dark:text-[#91c4ff]"
               }`}
             >
               {event.type}
@@ -62,7 +62,7 @@ export function EventCardWithRsvp({
 
         <div className="flex flex-col p-7">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-forest/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest dark:bg-[#70d5b3]/15 dark:text-[#70d5b3]">
+            <span className="rounded-full bg-forest/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-forest dark:bg-[#91c4ff]/15 dark:text-[#91c4ff]">
               {event.format}
             </span>
             {event.featured && (
@@ -113,7 +113,7 @@ export function EventCardWithRsvp({
             className={`mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${
               event.featured
                 ? "bg-amber-400 text-slate-950 hover:bg-amber-300 shadow-md"
-                : "bg-forest text-white hover:bg-[#075f52] dark:bg-[#70d5b3] dark:text-[#061e19]"
+                : "bg-forest text-white hover:bg-[#00427d] dark:bg-[#91c4ff] dark:text-[#06192d]"
             }`}
           >
             Reserve your place{" "}
@@ -145,7 +145,7 @@ export function QuickEventRsvpButton({
       <button
         type="button"
         onClick={() => setModalOpen(true)}
-        className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest hover:underline dark:text-[#70d5b3]"
+        className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest hover:underline dark:text-[#91c4ff]"
       >
         {label} <ArrowRight aria-hidden="true" className="h-4 w-4" />
       </button>

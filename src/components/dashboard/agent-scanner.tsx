@@ -94,7 +94,7 @@ export function AgentScanner() {
       {/* Code Entry Card */}
       <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.04] sm:p-8">
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-2xl bg-forest/10 text-forest dark:bg-[#70d5b3]/15 dark:text-[#70d5b3]">
+          <div className="flex size-10 items-center justify-center rounded-2xl bg-forest/10 text-forest dark:bg-[#91c4ff]/15 dark:text-[#91c4ff]">
             <QrCode className="size-5" />
           </div>
           <div>
@@ -115,7 +115,7 @@ export function AgentScanner() {
               value={query}
               onChange={(e) => setQuery(e.target.value.toUpperCase())}
               placeholder="e.g. TKT-343CE01B"
-              className="w-full rounded-2xl border border-ink/10 bg-forest/[0.02] py-3.5 pl-11 pr-4 font-mono text-sm uppercase tracking-wider text-ink outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/35 focus:border-forest focus:ring-4 focus:ring-forest/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-[#70d5b3]"
+              className="w-full rounded-2xl border border-ink/10 bg-forest/[0.02] py-3.5 pl-11 pr-4 font-mono text-sm uppercase tracking-wider text-ink outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/35 focus:border-forest focus:ring-4 focus:ring-forest/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-[#91c4ff]"
             />
           </div>
           <button
@@ -143,13 +143,13 @@ export function AgentScanner() {
 
       {/* Verified Pass Card */}
       {pass && (
-        <div className="overflow-hidden rounded-3xl border border-ink/8 bg-white shadow-lift dark:bg-[#07241d]">
+        <div className="overflow-hidden rounded-3xl border border-ink/8 bg-white shadow-lift dark:bg-[#071d33]">
           <div className="border-b border-ink/8 bg-forest/[0.04] p-6 dark:border-white/10 dark:bg-white/[0.02]">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <Ticket className="size-6 text-forest dark:text-[#70d5b3]" />
+                <Ticket className="size-6 text-forest dark:text-[#91c4ff]" />
                 <div>
-                  <div className="font-mono text-xs font-bold tracking-wider text-forest dark:text-[#70d5b3]">
+                  <div className="font-mono text-xs font-bold tracking-wider text-forest dark:text-[#91c4ff]">
                     {pass.ticketCode}
                   </div>
                   <h3 className="font-display text-xl font-bold text-ink dark:text-white">
@@ -209,7 +209,7 @@ export function AgentScanner() {
                 <span className="text-[0.7rem] font-bold uppercase tracking-wider text-ink/45 dark:text-white/45">
                   Reserved Capacity
                 </span>
-                <p className="text-2xl font-bold text-forest dark:text-[#70d5b3]">
+                <p className="text-2xl font-bold text-forest dark:text-[#91c4ff]">
                   {pass.ticketsCount} <span className="text-sm font-normal text-ink/60 dark:text-white/60">seat{pass.ticketsCount === 1 ? "" : "s"}</span>
                 </p>
                 {pass.notes && (

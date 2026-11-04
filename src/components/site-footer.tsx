@@ -57,7 +57,7 @@ export function SiteFooter() {
       ];
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#051713] text-[#edf5ef]">
+    <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#051326] text-[#edf5ef]">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-32 -top-32 size-[36rem] rounded-full bg-forest/20 blur-[130px]"
@@ -70,7 +70,7 @@ export function SiteFooter() {
         {newsletterAvailable ? (
           <div className="grid gap-12 border-b border-white/10 pb-16 lg:grid-cols-[1.2fr_1fr] lg:gap-24">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#6bd0ae]">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#91c4ff]">
                 Website updates
               </p>
               <h2 className="mt-5 max-w-xl font-display text-4xl font-semibold leading-tight tracking-[-0.045em] md:text-5xl">
@@ -86,7 +86,7 @@ export function SiteFooter() {
           </div>
         ) : (
           <div className="border-b border-white/10 pb-12">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#6bd0ae]">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#91c4ff]">
               Publication review
             </p>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-white/55">
@@ -106,7 +106,7 @@ export function SiteFooter() {
         >
           <div>
             <Link href="/" className="inline-flex items-center gap-3">
-              <BrandMark className="w-60 sm:w-64" />
+              <BrandMark className="brand-on-dark w-60 sm:w-64" />
             </Link>
             <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">
               {managedContactAvailable

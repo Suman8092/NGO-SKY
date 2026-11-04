@@ -119,7 +119,7 @@ export function EventRsvpModal({
           initial={{ opacity: 0, scale: 0.95, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
-          className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-ink/10 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-[#0c1f1a] sm:p-8"
+          className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-ink/10 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-[#0c1a2e] sm:p-8"
         >
           {/* Close button */}
           <button
@@ -148,12 +148,12 @@ export function EventRsvpModal({
               </p>
 
               {/* Ticket pass display */}
-              <div className="mt-6 rounded-2xl border border-dashed border-forest/30 bg-forest/[0.04] p-5 text-left dark:border-[#70d5b3]/30 dark:bg-white/[0.03]">
+              <div className="mt-6 rounded-2xl border border-dashed border-forest/30 bg-forest/[0.04] p-5 text-left dark:border-[#91c4ff]/30 dark:bg-white/[0.03]">
                 <div className="flex items-center justify-between border-b border-ink/10 pb-3 dark:border-white/10">
-                  <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+                  <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-forest dark:text-[#91c4ff]">
                     <Ticket className="size-4" /> Entry Pass
                   </span>
-                  <span className="rounded-full bg-forest/10 px-2.5 py-0.5 font-mono text-xs font-extrabold text-forest dark:bg-[#70d5b3]/20 dark:text-[#70d5b3]">
+                  <span className="rounded-full bg-forest/10 px-2.5 py-0.5 font-mono text-xs font-extrabold text-forest dark:bg-[#91c4ff]/20 dark:text-[#91c4ff]">
                     {successData.ticketCode}
                   </span>
                 </div>
@@ -184,7 +184,7 @@ export function EventRsvpModal({
           ) : (
             /* RSVP Registration Form */
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-widest text-forest dark:text-[#70d5b3]">
+              <p className="text-xs font-extrabold uppercase tracking-widest text-forest dark:text-[#91c4ff]">
                 Event RSVP
               </p>
               <h2

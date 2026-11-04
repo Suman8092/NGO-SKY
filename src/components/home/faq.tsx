@@ -38,7 +38,7 @@ export function Faq() {
                 <span
                   className={`grid size-9 shrink-0 place-items-center rounded-full transition-colors duration-300 ${
                     active
-                      ? "bg-forest text-white dark:text-[#071813]"
+                      ? "bg-forest text-white dark:text-[#071327]"
                       : "bg-ink/[0.06] text-ink/70 dark:bg-white/10 dark:text-white/80"
                   }`}
                 >

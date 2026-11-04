@@ -24,7 +24,7 @@ export default async function AdminLayout({
   const editorialContentPublished = isEditorialContentPublished();
 
   return (
-    <div className="min-h-screen bg-[#f2f3ef] text-[#17231f] dark:bg-[#0c1614] dark:text-[#eff3ec]">
+    <div className="min-h-screen bg-[#f2f3ef] text-[#171f32] dark:bg-[#0c1425] dark:text-[#eff3ec]">
       <DashboardSidebar
         clerkEnabled={clerkConfigured}
         editorialContentPublished={editorialContentPublished}

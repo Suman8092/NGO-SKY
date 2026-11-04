@@ -21,7 +21,7 @@ type SubmissionState = {
 };
 
 const fieldClass =
-  "mt-2 min-h-12 w-full rounded-2xl border border-ink/[0.12] bg-white/80 px-4 py-3.5 text-sm text-ink outline-none backdrop-blur-md shadow-sm transition-all duration-200 placeholder:text-ink/35 focus:border-forest focus:bg-white focus:ring-4 focus:ring-forest/10 dark:border-white/15 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/30 dark:focus:border-[#70d5b3] dark:focus:bg-white/[0.08]";
+  "mt-2 min-h-12 w-full rounded-2xl border border-ink/[0.12] bg-white/80 px-4 py-3.5 text-sm text-ink outline-none backdrop-blur-md shadow-sm transition-all duration-200 placeholder:text-ink/35 focus:border-forest focus:bg-white focus:ring-4 focus:ring-forest/10 dark:border-white/15 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/30 dark:focus:border-[#91c4ff] dark:focus:bg-white/[0.08]";
 const labelClass = "text-xs font-bold uppercase tracking-wider text-ink/75 dark:text-white/80";
 
 async function postJson(endpoint: string, payload: unknown) {
@@ -95,7 +95,7 @@ function SubmitButton({
   const pending = state.kind === "submitting";
   return (
     <button
-      className="group relative inline-flex min-h-13 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-forest px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#075f52] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest disabled:cursor-wait disabled:opacity-70 dark:bg-[#70d5b3] dark:text-[#061e19] dark:hover:bg-[#85e5c6]"
+      className="group relative inline-flex min-h-13 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-forest px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#00427d] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest disabled:cursor-wait disabled:opacity-70 dark:bg-[#91c4ff] dark:text-[#06192d] dark:hover:bg-[#85e5c6]"
       disabled={pending}
       type="submit"
     >
@@ -680,7 +680,7 @@ export function DonationForm({
               email: donorEmail,
               contact: donorPhone,
             },
-            theme: { color: "#0F766E" },
+            theme: { color: "#00549f" },
             handler: async (response) => {
               if (finished) return;
               finished = true;

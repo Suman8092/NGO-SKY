@@ -121,13 +121,13 @@ export default async function UserDashboard() {
   return (
     <div className="mx-auto max-w-[1200px] space-y-6">
       {/* Header Banner */}
-      <header className="rounded-4xl bg-[#0b3028] p-6 text-white shadow-lift sm:p-9">
+      <header className="rounded-4xl bg-[#0b283f] p-6 text-white shadow-lift sm:p-9">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#70d5b3]">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#91c4ff]">
             Supporter Portal & Giving Account
           </p>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/85 backdrop-blur-sm">
-            <CheckCircle2 className="size-3.5 text-[#70d5b3]" />
+            <CheckCircle2 className="size-3.5 text-[#91c4ff]" />
             Supporter account
           </span>
         </div>
@@ -148,10 +148,10 @@ export default async function UserDashboard() {
         {/* INR contributions */}
         <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#91c4ff]">
               INR contributions
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
               <ReceiptText className="size-4" />
             </span>
           </div>
@@ -166,10 +166,10 @@ export default async function UserDashboard() {
         {/* 80G Tax Exemption Claimable */}
         <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#91c4ff]">
               INR contributions
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
               <ShieldCheck className="size-4" />
             </span>
           </div>
@@ -184,10 +184,10 @@ export default async function UserDashboard() {
         {/* Volunteer Engagement */}
         <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#91c4ff]">
               Volunteer Status
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
               <HeartHandshake className="size-4" />
             </span>
           </div>
@@ -210,10 +210,10 @@ export default async function UserDashboard() {
         {/* Newsletter & Updates */}
         <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#91c4ff]">
               Dispatches
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
               <Mail className="size-4" />
             </span>
           </div>
@@ -412,7 +412,7 @@ export default async function UserDashboard() {
         <div className="border-t border-ink/15 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest dark:text-[#70d5b3]">
+              <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest dark:text-[#91c4ff]">
                 Gatherings & Forums
               </p>
               <h2
@@ -446,7 +446,7 @@ export default async function UserDashboard() {
                   <tbody className="divide-y divide-ink/8">
                     {data.eventRegistrations.map((reg) => (
                       <tr key={reg.id} className="hover:bg-forest/[0.02]">
-                        <td className="whitespace-nowrap px-5 py-4 font-mono font-bold text-forest dark:text-[#70d5b3]">
+                        <td className="whitespace-nowrap px-5 py-4 font-mono font-bold text-forest dark:text-[#91c4ff]">
                           {reg.ticketCode}
                         </td>
                         <td className="px-5 py-4 font-bold text-ink dark:text-white">

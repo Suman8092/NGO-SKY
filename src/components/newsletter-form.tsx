@@ -31,7 +31,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
 
   return (
     <div>
-      <form onSubmit={submit} className="relative flex items-center rounded-full border border-white/20 bg-white/[0.08] p-1.5 backdrop-blur-xl transition focus-within:border-[#f3bd67] focus-within:ring-2 focus-within:ring-[#f3bd67]/20">
+      <form onSubmit={submit} className="relative flex items-center rounded-full border border-white/20 bg-white/[0.08] p-1.5 backdrop-blur-xl transition focus-within:border-[#ff9f1c] focus-within:ring-2 focus-within:ring-[#ff9f1c]/20">
         <label htmlFor={compact ? "footer-email" : "newsletter-email"} className="sr-only">Email address</label>
         <input
           id={compact ? "footer-email" : "newsletter-email"}
@@ -45,7 +45,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
         <button
           type="submit"
           disabled={status === "loading"}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ffd385] to-[#f3bd67] px-6 text-sm font-extrabold text-[#091f1a] shadow-md transition hover:scale-[1.02] disabled:opacity-60"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ffb347] to-[#ff9f1c] px-6 text-sm font-extrabold text-[#091a2e] shadow-md transition hover:scale-[1.02] disabled:opacity-60"
           aria-label="Subscribe to field notes"
         >
           {status === "loading" ? (

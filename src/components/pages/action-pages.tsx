@@ -120,7 +120,7 @@ export function VolunteerPage({
         title={
           <>
             Your time can become someone’s{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               turning point.
             </span>
           </>
@@ -129,7 +129,7 @@ export function VolunteerPage({
         <div className={`rounded-xl p-8 ${pageSurface}`}>
           <HeartHandshake
             aria-hidden="true"
-            className="h-10 w-10 text-forest dark:text-[#70d5b3]"
+            className="h-10 w-10 text-forest dark:text-[#91c4ff]"
           />
           <p className="mt-8 text-2xl font-semibold tracking-tight text-ink">
             Volunteer roles are designed around reliability, respect, and real
@@ -166,7 +166,7 @@ export function VolunteerPage({
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <div>
@@ -192,7 +192,7 @@ export function VolunteerPage({
                   className={`rounded-[1.75rem] p-7 ${pageSurface}`}
                   key={step.number}
                 >
-                  <p className="text-xs font-extrabold text-forest dark:text-[#70d5b3]">
+                  <p className="text-xs font-extrabold text-forest dark:text-[#91c4ff]">
                     {step.number}
                   </p>
                   <h3 className="mt-7 text-xl font-bold text-ink">
@@ -261,7 +261,7 @@ export function VolunteerPage({
       </section>
 
       <section
-        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28"
+        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28"
         id="apply"
       >
         <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[.7fr_1.3fr] lg:px-8">
@@ -361,7 +361,7 @@ export function ContactPage({
         title={
           <>
             A good conversation can be the start of{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               meaningful change.
             </span>
           </>
@@ -377,7 +377,7 @@ export function ContactPage({
               >
                 <option.icon
                   aria-hidden="true"
-                  className="h-6 w-6 text-forest dark:text-[#70d5b3]"
+                  className="h-6 w-6 text-forest dark:text-[#91c4ff]"
                 />
                 <p className="mt-7 font-bold text-ink">
                   {option.title}
@@ -393,7 +393,7 @@ export function ContactPage({
             >
               <MessageCircle
                 aria-hidden="true"
-                className="h-6 w-6 text-forest dark:text-[#70d5b3]"
+                className="h-6 w-6 text-forest dark:text-[#91c4ff]"
               />
               <p className="mt-7 font-bold text-ink">
                 {submissionsAvailable
@@ -425,7 +425,7 @@ export function ContactPage({
           />
           <div className="mt-9 space-y-5">
             <div className="flex gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
                 <Clock3 aria-hidden="true" className="h-5 w-5" />
               </div>
               <div>
@@ -497,7 +497,7 @@ export function DonatePage({
         title={
           <>
             Turn your care into{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               forward motion.
             </span>
           </>
@@ -578,7 +578,7 @@ export function DonatePage({
             <div className="flex items-start gap-3">
               <ShieldCheck
                 aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-forest dark:text-[#70d5b3]"
+                className="mt-0.5 h-5 w-5 shrink-0 text-forest dark:text-[#91c4ff]"
               />
               <div>
                 <p className="font-bold text-ink">
@@ -630,7 +630,7 @@ export function DonatePage({
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-24">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -769,7 +769,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
     <main>
       <section className="border-b border-ink/[0.08] bg-paper pb-16 pt-32 dark:border-white/10 dark:bg-slate-950 sm:pb-20 sm:pt-36">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#70d5b3]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#91c4ff]">
             Search Skymeredian
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-ink sm:text-6xl">
@@ -811,7 +811,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
                 for “{query.trim()}”
               </h2>
               <Link
-                className="text-sm font-bold text-forest dark:text-[#70d5b3]"
+                className="text-sm font-bold text-forest dark:text-[#91c4ff]"
                 href="/search"
               >
                 Clear search
@@ -827,7 +827,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
                   >
                     <result.icon
                       aria-hidden="true"
-                      className="h-7 w-7 text-forest dark:text-[#70d5b3]"
+                      className="h-7 w-7 text-forest dark:text-[#91c4ff]"
                     />
                     <p className="mt-7 text-xs font-extrabold uppercase tracking-[0.16em] text-slate-400">
                       {result.type}
@@ -838,7 +838,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
                     <p className="mt-3 leading-7 text-ink/65">
                       {result.description}
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]">
+                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#91c4ff]">
                       Open{" "}
                       <ArrowRight
                         aria-hidden="true"
@@ -850,7 +850,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
               </div>
             ) : (
               <div className="mx-auto max-w-xl py-20 text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
                   <Search aria-hidden="true" className="h-7 w-7" />
                 </div>
                 <h2 className="mt-7 text-2xl font-bold text-ink">

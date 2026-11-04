@@ -37,7 +37,7 @@ export default async function NewsletterUnsubscribePage({
   const unavailable = status === "unavailable";
 
   return (
-    <main className="min-h-[75vh] bg-[#f5f3ee] px-6 pb-20 pt-36 text-[#17231f] dark:bg-[#0c1614] dark:text-[#eff3ec]">
+    <main className="min-h-[75vh] bg-[#f5f3ee] px-6 pb-20 pt-36 text-[#171f32] dark:bg-[#0c1425] dark:text-[#eff3ec]">
       <div className="mx-auto max-w-2xl rounded-[2rem] border border-ink/10 bg-white p-8 shadow-soft dark:bg-white/[0.055] sm:p-12">
         <span className="grid size-14 place-items-center rounded-2xl bg-forest/10 text-forest">
           {unavailable ? (

@@ -12,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
       : "Skymeredian Foundation website publication status.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f8f7f1",
-    theme_color: "#0f766e",
+    background_color: "#f8fafd",
+    theme_color: "#00549f",
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
     ],

@@ -30,10 +30,10 @@ function GlobeMesh() {
   return (
     <group ref={group} rotation={[0.08, -1.55, -0.05]}>
       <Sphere args={[2, 64, 64]}>
-        <meshPhysicalMaterial color="#0d5f52" roughness={0.74} metalness={0.08} transparent opacity={0.78} clearcoat={0.25} />
+        <meshPhysicalMaterial color="#0d526e" roughness={0.74} metalness={0.08} transparent opacity={0.78} clearcoat={0.25} />
       </Sphere>
       <Sphere args={[2.015, 28, 28]}>
-        <meshBasicMaterial color="#70d5b3" wireframe transparent opacity={0.14} />
+        <meshBasicMaterial color="#91c4ff" wireframe transparent opacity={0.14} />
       </Sphere>
       {points.map(([lat, lng], index) => {
         const position = toVector(lat, lng);
@@ -41,16 +41,16 @@ function GlobeMesh() {
           <group key={`${lat}-${lng}`} position={position}>
             <mesh>
               <sphereGeometry args={[index === 1 ? 0.065 : 0.045, 18, 18]} />
-              <meshStandardMaterial color={index === 1 ? "#f3bd67" : "#8ce1c5"} emissive={index === 1 ? "#f3bd67" : "#54c7a0"} emissiveIntensity={1.8} />
+              <meshStandardMaterial color={index === 1 ? "#ff9f1c" : "#8ce1c5"} emissive={index === 1 ? "#ff9f1c" : "#54c7a0"} emissiveIntensity={1.8} />
             </mesh>
             <mesh>
               <ringGeometry args={[0.08, 0.11, 24]} />
-              <meshBasicMaterial color="#f3bd67" transparent opacity={0.45} side={2} />
+              <meshBasicMaterial color="#ff9f1c" transparent opacity={0.45} side={2} />
             </mesh>
           </group>
         );
       })}
-      <Line points={[toVector(12.97, 77.59, 2.05), [0.3, 2.55, 0.45], toVector(26.14, 91.74, 2.05)]} color="#f3bd67" lineWidth={1} transparent opacity={0.5} />
+      <Line points={[toVector(12.97, 77.59, 2.05), [0.3, 2.55, 0.45], toVector(26.14, 91.74, 2.05)]} color="#ff9f1c" lineWidth={1} transparent opacity={0.5} />
     </group>
   );
 }
@@ -61,7 +61,7 @@ export default function ImpactGlobe() {
       <Canvas camera={{ position: [0, 0, 6.4], fov: 38 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={1.3} />
         <directionalLight position={[4, 4, 5]} intensity={2.6} color="#d7fff1" />
-        <pointLight position={[-4, -2, 3]} intensity={1.7} color="#f3bd67" />
+        <pointLight position={[-4, -2, 3]} intensity={1.7} color="#ff9f1c" />
         <GlobeMesh />
         <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.22} />
       </Canvas>

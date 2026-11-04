@@ -90,8 +90,8 @@ export function SiteHeader({
         className={cn(
           "fixed inset-x-0 top-0 z-50 border-b transition-all duration-500",
           scrolled || openMenu || mobileOpen
-            ? "border-ink/[0.07] bg-paper/90 py-2.5 shadow-[0_12px_40px_-15px_rgba(9,50,42,0.08)] backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#061915]/90"
-            : "border-transparent bg-transparent py-3.5",
+            ? "border-ink/[0.07] bg-paper/90 py-2.5 shadow-[0_12px_40px_-15px_rgba(9,50,42,0.08)] backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#061528]/90"
+            : "border-ink/10 bg-paper/95 py-3.5 backdrop-blur-xl",
         )}
       >
         <div className="page-shell flex min-h-16 items-center justify-between gap-3 sm:min-h-20 sm:gap-5">
@@ -141,7 +141,7 @@ export function SiteHeader({
                           transition={{ duration: 0.2 }}
                           className="absolute left-1/2 top-full w-[390px] -translate-x-1/2 pt-4"
                         >
-                          <div className="rounded-[2rem] border border-ink/[0.08] bg-white/95 p-3.5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#071d18]/95">
+                          <div className="rounded-[2rem] border border-ink/[0.08] bg-white/95 p-3.5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#07182c]/95">
                             {item.links.map(([label, href, description]) => (
                               <Link
                                 key={label}
@@ -150,7 +150,7 @@ export function SiteHeader({
                                 onClick={() => setOpenMenu(null)}
                               >
                                 <span>
-                                  <span className="block text-sm font-bold text-ink transition group-hover:text-forest dark:group-hover:text-[#70d5b3]">
+                                  <span className="block text-sm font-bold text-ink transition group-hover:text-forest dark:group-hover:text-[#91c4ff]">
                                     {label}
                                   </span>
                                   <span className="mt-0.5 block text-xs text-ink/55">
@@ -158,14 +158,14 @@ export function SiteHeader({
                                   </span>
                                 </span>
                                 <ArrowUpRight
-                                  className="size-4 text-forest opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100 dark:text-[#70d5b3]"
+                                  className="size-4 text-forest opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100 dark:text-[#91c4ff]"
                                   aria-hidden="true"
                                 />
                               </Link>
                             ))}
                             <Link
                               href={item.href}
-                              className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-forest px-4 py-3 text-sm font-bold text-white shadow-md transition duration-300 hover:bg-[#075f52] dark:bg-[#70d5b3] dark:text-[#061e19]"
+                              className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-forest px-4 py-3 text-sm font-bold text-white shadow-md transition duration-300 hover:bg-[#00427d] dark:bg-[#91c4ff] dark:text-[#06192d]"
                             >
                               <Sparkles className="size-4" aria-hidden="true" />{" "}
                               Explore {item.label.toLowerCase()}
@@ -351,7 +351,7 @@ export function SiteHeader({
       <AnimatePresence>
         {editorialContentPublished && searchOpen ? (
           <motion.div
-            className="fixed inset-0 z-[80] flex items-start justify-center bg-[#071c18]/75 px-5 pt-[18vh] backdrop-blur-xl"
+            className="fixed inset-0 z-[80] flex items-start justify-center bg-[#07182b]/75 px-5 pt-[18vh] backdrop-blur-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -690,7 +690,7 @@ export function EventRecords({
             <tbody className="divide-y divide-ink/8">
               {registrations.map((reg) => (
                 <tr key={reg.id}>
-                  <td className={`${cellClass} font-mono font-bold text-forest dark:text-[#70d5b3]`}>
+                  <td className={`${cellClass} font-mono font-bold text-forest dark:text-[#91c4ff]`}>
                     {reg.ticketCode}
                   </td>
                   <td className={`${cellClass} font-bold text-ink`}>

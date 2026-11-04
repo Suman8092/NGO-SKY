@@ -91,7 +91,7 @@ export function DonorTaxProfileCard() {
     <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055] sm:p-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest dark:text-[#70d5b3]">
+          <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest dark:text-[#91c4ff]">
             Statutory Income Tax Profile
           </p>
           <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-ink dark:text-white">

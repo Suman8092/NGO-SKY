@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 
 export function BrandMark({ className, priority = false }: { className?: string; priority?: boolean }) {
   return (
-    <span className={cn("block shrink-0 rounded-md bg-white p-1", className ?? "w-56")}>
+    <span className={cn("brand-logo block shrink-0", className ?? "w-56")}>
       <Image
-        src="/brand/foundation-logo-horizontal.png"
+        src="/brand/foundation-logo-transparent.png"
         alt="Skymeredian Foundation"
         width={2172}
         height={724}

@@ -10,7 +10,7 @@ export default function SignUpPage() {
   return (
     <main
       id="main-content"
-      className="flex min-h-screen flex-col items-center justify-center gap-8 bg-[#ecf0e9] p-6 dark:bg-[#0c1614]"
+      className="flex min-h-screen flex-col items-center justify-center gap-8 bg-[#ecf0e9] p-6 dark:bg-[#0c1425]"
     >
       <Link href="/" aria-label="Skymeredian Foundation home">
         <BrandMark className="w-64" priority />

@@ -153,7 +153,7 @@ const programs: {
     number: "01",
     icon: GraduationCap,
     href: "/programs#learning",
-    className: "bg-[#dcece5] dark:bg-[#173c33]",
+    className: "bg-[#dcece5] dark:bg-[#17334b]",
   },
   {
     title: "Care closer to home",
@@ -180,7 +180,7 @@ const programs: {
     number: "04",
     icon: Leaf,
     href: "/programs#climate",
-    className: "bg-[#dbe9cf] dark:bg-[#293c24]",
+    className: "bg-[#dbe9cf] dark:bg-[#29244b]",
   },
 ];
 
@@ -252,7 +252,7 @@ export default function HomePage() {
               {[...partners, ...partners].map((partner, index) => (
                 <span
                   key={`${partner}-${index}`}
-                  className="group flex items-center gap-3 whitespace-nowrap font-display text-sm font-extrabold uppercase tracking-[0.15em] text-ink/35 transition hover:text-forest dark:hover:text-[#70d5b3]"
+                  className="group flex items-center gap-3 whitespace-nowrap font-display text-sm font-extrabold uppercase tracking-[0.15em] text-ink/35 transition hover:text-forest dark:hover:text-[#91c4ff]"
                 >
                   <span className="size-1 rounded-full bg-ink/20 group-hover:bg-forest transition" />
                   {partner}
@@ -281,10 +281,10 @@ export default function HomePage() {
                     sizes="(max-width: 1024px) 90vw, 42vw"
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#08241e]/50 via-transparent to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 rounded-3xl border border-white/20 bg-[#08241e]/70 p-5 text-white backdrop-blur-xl">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#081e33]/50 via-transparent to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5 rounded-3xl border border-white/20 bg-[#081e33]/70 p-5 text-white backdrop-blur-xl">
                     <Quote
-                      className="size-6 text-[#f3bd67]"
+                      className="size-6 text-[#ff9f1c]"
                       aria-hidden="true"
                     />
                     <p className="mt-3 font-display text-lg font-semibold leading-7">
@@ -355,7 +355,7 @@ export default function HomePage() {
                       className="group border-t border-ink/20 py-5"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-display text-xs font-extrabold tracking-wider text-forest/70 dark:text-[#70d5b3]">
+                        <span className="font-display text-xs font-extrabold tracking-wider text-forest/70 dark:text-[#91c4ff]">
                           {num}
                         </span>
                         <span className="size-1.5 rounded-full bg-forest/30 transition group-hover:bg-forest" />
@@ -383,7 +383,7 @@ export default function HomePage() {
 
         <section
           id="impact"
-          className="section-space content-auto bg-[#e8efe9] dark:bg-[#10251f]"
+          className="section-space content-auto bg-[#e8efe9] dark:bg-[#101f34]"
           aria-labelledby="impact-title"
         >
           <div className="page-shell">
@@ -413,24 +413,24 @@ export default function HomePage() {
                     <article
                       className={`relative overflow-hidden transition-all duration-500 ease-out hover:-translate-y-1 ${
                         isHero
-                          ? "rounded-xl bg-gradient-to-br from-[#0c382f] via-[#092b24] to-[#051c17] p-8 text-white shadow-lift sm:p-10 flex flex-col justify-between min-h-[300px]"
+                          ? "rounded-xl bg-gradient-to-br from-[#0c2f47] via-[#09243a] to-[#05172b] p-8 text-white shadow-lift sm:p-10 flex flex-col justify-between min-h-[300px]"
                           : "border-t border-ink/20 py-7"
                       }`}
                     >
                       {isHero ? (
                         <>
-                          <div aria-hidden="true" className="absolute -right-20 -top-20 size-72 rounded-full bg-[#70d5b3]/10 blur-3xl pointer-events-none" />
+                          <div aria-hidden="true" className="absolute -right-20 -top-20 size-72 rounded-full bg-[#91c4ff]/10 blur-3xl pointer-events-none" />
                           <div className="flex flex-wrap items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                              <div className="grid size-12 place-items-center rounded-2xl bg-white/10 text-[#70d5b3] backdrop-blur-md">
+                              <div className="grid size-12 place-items-center rounded-2xl bg-white/10 text-[#91c4ff] backdrop-blur-md">
                                 <Icon className="size-6" aria-hidden="true" />
                               </div>
-                              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#70d5b3]">
+                              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#91c4ff]">
                                 Core Direct Footprint
                               </span>
                             </div>
                             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-wider text-white/90 backdrop-blur-md">
-                              <span className="size-2 rounded-full bg-[#70d5b3] animate-pulse" />
+                              <span className="size-2 rounded-full bg-[#91c4ff] animate-pulse" />
                               Verified · 31 July 2026
                             </span>
                           </div>
@@ -447,7 +447,7 @@ export default function HomePage() {
                               </p>
                             </div>
                             <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm sm:max-w-xs">
-                              <p className="text-[0.65rem] font-bold uppercase tracking-wider text-[#70d5b3]">
+                              <p className="text-[0.65rem] font-bold uppercase tracking-wider text-[#91c4ff]">
                                 Accountability
                               </p>
                               <p className="mt-1 text-xs leading-relaxed text-white/75">
@@ -459,7 +459,7 @@ export default function HomePage() {
                       ) : (
                         <div className="flex flex-col justify-between h-full">
                           <div className="flex items-start justify-between">
-                            <div className="grid size-11 place-items-center rounded-2xl bg-forest/[0.08] text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+                            <div className="grid size-11 place-items-center rounded-2xl bg-forest/[0.08] text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
                               <Icon className="size-5" aria-hidden="true" />
                             </div>
                             <span className="text-[0.65rem] font-bold tracking-wider text-ink/40 uppercase">
@@ -532,13 +532,13 @@ export default function HomePage() {
                           sizes="(max-width: 1024px) 100vw, 33vw"
                           className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#061e19]/75 via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#06192d]/75 via-transparent to-transparent" />
                         <div className="absolute left-4 top-4 flex items-center gap-2">
-                          <span className="rounded-full border border-white/20 bg-paper/90 px-3 py-1.5 text-[0.65rem] font-extrabold uppercase tracking-wider text-ink shadow-sm backdrop-blur-md dark:bg-[#071c18]/90 dark:text-white">
+                          <span className="rounded-full border border-white/20 bg-paper/90 px-3 py-1.5 text-[0.65rem] font-extrabold uppercase tracking-wider text-ink shadow-sm backdrop-blur-md dark:bg-[#07182b]/90 dark:text-white">
                             {campaign.category}
                           </span>
                         </div>
-                        <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white text-[#09231e] shadow-lg transition duration-300 group-hover:scale-110 group-hover:bg-[#f3bd67]">
+                        <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white text-[#091e32] shadow-lg transition duration-300 group-hover:scale-110 group-hover:bg-[#ff9f1c]">
                           <ArrowUpRight className="size-4" />
                         </span>
                       </Link>
@@ -567,7 +567,7 @@ export default function HomePage() {
                             raised of {campaign.goal}
                           </span>
                         </p>
-                        <span className="rounded-full bg-forest/10 px-2.5 py-1 text-xs font-extrabold text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+                        <span className="rounded-full bg-forest/10 px-2.5 py-1 text-xs font-extrabold text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
                           {campaign.progress}%
                         </span>
                       </div>
@@ -658,7 +658,7 @@ export default function HomePage() {
         </section>
 
         <section
-          className="relative overflow-hidden bg-[#071f1b] py-20 text-white md:py-28"
+          className="relative overflow-hidden bg-[#071b2e] py-20 text-white md:py-28"
           aria-labelledby="map-title"
         >
           <div
@@ -668,7 +668,7 @@ export default function HomePage() {
           <div className="page-shell relative grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
               <Reveal>
-                <p className="eyebrow text-[#70d5b3]">Live project map</p>
+                <p className="eyebrow text-[#91c4ff]">Live project map</p>
                 <h2
                   id="map-title"
                   className="mt-6 font-display text-5xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-6xl"
@@ -685,7 +685,7 @@ export default function HomePage() {
                   <Link
                     key={city}
                     href={`/impact?location=${city.toLowerCase()}`}
-                    className="group rounded-2xl border border-white/10 bg-white/[0.045] p-4 transition hover:border-[#70d5b3]/35 hover:bg-white/[0.07]"
+                    className="group rounded-2xl border border-white/10 bg-white/[0.045] p-4 transition hover:border-[#91c4ff]/35 hover:bg-white/[0.07]"
                   >
                     <div className="flex items-center justify-between">
                       <h3 className="font-display font-bold">
@@ -693,7 +693,7 @@ export default function HomePage() {
                       </h3>
                       <ArrowUpRight className="size-4 opacity-35 transition group-hover:opacity-100" />
                     </div>
-                    <p className="mt-2 text-xs text-[#70d5b3]">{focus}</p>
+                    <p className="mt-2 text-xs text-[#91c4ff]">{focus}</p>
                     <p className="mt-1 text-xs text-white/38">{reach}</p>
                   </Link>
                 ))}
@@ -717,10 +717,10 @@ export default function HomePage() {
                   sizes="(max-width: 1024px) 100vw, 55vw"
                   className="object-cover transition duration-700 group-hover:scale-[1.025]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#081f1a]/65 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#081a2e]/65 via-transparent to-transparent" />
                 <button
                   type="button"
-                  className="absolute left-6 top-6 grid size-14 place-items-center rounded-full bg-white text-[#09231e] shadow-xl transition hover:scale-105"
+                  className="absolute left-6 top-6 grid size-14 place-items-center rounded-full bg-white text-[#091e32] shadow-xl transition hover:scale-105"
                   aria-label="Play Kavya's story"
                 >
                   <Play className="ml-0.5 size-5 fill-current" />
@@ -765,7 +765,7 @@ export default function HomePage() {
           aria-labelledby="volunteer-title"
         >
           <div className="page-shell">
-            <div className="relative overflow-hidden rounded-[2.75rem] bg-gradient-to-br from-[#f5d089] via-[#ecb95e] to-[#e0a13d] p-8 text-[#0a221c] shadow-lift sm:p-12 md:p-16">
+            <div className="relative overflow-hidden rounded-[2.75rem] bg-gradient-to-br from-[#f5d089] via-[#ecb95e] to-[#e0a13d] p-8 text-[#0a1c31] shadow-lift sm:p-12 md:p-16">
               <div
                 aria-hidden="true"
                 className="absolute -right-24 -top-32 size-[32rem] rounded-full border-[70px] border-white/25 blur-sm pointer-events-none"
@@ -776,17 +776,17 @@ export default function HomePage() {
               />
               <div className="relative grid items-end gap-10 lg:grid-cols-[1fr_auto]">
                 <div className="max-w-3xl">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-[#0a221c]/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#0a221c]">
-                    <span className="size-2 rounded-full bg-[#0a221c]" />
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#0a1c31]/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#0a1c31]">
+                    <span className="size-2 rounded-full bg-[#0a1c31]" />
                     Bring what you know
                   </div>
                   <h2
                     id="volunteer-title"
-                    className="mt-6 font-display text-5xl font-semibold leading-[0.94] tracking-[-0.055em] text-[#0a221c] sm:text-6xl lg:text-7xl"
+                    className="mt-6 font-display text-5xl font-semibold leading-[0.94] tracking-[-0.055em] text-[#0a1c31] sm:text-6xl lg:text-7xl"
                   >
                     Your time can become someone else’s turning point.
                   </h2>
-                  <p className="mt-6 max-w-xl text-base leading-relaxed text-[#0a221c]/80 sm:text-lg">
+                  <p className="mt-6 max-w-xl text-base leading-relaxed text-[#0a1c31]/80 sm:text-lg">
                     Mentor a learner, strengthen a data system, document a field
                     story, or join an emergency response roster. Both remote and
                     field placements are open.
@@ -795,13 +795,13 @@ export default function HomePage() {
                 <div className="flex flex-col gap-3.5 sm:flex-row lg:flex-col">
                   <Link
                     href="/volunteer"
-                    className="inline-flex min-h-13 items-center justify-center gap-2.5 rounded-full bg-[#0a221c] px-8 py-3.5 text-sm font-extrabold text-white shadow-xl transition duration-300 hover:-translate-y-0.5 hover:bg-[#12382e]"
+                    className="inline-flex min-h-13 items-center justify-center gap-2.5 rounded-full bg-[#0a1c31] px-8 py-3.5 text-sm font-extrabold text-white shadow-xl transition duration-300 hover:-translate-y-0.5 hover:bg-[#122e47]"
                   >
                     Find your role <ArrowRight className="size-4" />
                   </Link>
                   <Link
                     href="/contact?subject=volunteering"
-                    className="inline-flex min-h-13 items-center justify-center rounded-full border border-[#0a221c]/25 bg-white/20 px-8 py-3.5 text-sm font-bold text-[#0a221c] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:bg-white/35"
+                    className="inline-flex min-h-13 items-center justify-center rounded-full border border-[#0a1c31]/25 bg-white/20 px-8 py-3.5 text-sm font-bold text-[#0a1c31] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:bg-white/35"
                   >
                     Offer a skill
                   </Link>
@@ -812,7 +812,7 @@ export default function HomePage() {
         </section>
 
         <section
-          className="section-space content-auto bg-[#ece9df] dark:bg-[#142520]"
+          className="section-space content-auto bg-[#ece9df] dark:bg-[#142034]"
           aria-labelledby="events-title"
         >
           <div className="page-shell">
@@ -835,7 +835,7 @@ export default function HomePage() {
                     className="group relative flex flex-col justify-between gap-6 rounded-3xl border border-ink/[0.07] bg-white/70 p-6 shadow-[0_8px_30px_-15px_rgba(12,53,45,0.05)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-forest/30 hover:bg-white hover:shadow-lift dark:border-white/[0.08] dark:bg-white/[0.035] dark:hover:bg-white/[0.06] sm:flex-row sm:items-center sm:p-7"
                   >
                     <div className="flex items-center gap-5">
-                      <div className="flex size-16 shrink-0 flex-col items-center justify-center rounded-2xl border border-forest/15 bg-forest/[0.08] text-forest dark:border-forest/25 dark:bg-forest/20 dark:text-[#70d5b3]">
+                      <div className="flex size-16 shrink-0 flex-col items-center justify-center rounded-2xl border border-forest/15 bg-forest/[0.08] text-forest dark:border-forest/25 dark:bg-forest/20 dark:text-[#91c4ff]">
                         <span className="font-display text-2xl font-bold leading-none">
                           {event.date}
                         </span>
@@ -941,7 +941,7 @@ export default function HomePage() {
 
 function ProductionStatusHero() {
   return (
-    <section className="relative isolate overflow-hidden bg-[#071c18] px-5 pb-24 pt-40 text-white sm:pb-28 sm:pt-48">
+    <section className="relative isolate overflow-hidden bg-[#07182b] px-5 pb-24 pt-40 text-white sm:pb-28 sm:pt-48">
       <div
         aria-hidden="true"
         className="absolute -right-40 -top-40 size-[34rem] rounded-full bg-forest/30 blur-[120px]"
@@ -951,10 +951,10 @@ function ProductionStatusHero() {
         className="absolute -bottom-52 left-1/4 size-[32rem] rounded-full bg-amber-400/10 blur-[130px]"
       />
       <div className="relative mx-auto max-w-5xl">
-        <span className="grid size-14 place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-[#70d5b3]">
+        <span className="grid size-14 place-items-center rounded-2xl border border-white/10 bg-white/[0.06] text-[#91c4ff]">
           <ShieldCheck className="size-7" aria-hidden="true" />
         </span>
-        <p className="mt-9 text-xs font-extrabold uppercase tracking-[0.2em] text-[#70d5b3]">
+        <p className="mt-9 text-xs font-extrabold uppercase tracking-[0.2em] text-[#91c4ff]">
           Production publication safeguard
         </p>
         <h1 className="mt-5 max-w-4xl font-display text-5xl font-semibold leading-[0.96] tracking-[-0.055em] sm:text-7xl">
@@ -968,7 +968,7 @@ function ProductionStatusHero() {
         <div className="mt-9 flex flex-wrap gap-3">
           <Link
             href="/contact"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#071c18]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#07182b]"
           >
             Check contact availability
           </Link>
@@ -995,12 +995,12 @@ function ProductionDonationStatus({
 
   return (
     <section
-      className="section-space bg-[#0b2c25] text-white"
+      className="section-space bg-[#0b253b] text-white"
       aria-labelledby="production-donation-status"
     >
       <div className="page-shell">
-        <ShieldCheck className="size-8 text-[#70d5b3]" aria-hidden="true" />
-        <p className="mt-7 text-xs font-extrabold uppercase tracking-[0.18em] text-[#70d5b3]">
+        <ShieldCheck className="size-8 text-[#91c4ff]" aria-hidden="true" />
+        <p className="mt-7 text-xs font-extrabold uppercase tracking-[0.18em] text-[#91c4ff]">
           Online giving status
         </p>
         <h2

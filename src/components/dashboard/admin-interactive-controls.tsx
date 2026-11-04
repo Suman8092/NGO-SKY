@@ -204,7 +204,7 @@ export function SanitySyncButton() {
         type="button"
         onClick={handleSync}
         disabled={loading}
-        className="inline-flex items-center gap-2 rounded-xl bg-forest px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0c2a24] disabled:opacity-50"
+        className="inline-flex items-center gap-2 rounded-xl bg-forest px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-[#0c2439] disabled:opacity-50"
       >
         <RefreshCw
           className={`size-3.5 ${loading ? "animate-spin" : ""}`}

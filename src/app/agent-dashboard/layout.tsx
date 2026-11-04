@@ -21,8 +21,8 @@ export default async function AgentDashboardLayout({
   const { userId } = await auth();
   if (!isAdminUserId(userId)) redirect("/dashboard");
   return (
-    <div className="min-h-screen bg-[#faf8f5] text-ink dark:bg-[#061814] dark:text-white">
-      <header className="border-b border-ink/8 bg-white/80 px-6 py-4 backdrop-blur-md dark:border-white/10 dark:bg-[#07241d]/80">
+    <div className="min-h-screen bg-[#faf8f5] text-ink dark:bg-[#061427] dark:text-white">
+      <header className="border-b border-ink/8 bg-white/80 px-6 py-4 backdrop-blur-md dark:border-white/10 dark:bg-[#071d33]/80">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
@@ -35,7 +35,7 @@ export default async function AgentDashboardLayout({
             <div>
               <div className="flex items-center gap-2">
                 <BrandMark className="w-36 sm:w-48" priority />
-                <span className="rounded-full bg-forest/10 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-forest dark:bg-[#70d5b3]/15 dark:text-[#70d5b3]">
+                <span className="rounded-full bg-forest/10 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-forest dark:bg-[#91c4ff]/15 dark:text-[#91c4ff]">
                   Field Desk
                 </span>
               </div>
@@ -50,7 +50,7 @@ export default async function AgentDashboardLayout({
               href="/admin/events"
               className="inline-flex items-center gap-1.5 rounded-xl border border-ink/10 px-3 py-1.5 text-xs font-semibold hover:bg-forest/5 dark:border-white/10"
             >
-              <ShieldCheck className="size-3.5 text-forest dark:text-[#70d5b3]" />
+              <ShieldCheck className="size-3.5 text-forest dark:text-[#91c4ff]" />
               Admin View
             </Link>
           </div>

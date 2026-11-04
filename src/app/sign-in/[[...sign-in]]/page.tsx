@@ -10,14 +10,14 @@ export default function SignInPage() {
   return (
     <main
       id="main-content"
-      className="grid min-h-screen bg-[#ecf0e9] dark:bg-[#0c1614] lg:grid-cols-2"
+      className="grid min-h-screen bg-[#ecf0e9] dark:bg-[#0c1425] lg:grid-cols-2"
     >
-      <div className="hidden bg-[#08241e] p-12 text-white lg:flex lg:flex-col lg:justify-between">
+      <div className="hidden bg-[#081e33] p-12 text-white lg:flex lg:flex-col lg:justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <BrandMark className="w-72" priority />
+          <BrandMark className="brand-on-dark w-72" priority />
         </Link>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#6bd0ae]">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#91c4ff]">
             Your secure account
           </p>
           <h1 className="mt-5 max-w-xl font-display text-6xl font-semibold leading-[0.96] tracking-[-0.06em]">

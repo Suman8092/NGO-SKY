@@ -105,7 +105,7 @@ export function AboutPage() {
         title={
           <>
             Hope becomes powerful when it is{" "}
-            <span className="text-forest dark:text-[#70d5b3]">shared.</span>
+            <span className="text-forest dark:text-[#91c4ff]">shared.</span>
           </>
         }
       >
@@ -116,7 +116,7 @@ export function AboutPage() {
             aria-hidden="true"
             className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-amber-400/20 blur-3xl"
           />
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#70d5b3]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#91c4ff]">
             Our promise
           </p>
           <p className="mt-5 text-pretty text-2xl font-semibold leading-9 tracking-tight text-ink">
@@ -125,7 +125,7 @@ export function AboutPage() {
           </p>
           <div className="mt-8 grid grid-cols-2 gap-4 border-t border-ink/[0.08] pt-6 dark:border-white/10">
             <div>
-              <p className="text-3xl font-semibold tracking-tight text-forest dark:text-[#70d5b3]">
+              <p className="text-3xl font-semibold tracking-tight text-forest dark:text-[#91c4ff]">
                 28K+
               </p>
               <p className="mt-1 text-sm text-ink/50">
@@ -133,7 +133,7 @@ export function AboutPage() {
               </p>
             </div>
             <div>
-              <p className="text-3xl font-semibold tracking-tight text-forest dark:text-[#70d5b3]">
+              <p className="text-3xl font-semibold tracking-tight text-forest dark:text-[#91c4ff]">
                 42
               </p>
               <p className="mt-1 text-sm text-ink/50">
@@ -172,7 +172,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -217,7 +217,7 @@ export function AboutPage() {
                   <span className="h-2 w-2 rounded-full bg-white" />
                 </span>
                 <div className={`rounded-3xl p-6 ${pageSurface}`}>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-forest dark:text-[#70d5b3]">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-forest dark:text-[#91c4ff]">
                     {milestone.year}
                   </p>
                   <h3 className="mt-2 text-lg font-bold text-ink">
@@ -417,7 +417,7 @@ export function ProgramsPage() {
         title={
           <>
             Whole-person support.{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               Community-wide change.
             </span>
           </>
@@ -555,7 +555,7 @@ export function ProgramsPage() {
           <div className={`rounded-xl p-8 sm:p-10 ${pageSurface}`}>
             <Building2
               aria-hidden="true"
-              className="h-9 w-9 text-forest dark:text-[#70d5b3]"
+              className="h-9 w-9 text-forest dark:text-[#91c4ff]"
             />
             <h3 className="mt-8 text-2xl font-bold text-ink">
               Partner with our programmes
@@ -574,7 +574,7 @@ export function ProgramsPage() {
               />
             </div>
             <Link
-              className="mt-8 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#075f52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950"
+              className="mt-8 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#00427d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950"
               href="/contact?interest=partnerships"
             >
               Start a partnership conversation

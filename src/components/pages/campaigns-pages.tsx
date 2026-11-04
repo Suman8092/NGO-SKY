@@ -435,7 +435,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
           </div>
         </div>
         <Link
-          className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#075f52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400"
+          className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#00427d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400"
           href={`/campaigns/${campaign.slug}`}
         >
           View campaign{" "}
@@ -494,7 +494,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
         title={
           <>
             Choose the change you want to{" "}
-            <span className="text-forest dark:text-[#70d5b3]">
+            <span className="text-forest dark:text-[#91c4ff]">
               move forward.
             </span>
           </>
@@ -526,7 +526,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
             <div className="flex items-start gap-4">
               <ShieldCheck
                 aria-hidden="true"
-                className="mt-0.5 h-6 w-6 shrink-0 text-forest dark:text-[#70d5b3]"
+                className="mt-0.5 h-6 w-6 shrink-0 text-forest dark:text-[#91c4ff]"
               />
               <div>
                 <p className="font-bold text-ink">
@@ -581,7 +581,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-24">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:px-8">
           <SectionHeading
             description="We design campaign giving to be clear before you donate and accountable after you do."
@@ -612,7 +612,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
               >
                 <item.icon
                   aria-hidden="true"
-                  className="h-6 w-6 text-forest dark:text-[#70d5b3]"
+                  className="h-6 w-6 text-forest dark:text-[#91c4ff]"
                 />
                 <p className="mt-7 text-xs font-bold text-slate-400">
                   0{index + 1}
@@ -685,21 +685,21 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                 <span className="flex items-center gap-2">
                   <MapPin
                     aria-hidden="true"
-                    className="h-4 w-4 text-forest dark:text-[#70d5b3]"
+                    className="h-4 w-4 text-forest dark:text-[#91c4ff]"
                   />
                   {campaign.location}
                 </span>
                 <span className="flex items-center gap-2">
                   <Users
                     aria-hidden="true"
-                    className="h-4 w-4 text-forest dark:text-[#70d5b3]"
+                    className="h-4 w-4 text-forest dark:text-[#91c4ff]"
                   />
                   {campaign.supporters.toLocaleString("en-IN")} supporters
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock3
                     aria-hidden="true"
-                    className="h-4 w-4 text-forest dark:text-[#70d5b3]"
+                    className="h-4 w-4 text-forest dark:text-[#91c4ff]"
                   />
                   {campaign.daysLeft} days left
                 </span>
@@ -735,7 +735,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               <p className="mt-5 flex items-start gap-2 border-t border-ink/[0.08] pt-5 text-xs leading-5 text-slate-500 dark:border-white/10 dark:text-slate-400">
                 <ShieldCheck
                   aria-hidden="true"
-                  className="mt-0.5 h-4 w-4 shrink-0 text-forest dark:text-[#70d5b3]"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-forest dark:text-[#91c4ff]"
                 />
                 Ask the team which verified support options are currently
                 available for this work.
@@ -794,7 +794,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
             <div className={`rounded-[1.75rem] p-6 ${pageSurface}`}>
               <BadgeCheck
                 aria-hidden="true"
-                className="h-6 w-6 text-forest dark:text-[#70d5b3]"
+                className="h-6 w-6 text-forest dark:text-[#91c4ff]"
               />
               <h2 className="mt-6 text-lg font-bold text-ink">
                 Campaign standards
@@ -808,7 +808,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <SectionHeading
@@ -826,7 +826,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                     <h3 className="font-bold text-ink">
                       {item.label}
                     </h3>
-                    <span className="text-lg font-extrabold text-forest dark:text-[#70d5b3]">
+                    <span className="text-lg font-extrabold text-forest dark:text-[#91c4ff]">
                       {item.percent}%
                     </span>
                   </div>
@@ -849,7 +849,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               title="Campaign updates"
             />
             <Link
-              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]"
+              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#91c4ff]"
               href="/contact"
             >
               Ask a question{" "}
@@ -862,7 +862,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                 className={`rounded-[1.5rem] p-6 ${pageSurface}`}
                 key={update.date}
               >
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-forest dark:text-[#70d5b3]">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-forest dark:text-[#91c4ff]">
                   <CalendarDays aria-hidden="true" className="h-4 w-4" />
                   {update.date}
                 </div>

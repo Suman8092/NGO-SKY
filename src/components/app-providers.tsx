@@ -33,7 +33,7 @@ export function AppProviders({
       appearance={{
         elements: { logoImage: { width: "220px", height: "auto", maxHeight: "80px", objectFit: "contain" } },
         layout: {
-          logoImageUrl: "/brand/foundation-logo-horizontal.png",
+          logoImageUrl: "/brand/foundation-logo-transparent.png",
           logoPlacement: "inside",
         },
       }}

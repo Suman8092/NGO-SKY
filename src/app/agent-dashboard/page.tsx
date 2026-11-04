@@ -10,10 +10,10 @@ export default function AgentDashboardPage() {
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
-      <div className="rounded-4xl bg-[#0b3028] p-6 text-white shadow-lift sm:p-8">
+      <div className="rounded-4xl bg-[#0b283f] p-6 text-white shadow-lift sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#70d5b3]">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#91c4ff]">
               Field Operations & Community Assemblies
             </span>
             <h1 className="mt-1 font-display text-2xl font-bold tracking-tight sm:text-3xl">
@@ -26,7 +26,7 @@ export default function AgentDashboardPage() {
 
           <div className="flex gap-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
-              <span className="block font-mono text-2xl font-bold text-[#70d5b3]">
+              <span className="block font-mono text-2xl font-bold text-[#91c4ff]">
                 {activeEvents.length}
               </span>
               <span className="text-[0.7rem] uppercase tracking-wider text-white/60">
@@ -43,7 +43,7 @@ export default function AgentDashboardPage() {
       {/* Field Desk Guidance Card */}
       <div className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.04]">
         <h3 className="flex items-center gap-2 font-display text-base font-bold text-ink dark:text-white">
-          <HeartHandshake className="size-4 text-forest dark:text-[#70d5b3]" />
+          <HeartHandshake className="size-4 text-forest dark:text-[#91c4ff]" />
           Field Volunteer Protocols
         </h3>
         <div className="mt-4 grid gap-4 text-xs text-ink/70 dark:text-white/70 sm:grid-cols-3">
