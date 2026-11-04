@@ -446,7 +446,7 @@ export default async function UserDashboard() {
                   <tbody className="divide-y divide-ink/8">
                     {data.eventRegistrations.map((reg) => (
                       <tr key={reg.id} className="hover:bg-forest/[0.02]">
-                        <td className="whitespace-nowrap px-5 py-4 font-mono font-bold text-forest dark:text-[#91c4ff]">
+                        <td className="whitespace-nowrap px-5 py-4 font-sans tabular-nums font-bold text-forest dark:text-[#91c4ff]">
                           {reg.ticketCode}
                         </td>
                         <td className="px-5 py-4 font-bold text-ink dark:text-white">

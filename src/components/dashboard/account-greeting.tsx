@@ -29,6 +29,6 @@ function ClerkGreeting({ role }: { role: "admin" | "user" }) {
   }
 
   return role === "admin"
-    ? `Good morning, ${firstName}.`
+    ? `Welcome back, ${firstName}.`
     : `Welcome to your account, ${firstName}.`;
 }

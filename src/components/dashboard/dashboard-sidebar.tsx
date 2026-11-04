@@ -38,7 +38,6 @@ const adminLinks = [
   ["Stories", "/admin/stories", BookOpen],
   ["Media", "/admin/media", FileImage],
   ["Analytics", "/admin/analytics", BarChart3],
-  ["Settings", "/admin/settings", Settings],
 ] as const;
 
 const userLinks = [
@@ -51,8 +50,10 @@ export function DashboardSidebar({
   role = "admin",
   clerkEnabled,
   editorialContentPublished,
+  adminAccess = false,
 }: {
   role?: "admin" | "user";
+  adminAccess?: boolean;
   clerkEnabled: boolean;
   editorialContentPublished: boolean;
 }) {
@@ -85,12 +86,15 @@ export function DashboardSidebar({
         />
       ) : null}
       <aside
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setOpen(false);
+        }}
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-[270px] flex-col border-r border-white/8 bg-[#07182b] p-5 text-white transition-transform lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex h-dvh w-[270px] flex-col border-r border-white/8 bg-[#07182b] p-5 text-white transition-transform lg:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex shrink-0 items-center justify-between">
           <Link
             href="/"
             className="flex items-center gap-3"
@@ -114,7 +118,7 @@ export function DashboardSidebar({
           </button>
         </div>
         <nav
-          className="no-scrollbar mt-8 flex-1 space-y-1 overflow-y-auto"
+          className="mt-5 min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain pr-1"
           aria-label="Dashboard navigation"
         >
           {links.map(([label, href, Icon]) => {
@@ -126,10 +130,10 @@ export function DashboardSidebar({
                 onClick={() => setOpen(false)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition",
+                  "flex min-h-10 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition",
                   active
                     ? "bg-[#91c4ff] text-[#07182b]"
-                    : "text-white/55 hover:bg-white/[0.06] hover:text-white",
+                    : "text-white/75 hover:bg-white/[0.06] hover:text-white",
                 )}
               >
                 <Icon className="size-[18px]" aria-hidden="true" />
@@ -138,7 +142,31 @@ export function DashboardSidebar({
             );
           })}
         </nav>
-        <div className="border-t border-white/10 pt-5">
+        <div className="shrink-0 border-t border-white/15 pt-3">
+          {role === "admin" ? (
+            <Link
+              href="/admin/settings"
+              onClick={() => setOpen(false)}
+              aria-current={pathname === "/admin/settings" ? "page" : undefined}
+              className={cn(
+                "mb-3 flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium",
+                pathname === "/admin/settings"
+                  ? "bg-[#91c4ff] text-[#07182b]"
+                  : "text-white/85 hover:bg-white/10",
+              )}
+            >
+              <Settings className="size-[18px]" aria-hidden="true" /> Settings
+            </Link>
+          ) : adminAccess ? (
+            <Link
+              href="/admin"
+              onClick={() => setOpen(false)}
+              className="mb-3 flex min-h-11 items-center gap-3 rounded-md bg-white/10 px-3 text-sm font-medium text-white"
+            >
+              <ShieldCheck className="size-[18px]" aria-hidden="true" /> Admin
+              workspace
+            </Link>
+          ) : null}
           {clerkEnabled ? <ClerkAccount role={role} /> : <UnavailableAccount />}
           <div className="mt-4 flex items-center justify-between">
             <Link

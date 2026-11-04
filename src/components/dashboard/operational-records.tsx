@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { WorkspacePreferences } from "./workspace-preferences";
 import { RecordsTable } from "./records-table";
 import { getHealthSnapshot } from "@/lib/server/services/health";
 import { isClerkConfigured } from "@/lib/auth-config";
@@ -86,7 +87,10 @@ function UnavailableState({ source }: { source: "database" | "identity" }) {
 function EmptyState({ label }: { label: string }) {
   return (
     <div className="flex gap-4 border-t border-ink/15 py-8">
-      <Database className="mt-0.5 size-6 shrink-0 text-forest" aria-hidden="true" />
+      <Database
+        className="mt-0.5 size-6 shrink-0 text-forest"
+        aria-hidden="true"
+      />
       <div>
         <h2 className="font-display text-2xl font-bold">No {label} found</h2>
         <p className="mt-2 text-sm leading-7 text-ink/55">
@@ -135,48 +139,52 @@ export function DonationRecords({
         </a>
       </div>
       <TableShell label="Latest donation records">
-      <thead className={headClass}>
-        <tr>
-          {[
-            "Created",
-            "Donor",
-            "Amount",
-            "Frequency",
-            "Provider",
-            "Status",
-            "Reference",
-          ].map((label) => (
-            <th key={label} className={headerCellClass} scope="col">
-              {label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-ink/8">
-        {result.data.map((record) => (
-          <tr key={record.id}>
-            <td className={`${cellClass} whitespace-nowrap`}>
-              {formatDate(record.createdAt)}
-            </td>
-            <td className={cellClass}>
-              <strong className="block text-ink">{record.donorName}</strong>
-              <span className="break-all text-xs">{record.donorEmail}</span>
-            </td>
-            <td className={`${cellClass} whitespace-nowrap font-bold text-ink`}>
-              {formatAmount(record)}
-            </td>
-            <td className={`${cellClass} capitalize`}>
-              {record.frequency.replace("_", " ")}
-            </td>
-            <td className={`${cellClass} capitalize`}>{record.provider}</td>
-            <td className={cellClass}>
-              <StatusBadge status={record.status} />
-            </td>
-            <td className={`${cellClass} font-mono text-xs`}>{record.id}</td>
+        <thead className={headClass}>
+          <tr>
+            {[
+              "Created",
+              "Donor",
+              "Amount",
+              "Frequency",
+              "Provider",
+              "Status",
+              "Reference",
+            ].map((label) => (
+              <th key={label} className={headerCellClass} scope="col">
+                {label}
+              </th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </TableShell>
+        </thead>
+        <tbody className="divide-y divide-ink/8">
+          {result.data.map((record) => (
+            <tr key={record.id}>
+              <td className={`${cellClass} whitespace-nowrap`}>
+                {formatDate(record.createdAt)}
+              </td>
+              <td className={cellClass}>
+                <strong className="block text-ink">{record.donorName}</strong>
+                <span className="break-all text-xs">{record.donorEmail}</span>
+              </td>
+              <td
+                className={`${cellClass} whitespace-nowrap font-bold text-ink`}
+              >
+                {formatAmount(record)}
+              </td>
+              <td className={`${cellClass} capitalize`}>
+                {record.frequency.replace("_", " ")}
+              </td>
+              <td className={`${cellClass} capitalize`}>{record.provider}</td>
+              <td className={cellClass}>
+                <StatusBadge status={record.status} />
+              </td>
+              <td className={`${cellClass} font-sans text-xs tabular-nums`}>
+                {record.id}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </TableShell>
     </div>
   );
 }
@@ -206,51 +214,53 @@ export function VolunteerRecords({
         </a>
       </div>
       <TableShell label="Latest volunteer applications">
-      <thead className={headClass}>
-        <tr>
-          {[
-            "Submitted",
-            "Applicant",
-            "Contact",
-            "Location",
-            "Area",
-            "Availability",
-            "Status",
-          ].map((label) => (
-            <th key={label} className={headerCellClass} scope="col">
-              {label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-ink/8">
-        {result.data.map((record) => (
-          <tr key={record.id}>
-            <td className={`${cellClass} whitespace-nowrap`}>
-              {formatDate(record.createdAt)}
-            </td>
-            <td className={`${cellClass} font-bold text-ink`}>{record.name}</td>
-            <td className={cellClass}>
-              <span className="block break-all">{record.email}</span>
-              <span className="mt-1 block text-xs">{record.phone}</span>
-            </td>
-            <td className={cellClass}>
-              {record.city}, {record.country}
-            </td>
-            <td className={cellClass}>{record.areaOfInterest}</td>
-            <td className={`${cellClass} capitalize`}>
-              {record.availability.replace("_", " ")}
-            </td>
-            <td className={cellClass}>
-              <VolunteerStatusSelector
-                id={record.id}
-                initialStatus={record.status}
-              />
-            </td>
+        <thead className={headClass}>
+          <tr>
+            {[
+              "Submitted",
+              "Applicant",
+              "Contact",
+              "Location",
+              "Area",
+              "Availability",
+              "Status",
+            ].map((label) => (
+              <th key={label} className={headerCellClass} scope="col">
+                {label}
+              </th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </TableShell>
+        </thead>
+        <tbody className="divide-y divide-ink/8">
+          {result.data.map((record) => (
+            <tr key={record.id}>
+              <td className={`${cellClass} whitespace-nowrap`}>
+                {formatDate(record.createdAt)}
+              </td>
+              <td className={`${cellClass} font-bold text-ink`}>
+                {record.name}
+              </td>
+              <td className={cellClass}>
+                <span className="block break-all">{record.email}</span>
+                <span className="mt-1 block text-xs">{record.phone}</span>
+              </td>
+              <td className={cellClass}>
+                {record.city}, {record.country}
+              </td>
+              <td className={cellClass}>{record.areaOfInterest}</td>
+              <td className={`${cellClass} capitalize`}>
+                {record.availability.replace("_", " ")}
+              </td>
+              <td className={cellClass}>
+                <VolunteerStatusSelector
+                  id={record.id}
+                  initialStatus={record.status}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </TableShell>
     </div>
   );
 }
@@ -292,7 +302,13 @@ export function SubmissionRecords({
   );
 }
 
-function RecordGroupHeading({ title, count }: { title: string; count: number }) {
+function RecordGroupHeading({
+  title,
+  count,
+}: {
+  title: string;
+  count: number;
+}) {
   return (
     <div className="flex items-end justify-between gap-4 pt-2">
       <h2 className="font-display text-2xl font-bold">{title}</h2>
@@ -306,18 +322,13 @@ function ContactTable({ records }: { records: AdminContactRecord[] }) {
     <TableShell label="Latest contact enquiries">
       <thead className={headClass}>
         <tr>
-          {[
-            "Submitted",
-            "Name",
-            "Email",
-            "Phone",
-            "Subject",
-            "Status",
-          ].map((label) => (
-            <th key={label} className={headerCellClass} scope="col">
-              {label}
-            </th>
-          ))}
+          {["Submitted", "Name", "Email", "Phone", "Subject", "Status"].map(
+            (label) => (
+              <th key={label} className={headerCellClass} scope="col">
+                {label}
+              </th>
+            ),
+          )}
         </tr>
       </thead>
       <tbody className="divide-y divide-ink/8">
@@ -331,9 +342,18 @@ function ContactTable({ records }: { records: AdminContactRecord[] }) {
             <td className={cellClass}>{record.phone ?? "Not provided"}</td>
             <td className={cellClass}>
               <details className="max-w-md">
-                <summary className="cursor-pointer font-semibold text-forest">{record.subject}</summary>
-                <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6">{record.message}</p>
-                <a className="mt-3 inline-flex font-semibold text-forest hover:underline" href={`mailto:${record.email}?subject=${encodeURIComponent(`Re: ${record.subject}`)}`}>Reply by email</a>
+                <summary className="cursor-pointer font-semibold text-forest">
+                  {record.subject}
+                </summary>
+                <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6">
+                  {record.message}
+                </p>
+                <a
+                  className="mt-3 inline-flex font-semibold text-forest hover:underline"
+                  href={`mailto:${record.email}?subject=${encodeURIComponent(`Re: ${record.subject}`)}`}
+                >
+                  Reply by email
+                </a>
               </details>
             </td>
             <td className={cellClass}>
@@ -354,18 +374,13 @@ function NewsletterTable({ records }: { records: AdminNewsletterRecord[] }) {
     <TableShell label="Latest newsletter subscriptions">
       <thead className={headClass}>
         <tr>
-          {[
-            "Subscribed",
-            "Name",
-            "Email",
-            "Source",
-            "Status",
-            "Updated",
-          ].map((label) => (
-            <th key={label} className={headerCellClass} scope="col">
-              {label}
-            </th>
-          ))}
+          {["Subscribed", "Name", "Email", "Source", "Status", "Updated"].map(
+            (label) => (
+              <th key={label} className={headerCellClass} scope="col">
+                {label}
+              </th>
+            ),
+          )}
         </tr>
       </thead>
       <tbody className="divide-y divide-ink/8">
@@ -448,18 +463,24 @@ function AuthPersonRow({ person }: { person: AuthPersonRecord }) {
       <td className={`${cellClass} whitespace-nowrap`}>
         {formatDate(person.createdAt)}
       </td>
-      <td className={`${cellClass} font-bold text-ink`}>{person.displayName}</td>
+      <td className={`${cellClass} font-bold text-ink`}>
+        {person.displayName}
+      </td>
       <td className={`${cellClass} break-all`}>
         {person.primaryEmail ?? "Not set"}
       </td>
       <td className={cellClass}>
-        <StatusBadge status={person.emailVerified ? "verified" : "unverified"} />
+        <StatusBadge
+          status={person.emailVerified ? "verified" : "unverified"}
+        />
       </td>
       <td className={`${cellClass} whitespace-nowrap`}>{security}</td>
       <td className={`${cellClass} whitespace-nowrap`}>
         {person.lastSignInAt ? formatDate(person.lastSignInAt) : "Never"}
       </td>
-      <td className={`${cellClass} font-mono text-xs`}>{person.id}</td>
+      <td className={`${cellClass} font-sans text-xs tabular-nums`}>
+        {person.id}
+      </td>
     </tr>
   );
 }
@@ -473,7 +494,8 @@ export function CampaignRecords() {
             Active Campaigns ({campaigns.length})
           </h2>
           <p className="text-xs text-ink/50">
-            Verified field initiatives accepting donations and community backing.
+            Verified field initiatives accepting donations and community
+            backing.
           </p>
         </div>
         <Link
@@ -505,12 +527,17 @@ export function CampaignRecords() {
         </thead>
         <tbody className="divide-y divide-ink/8">
           {campaigns.map((c) => {
-            const percent = Math.min(100, Math.round((c.raised / c.goal) * 100));
+            const percent = Math.min(
+              100,
+              Math.round((c.raised / c.goal) * 100),
+            );
             return (
               <tr key={c.id}>
                 <td className={cellClass}>
                   <div className="font-bold text-ink">{c.title}</div>
-                  <div className="font-mono text-xs text-ink/45">{c.slug}</div>
+                  <div className="font-sans text-xs tabular-nums text-ink/45">
+                    {c.slug}
+                  </div>
                 </td>
                 <td className={cellClass}>
                   <span className="rounded-md bg-forest/10 px-2 py-0.5 text-xs font-semibold text-forest">
@@ -520,7 +547,9 @@ export function CampaignRecords() {
                 <td className={`${cellClass} whitespace-nowrap font-medium`}>
                   ₹{c.goal.toLocaleString("en-IN")}
                 </td>
-                <td className={`${cellClass} whitespace-nowrap font-bold text-forest`}>
+                <td
+                  className={`${cellClass} whitespace-nowrap font-bold text-forest`}
+                >
                   ₹{c.raised.toLocaleString("en-IN")}
                 </td>
                 <td className={cellClass}>
@@ -562,7 +591,8 @@ export function EventRecords({
 }: {
   registrationsResult?: OperationalRead<AdminEventRegistrationRecord[]>;
 } = {}) {
-  const registrations = registrationsResult?.state === "ready" ? registrationsResult.data : [];
+  const registrations =
+    registrationsResult?.state === "ready" ? registrationsResult.data : [];
   const hasRegistrations = registrations.length > 0;
 
   return (
@@ -608,12 +638,16 @@ export function EventRecords({
             {events.map((e) => (
               <tr key={e.slug}>
                 <td className={`${cellClass} whitespace-nowrap`}>
-                  <div className="font-bold text-ink">{formatDate(e.start)}</div>
+                  <div className="font-bold text-ink">
+                    {formatDate(e.start)}
+                  </div>
                   <div className="text-xs text-ink/45">{e.timezone}</div>
                 </td>
                 <td className={cellClass}>
                   <div className="font-bold text-ink">{e.title}</div>
-                  <p className="line-clamp-1 text-xs text-ink/45">{e.summary}</p>
+                  <p className="line-clamp-1 text-xs text-ink/45">
+                    {e.summary}
+                  </p>
                 </td>
                 <td className={cellClass}>
                   <div className="text-xs font-medium text-ink">{e.venue}</div>
@@ -652,7 +686,8 @@ export function EventRecords({
               Attendee Roster & Confirmed RSVPs ({registrations.length})
             </h2>
             <p className="text-xs text-ink/50">
-              Live registrations submitted via public RSVP modals and verified community passes.
+              Live registrations submitted via public RSVP modals and verified
+              community passes.
             </p>
           </div>
           {hasRegistrations && (
@@ -690,30 +725,48 @@ export function EventRecords({
             <tbody className="divide-y divide-ink/8">
               {registrations.map((reg) => (
                 <tr key={reg.id}>
-                  <td className={`${cellClass} font-mono font-bold text-forest dark:text-[#91c4ff]`}>
+                  <td
+                    className={`${cellClass} font-sans font-bold tabular-nums text-forest dark:text-[#91c4ff]`}
+                  >
                     {reg.ticketCode}
                   </td>
                   <td className={`${cellClass} font-bold text-ink`}>
                     {reg.name}
                   </td>
                   <td className={cellClass}>
-                    <div className="text-xs font-medium text-ink">{reg.email}</div>
-                    {reg.phone && <div className="text-[0.7rem] text-ink/45">{reg.phone}</div>}
+                    <div className="text-xs font-medium text-ink">
+                      {reg.email}
+                    </div>
+                    {reg.phone && (
+                      <div className="text-[0.7rem] text-ink/45">
+                        {reg.phone}
+                      </div>
+                    )}
                   </td>
                   <td className={cellClass}>
-                    <div className="text-xs font-bold text-ink">{reg.eventTitle}</div>
-                    {reg.eventDate && <div className="text-[0.7rem] text-ink/45">{reg.eventDate}</div>}
+                    <div className="text-xs font-bold text-ink">
+                      {reg.eventTitle}
+                    </div>
+                    {reg.eventDate && (
+                      <div className="text-[0.7rem] text-ink/45">
+                        {reg.eventDate}
+                      </div>
+                    )}
                   </td>
                   <td className={`${cellClass} font-semibold`}>
                     {reg.ticketsCount}
                   </td>
-                  <td className={`${cellClass} text-xs text-ink/60 max-w-[200px] truncate`}>
+                  <td
+                    className={`${cellClass} max-w-[200px] truncate text-xs text-ink/60`}
+                  >
                     {reg.notes || "None"}
                   </td>
                   <td className={cellClass}>
                     <StatusBadge status={reg.status} />
                   </td>
-                  <td className={`${cellClass} whitespace-nowrap text-xs text-ink/45`}>
+                  <td
+                    className={`${cellClass} whitespace-nowrap text-xs text-ink/45`}
+                  >
                     {formatDate(reg.createdAt)}
                   </td>
                 </tr>
@@ -722,8 +775,13 @@ export function EventRecords({
           </TableShell>
         ) : (
           <div className="rounded-2xl border border-dashed border-ink/15 p-6 text-center">
-            <p className="text-sm font-bold text-ink/60">No attendees have registered yet.</p>
-            <p className="mt-1 text-xs text-ink/45">Attendee RSVPs submitted on the website will appear here in real time.</p>
+            <p className="text-sm font-bold text-ink/60">
+              No attendees have registered yet.
+            </p>
+            <p className="mt-1 text-xs text-ink/45">
+              Attendee RSVPs submitted on the website will appear here in real
+              time.
+            </p>
           </div>
         )}
       </div>
@@ -740,7 +798,8 @@ export function StoryRecords() {
             Impact Stories & Field Articles ({impactStories.length})
           </h2>
           <p className="text-xs text-ink/50">
-            Consent-verified narratives, participant voices, and project retrospectives.
+            Consent-verified narratives, participant voices, and project
+            retrospectives.
           </p>
         </div>
         <Link
@@ -817,7 +876,8 @@ export function MediaRecords() {
             Foundation Media Asset Library ({gallery.length})
           </h2>
           <p className="text-xs text-ink/50">
-            High-resolution photographic records, field portraits, and rights metadata.
+            High-resolution photographic records, field portraits, and rights
+            metadata.
           </p>
         </div>
         <Link
@@ -916,7 +976,8 @@ export function AnalyticsDashboard({
             ₹{donations.averageAmountInr.toLocaleString("en-IN")}
           </p>
           <p className="mt-1 text-xs text-ink/45">
-            {donations.monthlyRecurringCount} monthly · {donations.oneTimeCount} one-time
+            {donations.monthlyRecurringCount} monthly · {donations.oneTimeCount}{" "}
+            one-time
           </p>
         </article>
 
@@ -928,7 +989,8 @@ export function AnalyticsDashboard({
             {volunteers.totalCount}
           </p>
           <p className="mt-1 text-xs text-ink/45">
-            {volunteers.approvedCount} approved · {volunteers.reviewingCount} reviewing
+            {volunteers.approvedCount} approved · {volunteers.reviewingCount}{" "}
+            reviewing
           </p>
         </article>
 
@@ -940,7 +1002,8 @@ export function AnalyticsDashboard({
             {contacts.totalCount + newsletter.totalCount}
           </p>
           <p className="mt-1 text-xs text-ink/45">
-            {contacts.totalCount} enquiries · {newsletter.activeCount} active subscribers
+            {contacts.totalCount} enquiries · {newsletter.activeCount} active
+            subscribers
           </p>
         </article>
       </div>
@@ -1011,15 +1074,21 @@ export function AnalyticsDashboard({
             </div>
             <div className="flex justify-between py-2.5">
               <dt className="text-ink/50">Node.js Process Uptime</dt>
-              <dd className="font-mono text-xs">{system.uptimeSeconds}s active</dd>
+              <dd className="font-sans text-xs tabular-nums">
+                {system.uptimeSeconds}s active
+              </dd>
             </div>
             <div className="flex justify-between py-2.5">
               <dt className="text-ink/50">Runtime Environment</dt>
-              <dd className="font-mono text-xs capitalize">{system.nodeEnv}</dd>
+              <dd className="font-sans text-xs capitalize tabular-nums">
+                {system.nodeEnv}
+              </dd>
             </div>
             <div className="flex justify-between py-2.5">
               <dt className="text-ink/50">Site Origin</dt>
-              <dd className="font-mono text-xs">{system.nextPublicSiteUrl}</dd>
+              <dd className="font-sans text-xs tabular-nums">
+                {system.nextPublicSiteUrl}
+              </dd>
             </div>
           </dl>
         </section>
@@ -1040,27 +1109,90 @@ export async function SettingsConsole() {
     ["Account authentication", isClerkConfigured() ? "configured" : "disabled"],
   ];
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
+      <WorkspacePreferences />
+      <section
+        aria-labelledby="records-tools-title"
+        className="border-t border-ink/15 py-6"
+      >
+        <h2 id="records-tools-title" className="text-xl font-semibold">
+          Records & exports
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-ink/60">
+          Download current records for reconciliation and operational follow-up.
+          These files contain personal data; share them only with authorized
+          staff.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {[
+            ["donations", "Donations"],
+            ["volunteers", "Volunteers"],
+            ["contacts", "Enquiries"],
+            ["events", "Event roster"],
+          ].map(([type, label]) => (
+            <a
+              key={type}
+              href={`/api/admin/export/${type}`}
+              className="button-secondary min-h-10 px-4 text-xs"
+            >
+              <Download className="size-4" aria-hidden="true" />
+              {label} CSV
+            </a>
+          ))}
+        </div>
+      </section>
       <section className="border-t border-ink/15 py-6">
         <p className="eyebrow">Foundation details</p>
         <h2 className="mt-3 text-2xl font-semibold">{brand.legalName}</h2>
         <dl className="mt-5 divide-y divide-ink/10 text-sm">
-          {[["Registration", brand.registration.ngoId], ["Tax registration", brand.registration.taxExemption], ["Contact", brand.contact.email]].map(([label, value]) => (
-            <div key={label} className="grid gap-2 py-4 sm:grid-cols-2"><dt className="text-ink/60">{label}</dt><dd className="break-words font-medium">{value}</dd></div>
+          {[
+            ["Registration", brand.registration.ngoId],
+            ["Tax registration", brand.registration.taxExemption],
+            ["Contact", brand.contact.email],
+          ].map(([label, value]) => (
+            <div key={label} className="grid gap-2 py-4 sm:grid-cols-2">
+              <dt className="text-ink/60">{label}</dt>
+              <dd className="break-words font-medium">{value}</dd>
+            </div>
           ))}
         </dl>
       </section>
       <section className="border-t border-ink/15 py-6">
         <h2 className="text-2xl font-semibold">Integration status</h2>
-        <p className="mt-2 text-sm leading-6 text-ink/60">Database connectivity is checked when this page loads. Other statuses reflect server configuration; provider delivery must be verified separately.</p>
+        <p className="mt-2 text-sm leading-6 text-ink/60">
+          Database connectivity is checked when this page loads. Other statuses
+          reflect server configuration; provider delivery must be verified
+          separately.
+        </p>
         <dl className="mt-5 divide-y divide-ink/10">
           {integrations.map(([name, status]) => (
-            <div key={name} className="flex items-center justify-between gap-4 py-4 text-sm"><dt>{name}</dt><dd><StatusBadge status={status} /></dd></div>
+            <div
+              key={name}
+              className="flex items-center justify-between gap-4 py-4 text-sm"
+            >
+              <dt>{name}</dt>
+              <dd>
+                <StatusBadge status={status} />
+              </dd>
+            </div>
           ))}
         </dl>
-        {health.configuration.invalidFields.length > 0 && <p role="status" className="mt-5 text-sm text-amber-700 dark:text-amber-300">Review deployment configuration: {health.configuration.invalidFields.join(", ")}</p>}
-        <div className="mt-6"><SanitySyncButton /></div>
-        <p className="mt-4 text-xs text-ink/50">Credentials are managed in the deployment environment. Last checked: {formatDate(health.timestamp)}.</p>
+        {health.configuration.invalidFields.length > 0 && (
+          <p
+            role="status"
+            className="mt-5 text-sm text-amber-700 dark:text-amber-300"
+          >
+            Review deployment configuration:{" "}
+            {health.configuration.invalidFields.join(", ")}
+          </p>
+        )}
+        <div className="mt-6">
+          <SanitySyncButton />
+        </div>
+        <p className="mt-4 text-xs text-ink/50">
+          Credentials are managed in the deployment environment. Last checked:{" "}
+          {formatDate(health.timestamp)}.
+        </p>
       </section>
     </div>
   );

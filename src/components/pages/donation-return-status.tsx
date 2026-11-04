@@ -217,7 +217,7 @@ export function DonationReturnStatus({ donationId }: { donationId?: string }) {
           <dt className="text-xs font-bold uppercase tracking-[0.14em] opacity-60">
             Reference
           </dt>
-          <dd className="mt-2 break-all font-mono text-xs font-bold">
+          <dd className="mt-2 break-all font-sans tabular-nums text-xs font-bold">
             {state.donation.id}
           </dd>
         </div>

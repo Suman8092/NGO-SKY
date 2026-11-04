@@ -83,7 +83,7 @@ export function Hero() {
               </span>
               Clear information · Verified impact
             </div>
-            <h1 className="mt-5 font-display text-[clamp(2.75rem,6.1vw,5.4rem)] font-semibold leading-[1.02] tracking-[-0.07em]">
+            <h1 className="mt-5 font-display text-[clamp(2.75rem,6.1vw,5rem)] font-semibold leading-[1.02] tracking-[-0.045em]">
               <span data-hero-reveal className="block">
                 Hope should
               </span>
@@ -92,7 +92,7 @@ export function Hero() {
               </span>
               <span
                 data-hero-reveal
-                className="mt-2 block bg-gradient-to-r from-[#ffe1b3] via-[#ff9f1c] to-[#f28c00] bg-clip-text font-serif italic text-transparent drop-shadow-sm"
+                className="mt-2 block bg-gradient-to-r from-[#ffe1b3] via-[#ff9f1c] to-[#f28c00] bg-clip-text font-display text-transparent drop-shadow-sm"
               >
                 It should arrive.
               </span>

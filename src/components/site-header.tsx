@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Heart,
   LogIn,
+  LayoutDashboard,
   Menu,
   Search,
   Sparkles,
@@ -100,7 +101,10 @@ export function SiteHeader({
             className="group flex shrink-0 items-center gap-3"
             aria-label="Skymeredian Foundation home"
           >
-            <BrandMark className="w-40 sm:w-[200px] lg:w-[190px] xl:w-[220px]" priority />
+            <BrandMark
+              className="w-40 sm:w-[200px] lg:w-[190px] xl:w-[220px]"
+              priority
+            />
           </Link>
 
           <nav
@@ -219,6 +223,14 @@ export function SiteHeader({
                   </Link>
                 </SignedOut>
                 <SignedIn>
+                  <Link
+                    href="/dashboard"
+                    aria-label="Open account dashboard"
+                    title="Open account dashboard"
+                    className="mr-2 grid size-10 place-items-center rounded-full border border-ink/15 text-forest transition hover:bg-forest/10"
+                  >
+                    <LayoutDashboard className="size-4" aria-hidden="true" />
+                  </Link>
                   <UserButton
                     appearance={{ elements: { avatarBox: "size-10" } }}
                   />
@@ -295,6 +307,28 @@ export function SiteHeader({
                 >
                   Contact
                 </Link>
+                {clerkEnabled && (
+                  <div className="flex gap-4 border-b border-ink/10 py-4">
+                    <SignedIn>
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setMobileOpen(false)}
+                        className="font-semibold text-forest"
+                      >
+                        My dashboard
+                      </Link>
+                    </SignedIn>
+                    <SignedOut>
+                      <Link
+                        href="/sign-in"
+                        onClick={() => setMobileOpen(false)}
+                        className="font-semibold text-forest"
+                      >
+                        Sign in
+                      </Link>
+                    </SignedOut>
+                  </div>
+                )}
                 <div className="mt-5 flex items-center justify-between">
                   {editorialContentPublished ? (
                     <button

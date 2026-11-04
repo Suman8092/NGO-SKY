@@ -344,7 +344,7 @@ export function QuotePanel({
       />
       <span
         aria-hidden="true"
-        className="font-serif text-7xl leading-none text-teal-300"
+        className="font-display text-7xl leading-none text-teal-300"
       >
         “
       </span>

@@ -7,7 +7,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        teal: { ...colors.blue, 50: "#eef6ff", 100: "#dcecff", 500: "#0879c5", 600: "#00549f", 700: "#00427d", 800: "#07376a", 900: "#092c52", 950: "#071b34" },
+        teal: {
+          ...colors.blue,
+          50: "#eef6ff",
+          100: "#dcecff",
+          500: "#0879c5",
+          600: "#00549f",
+          700: "#00427d",
+          800: "#07376a",
+          900: "#092c52",
+          950: "#071b34",
+        },
         emerald: colors.green,
         amber: colors.orange,
         ink: "rgb(var(--ink) / <alpha-value>)",
@@ -18,8 +28,8 @@ const config: Config = {
         mist: "rgb(var(--mist) / <alpha-value>)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
-        display: ["var(--font-jakarta)", "sans-serif"],
+        sans: ["var(--font-poppins)", "sans-serif"],
+        display: ["var(--font-poppins)", "sans-serif"],
       },
       boxShadow: {
         soft: "0 24px 80px rgba(0, 55, 106, 0.10)",

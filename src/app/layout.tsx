@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Poppins } from "next/font/google";
 import Script from "next/script";
 
 import { AppProviders } from "@/components/app-providers";
@@ -10,15 +10,10 @@ import { isEditorialContentPublished } from "@/lib/content-config";
 
 import "./globals.css";
 
-const inter = Inter({
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -90,11 +85,7 @@ export default function RootLayout({
   const clerkEnabled = isClerkConfigured();
 
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${inter.variable} ${jakarta.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning className={poppins.variable}>
       <body>
         <a
           href="#main-content"

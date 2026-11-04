@@ -26,7 +26,7 @@ export default function AgentDashboardPage() {
 
           <div className="flex gap-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-center">
-              <span className="block font-mono text-2xl font-bold text-[#91c4ff]">
+              <span className="block font-sans tabular-nums text-2xl font-bold text-[#91c4ff]">
                 {activeEvents.length}
               </span>
               <span className="text-[0.7rem] uppercase tracking-wider text-white/60">

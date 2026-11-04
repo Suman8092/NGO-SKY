@@ -31,7 +31,15 @@ export function AppProviders({
   return publishableKey && clerkEnabled ? (
     <ClerkProvider
       appearance={{
-        elements: { logoImage: { width: "220px", height: "auto", maxHeight: "80px", objectFit: "contain" } },
+        variables: { fontFamily: "var(--font-poppins), sans-serif" },
+        elements: {
+          logoImage: {
+            width: "220px",
+            height: "auto",
+            maxHeight: "80px",
+            objectFit: "contain",
+          },
+        },
         layout: {
           logoImageUrl: "/brand/foundation-logo-transparent.png",
           logoPlacement: "inside",

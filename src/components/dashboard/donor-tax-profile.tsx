@@ -133,7 +133,7 @@ export function DonorTaxProfileCard() {
             <span className="text-[0.68rem] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
               Permanent Account Number (PAN)
             </span>
-            <p className="mt-1 font-mono text-lg font-extrabold tracking-wider text-ink dark:text-white">
+            <p className="mt-1 font-sans tabular-nums text-lg font-extrabold tracking-wider text-ink dark:text-white">
               {profile?.panNumber.slice(0, 5)}****{profile?.panNumber.slice(-1)}
             </p>
             <p className="mt-1 flex items-center gap-1 text-[0.7rem] text-emerald-600 dark:text-emerald-400">
@@ -191,7 +191,7 @@ export function DonorTaxProfileCard() {
                 required
                 maxLength={10}
                 placeholder="ABCDE1234F"
-                className="mt-1.5 w-full rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 font-mono text-sm uppercase text-ink outline-none transition focus:border-forest focus:ring-2 focus:ring-forest/10 dark:border-white/15 dark:bg-white/5 dark:text-white"
+                className="mt-1.5 w-full rounded-xl border border-ink/15 bg-white px-3.5 py-2.5 font-sans tabular-nums text-sm uppercase text-ink outline-none transition focus:border-forest focus:ring-2 focus:ring-forest/10 dark:border-white/15 dark:bg-white/5 dark:text-white"
               />
             </div>
           </div>

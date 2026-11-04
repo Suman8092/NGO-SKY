@@ -37,10 +37,14 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 90% -10%, rgba(0, 84, 159, 0.08), transparent 34rem),
+    radial-gradient(
+      circle at 90% -10%,
+      rgba(0, 84, 159, 0.08),
+      transparent 34rem
+    ),
     rgb(var(--paper));
   color: rgb(var(--ink));
-  font-family: var(--font-inter), Arial, sans-serif;
+  font-family: var(--font-poppins), Arial, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -81,8 +85,8 @@ body::before {
   h2,
   h3,
   h4 {
-    font-family: var(--font-jakarta), var(--font-inter), sans-serif;
-    letter-spacing: -0.045em;
+    font-family: var(--font-poppins), sans-serif;
+    letter-spacing: -0.03em;
   }
 }
 
@@ -147,11 +151,21 @@ body::before {
 }
 
 .mask-fade-x {
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
 }
 
 .map-dots {
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.32) 1px, transparent 1px);
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.32) 1px,
+    transparent 1px
+  );
   background-size: 15px 15px;
 }
 
@@ -181,7 +195,24 @@ body::before {
 }
 
 /* Editorial rhythm: sections grow with their content, with no clipped viewport panels. */
-main section[id], main section[aria-labelledby] { scroll-margin-top: 7rem; }
+main section[id],
+main section[aria-labelledby] {
+  scroll-margin-top: 7rem;
+}
 @media (min-width: 1024px) {
-  .section-space { padding-block: clamp(2.75rem, 5.5vh, 4rem); }
+  .section-space {
+    padding-block: clamp(2.75rem, 5.5vh, 4rem);
+  }
+}
+
+@layer base {
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  table {
+    font-variant-numeric: tabular-nums;
+  }
 }

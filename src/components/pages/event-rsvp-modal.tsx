@@ -153,7 +153,7 @@ export function EventRsvpModal({
                   <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-forest dark:text-[#91c4ff]">
                     <Ticket className="size-4" /> Entry Pass
                   </span>
-                  <span className="rounded-full bg-forest/10 px-2.5 py-0.5 font-mono text-xs font-extrabold text-forest dark:bg-[#91c4ff]/20 dark:text-[#91c4ff]">
+                  <span className="rounded-full bg-forest/10 px-2.5 py-0.5 font-sans tabular-nums text-xs font-extrabold text-forest dark:bg-[#91c4ff]/20 dark:text-[#91c4ff]">
                     {successData.ticketCode}
                   </span>
                 </div>

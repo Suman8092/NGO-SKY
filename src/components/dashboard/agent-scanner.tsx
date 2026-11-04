@@ -115,7 +115,7 @@ export function AgentScanner() {
               value={query}
               onChange={(e) => setQuery(e.target.value.toUpperCase())}
               placeholder="e.g. TKT-343CE01B"
-              className="w-full rounded-2xl border border-ink/10 bg-forest/[0.02] py-3.5 pl-11 pr-4 font-mono text-sm uppercase tracking-wider text-ink outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/35 focus:border-forest focus:ring-4 focus:ring-forest/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-[#91c4ff]"
+              className="w-full rounded-2xl border border-ink/10 bg-forest/[0.02] py-3.5 pl-11 pr-4 font-sans tabular-nums text-sm uppercase tracking-wider text-ink outline-none transition placeholder:normal-case placeholder:tracking-normal placeholder:text-ink/35 focus:border-forest focus:ring-4 focus:ring-forest/10 dark:border-white/10 dark:bg-white/5 dark:text-white dark:focus:border-[#91c4ff]"
             />
           </div>
           <button
@@ -149,7 +149,7 @@ export function AgentScanner() {
               <div className="flex items-center gap-3">
                 <Ticket className="size-6 text-forest dark:text-[#91c4ff]" />
                 <div>
-                  <div className="font-mono text-xs font-bold tracking-wider text-forest dark:text-[#91c4ff]">
+                  <div className="font-sans tabular-nums text-xs font-bold tracking-wider text-forest dark:text-[#91c4ff]">
                     {pass.ticketCode}
                   </div>
                   <h3 className="font-display text-xl font-bold text-ink dark:text-white">
