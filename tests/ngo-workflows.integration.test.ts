@@ -316,6 +316,10 @@ async function main() {
     const pdfReport = await exportReportPdf(headers, rows, definition.title);
     assert.equal(pdfReport.subarray(0, 4).toString(), "%PDF");
     checks.push("real Excel and full PDF exports");
+    const provisional=await saveRecord("designations",{status:"active",data:{name:"PROVISIONAL QA category",fee:0,termMonths:1,provisional:true}},admin);
+    const testMember=await saveRecord("members",{status:"approved",data:{...memberData,accountUserId:"qa-provisional",designation:provisional.id}},admin);
+    const testDocs=await NgoRecordModel.find({module:"documents","data.source":testMember.id});assert.equal(testDocs.length,3);assert(testDocs.every(d=>d.status==="draft"&&d.data._provisional===true));assert.equal(await documentValidity(testDocs[0]),false);assert((await renderNgoDocument(testDocs[0])).length>1000);checks.push("provisional test categories issue only invalid-for-official-use draft documents");
+
     await mkdir("scratch/ngo-pdf-qa", { recursive: true });
     for (const template of [
       "classic",

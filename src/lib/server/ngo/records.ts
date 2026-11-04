@@ -342,10 +342,16 @@ export async function applyRecordEffects(
           ? String(member.data._expires)
           : today;
     const expiry = addCalendarMonths(start, Number(doc.data._termMonths ?? 12));
+    doc.data = {
+      ...doc.data,
+      _previousExpiry: String(member.data._expires ?? ""),
+      _previousStatus: member.status,
+    };
     member.data = {
       ...member.data,
       designation: String(doc.data.designation),
       _expires: expiry,
+      _lastRenewalId: doc._id.toString(),
       _provisional: doc.data._provisional === true,
       _termMonths: Number(doc.data._termMonths ?? 12),
       _paymentStatus: doc.data._paymentStatus ?? "not-required",
@@ -791,7 +797,9 @@ export async function archiveRecord(
   if (
     !actor.admin ||
     financialModules.has(module) ||
-    ["members", "coordinators", "certificates", "letters"].includes(module)
+    ["members", "renewals", "coordinators", "certificates", "letters"].includes(
+      module,
+    )
   )
     throw new ApiError(
       403,

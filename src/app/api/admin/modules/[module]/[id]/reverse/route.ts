@@ -78,6 +78,40 @@ export async function POST(
               _paymentReference: "",
             };
             if (source.module === "members") source.status = "pending";
+            if (source.module === "renewals" && source.status === "approved") {
+              const member = await NgoRecordModel.findById(
+                String(source.data.member),
+              ).session(session);
+              if (
+                !member ||
+                member.data._lastRenewalId !== source._id.toString()
+              )
+                throw new ApiError(
+                  409,
+                  "LATER_RENEWAL_EXISTS",
+                  "A later membership change exists. Review membership validity before reversing this renewal.",
+                );
+              member.data = {
+                ...member.data,
+                _expires: String(source.data._previousExpiry ?? ""),
+                _lastRenewalId: "",
+              };
+              member.status = String(source.data._previousStatus ?? "expired");
+              member.revision++;
+              member.updatedBy = actor.id;
+              await member.save({ session });
+              source.status = "pending";
+              await NgoRecordModel.updateMany(
+                {
+                  module: "documents",
+                  "data.source": member._id.toString(),
+                  status: "issued",
+                },
+                { $set: { status: "revoked" }, $inc: { revision: 1 } },
+                { session },
+              );
+            }
+
             source.revision++;
             await source.save({ session });
             await NgoRecordModel.updateMany(
