@@ -106,7 +106,7 @@ export function SiteFooter() {
         >
           <div>
             <Link href="/" className="inline-flex items-center gap-3">
-              <BrandMark className="w-48 sm:w-52" />
+              <BrandMark className="w-60 sm:w-64" />
             </Link>
             <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">
               {managedContactAvailable

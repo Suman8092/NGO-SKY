@@ -34,7 +34,7 @@ export default async function AgentDashboardLayout({
             </Link>
             <div>
               <div className="flex items-center gap-2">
-                <BrandMark className="w-24 sm:w-28" priority />
+                <BrandMark className="w-36 sm:w-48" priority />
                 <span className="rounded-full bg-forest/10 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-forest dark:bg-[#70d5b3]/15 dark:text-[#70d5b3]">
                   Field Desk
                 </span>

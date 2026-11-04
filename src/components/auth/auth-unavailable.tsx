@@ -20,7 +20,7 @@ export function AuthUnavailable({
 
   return (
     <div className="max-w-md rounded-3xl border border-ink/10 bg-paper p-8 shadow-soft">
-      <BrandMark className="w-40" priority />
+      <BrandMark className="w-56" priority />
       <h1 className="mt-6 font-display text-3xl font-bold">{heading}</h1>
       <p className="mt-4 text-sm leading-7 text-ink/55">{description}</p>
       <Link

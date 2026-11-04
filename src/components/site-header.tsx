@@ -94,13 +94,13 @@ export function SiteHeader({
             : "border-transparent bg-transparent py-3.5",
         )}
       >
-        <div className="page-shell flex min-h-20 items-center justify-between gap-3 sm:min-h-24 sm:gap-5">
+        <div className="page-shell flex min-h-16 items-center justify-between gap-3 sm:min-h-20 sm:gap-5">
           <Link
             href="/"
             className="group flex shrink-0 items-center gap-3"
             aria-label="Skymeredian Foundation home"
           >
-            <BrandMark className="w-[84px] sm:w-[100px]" priority />
+            <BrandMark className="w-40 sm:w-[200px] lg:w-[190px] xl:w-[220px]" priority />
           </Link>
 
           <nav

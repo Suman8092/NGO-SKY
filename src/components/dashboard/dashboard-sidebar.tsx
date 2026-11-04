@@ -98,7 +98,7 @@ export function DashboardSidebar({
             onClick={() => setOpen(false)}
           >
             <div>
-              <BrandMark className="w-40" priority />
+              <BrandMark className="w-44" priority />
               <span className="mt-3 block text-xs font-semibold tracking-wide text-white/60">
                 {role === "admin" ? "Operations" : "My account"}
               </span>

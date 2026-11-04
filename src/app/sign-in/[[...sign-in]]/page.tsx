@@ -14,7 +14,7 @@ export default function SignInPage() {
     >
       <div className="hidden bg-[#08241e] p-12 text-white lg:flex lg:flex-col lg:justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <BrandMark className="w-48" priority />
+          <BrandMark className="w-72" priority />
         </Link>
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#6bd0ae]">

@@ -8,7 +8,7 @@ export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   const logo = await readFile(
-    join(process.cwd(), "public/brand/foundation-logo.png"),
+    join(process.cwd(), "public/brand/foundation-logo-horizontal.png"),
   );
   const logoSource = `data:image/png;base64,${logo.toString("base64")}`;
   return new ImageResponse(
@@ -37,27 +37,24 @@ export default async function OpenGraphImage() {
         <div
           style={{
             display: "flex",
-            width: 170,
-            height: 162,
+            width: 450,
+            height: 150,
             position: "relative",
             overflow: "hidden",
             background: "white",
             borderRadius: 8,
           }}
         >
-          {/* The source includes whitespace; preserve the complete logo within the visible frame. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={logoSource}
             alt="Skymeredian Foundation"
-            width={300}
-            height={300}
+            width={450}
+            height={150}
             style={{
-              position: "absolute",
-              width: 300,
-              height: 300,
-              left: -64.5,
-              top: -56,
+              width: 450,
+              height: 150,
+              objectFit: "contain",
             }}
           />
         </div>
