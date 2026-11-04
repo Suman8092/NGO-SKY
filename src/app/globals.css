@@ -216,3 +216,7 @@ main section[aria-labelledby] {
     font-variant-numeric: tabular-nums;
   }
 }
+
+@layer components {
+  .ngo-input { @apply min-h-11 rounded-md border border-ink/20 bg-paper px-3 py-2 text-sm font-normal text-ink focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest; }
+}

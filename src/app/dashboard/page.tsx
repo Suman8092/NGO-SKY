@@ -120,6 +120,7 @@ export default async function UserDashboard() {
 
   return (
     <div className="mx-auto max-w-[1200px] space-y-6">
+      <Link href="/dashboard/membership" className="inline-flex text-sm font-semibold text-forest">Membership, documents & messages →</Link>
       {/* Header Banner */}
       <header className="rounded-lg bg-[#0b283f] p-6 text-white shadow-lift sm:p-9">
         <div className="flex flex-wrap items-center justify-between gap-3">

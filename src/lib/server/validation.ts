@@ -89,6 +89,8 @@ const amount = z.preprocess(
 
 export const donationSchema = z
   .object({
+    campaignId: z.string().regex(/^(?:[a-f0-9]{24}|CAM-\d{4}-[A-F0-9]{12})$/i).optional(),
+    referredBy: z.string().regex(/^(?:[a-f0-9]{24}|MEM-\d{4}-[A-F0-9]{12})$/i).optional(),
     amount,
     currency: z.enum(["INR", "USD", "EUR", "GBP"]).default("INR"),
     frequency: z.enum(["one_time", "monthly", "yearly"]).default("one_time"),

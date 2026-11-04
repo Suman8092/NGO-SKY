@@ -29,6 +29,8 @@ import { cn } from "@/lib/utils";
 
 const adminLinks = [
   ["Overview", "/admin", LayoutDashboard],
+  ["NGO operations", "/admin/manage", HeartHandshake],
+  ["Financial reports", "/admin/reports", BarChart3],
   ["Campaigns", "/admin/campaigns", HeartHandshake],
   ["Donations", "/admin/donations", CircleDollarSign],
   ["People", "/admin/users", Users],
@@ -42,6 +44,7 @@ const adminLinks = [
 
 const userLinks = [
   ["Account overview", "/dashboard", LayoutDashboard],
+  ["Membership & documents", "/dashboard/membership", ShieldCheck],
   ["Browse campaigns", "/campaigns", HeartHandshake],
   ["Contact support", "/contact", LifeBuoy],
 ] as const;

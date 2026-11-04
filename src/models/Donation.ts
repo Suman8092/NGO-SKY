@@ -7,6 +7,8 @@ export type PaymentProvider = "stripe" | "razorpay";
 export interface DonationDocument {
   _id: Types.ObjectId;
   amountMinor: number;
+  campaignId?: string;
+  referredBy?: string;
   currency: "INR" | "USD" | "EUR" | "GBP";
   frequency: "one_time" | "monthly" | "yearly";
   provider: PaymentProvider;
@@ -36,6 +38,8 @@ export interface DonationDocument {
 
 const donationSchema = new Schema<DonationDocument>(
   {
+    campaignId: { type: String, maxlength: 24, index: true },
+    referredBy: { type: String, maxlength: 24, index: true },
     amountMinor: { type: Number, required: true, min: 100, max: 1_000_000_000 },
     currency: {
       type: String,

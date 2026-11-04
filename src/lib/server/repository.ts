@@ -1,3 +1,5 @@
+import { NgoRecordModel } from "@/models/NgoRecord";
+import { Types } from "mongoose";
 import { createHash, randomBytes } from "node:crypto";
 
 import {
@@ -61,6 +63,8 @@ export type NewsletterSubscriptionStoredResult =
 export type NewsletterUnsubscribeResult = "unsubscribed" | "invalid";
 
 export type DonationRecord = {
+  campaignId?: string;
+  referredBy?: string;
   id: string;
   amountMinor: number;
   currency: DonationDocument["currency"];
@@ -94,6 +98,8 @@ function donationRecord(document: DonationDocument): DonationRecord {
   return {
     id: document._id.toString(),
     amountMinor: document.amountMinor,
+    campaignId: document.campaignId,
+    referredBy: document.referredBy,
     currency: document.currency,
     frequency: document.frequency,
     provider: document.provider,
@@ -366,6 +372,8 @@ function assertDonationIdempotencyMatch(
     document.currency === input.currency &&
     document.frequency === input.frequency &&
     document.provider === provider &&
+    document.campaignId === input.campaignId &&
+    document.referredBy === input.referredBy &&
     storedAccountUserId === expectedAccountUserId;
 
   if (!matches) {
@@ -568,6 +576,13 @@ export async function storeDonation(
     );
   }
 
+  for (const [field, module] of [["campaignId", "campaigns"], ["referredBy", "members"]] as const) {
+    const value = input[field]; if (!value) continue;
+    const linked = await NgoRecordModel.findOne({ module, ...(Types.ObjectId.isValid(value) ? { _id: value } : { reference: value }), status: module === "members" ? "approved" : "active", deletedAt: null });
+    if (!linked || module === "members" && metadata.accountUserId && linked.ownerId === metadata.accountUserId || module === "campaigns" && linked.data.endDate && String(linked.data.endDate) < new Date().toISOString().slice(0,10)) throw new ApiError(422, "INVALID_REFERRAL_OR_CAMPAIGN", "The selected campaign or referral is unavailable.");
+    input = { ...input, [field]: linked._id.toString() };
+  }
+
   if (input.idempotencyKey) {
     const existing = await DonationModel.findOne({
       idempotencyKey: input.idempotencyKey,
@@ -591,6 +606,8 @@ export async function storeDonation(
   try {
     const document = await DonationModel.create({
       amountMinor,
+      campaignId: input.campaignId,
+      referredBy: input.referredBy,
       currency: input.currency,
       frequency: input.frequency,
       provider,

@@ -15,7 +15,7 @@ import { isEditorialContentPublished } from "@/lib/content-config";
 const isDashboardRoute = createRouteMatcher(["/dashboard/:path*"]);
 const isAdminRoute = createRouteMatcher(["/admin/:path*", "/agent-dashboard/:path*"]);
 const isAdminApiRoute = createRouteMatcher(["/api/admin/:path*"]);
-const isUserApiRoute = createRouteMatcher(["/api/user/:path*"]);
+const isUserApiRoute = createRouteMatcher(["/api/user/:path*", "/api/ngo/:path*"]);
 const isEventApiRoute = createRouteMatcher(["/api/events/:path*"]);
 const isDonationApiRoute = createRouteMatcher(["/api/donations/:path*"]);
 const isHealthApiRoute = createRouteMatcher(["/api/health"]);
@@ -78,6 +78,11 @@ export default function middleware(
   request: NextRequest,
   event: NextFetchEvent,
 ) {
+  if ((isAdminApiRoute(request) || isUserApiRoute(request)) && !["GET", "HEAD", "OPTIONS"].includes(request.method)) {
+    const origin = request.headers.get("origin");
+    const configuredOrigin = process.env.NEXT_PUBLIC_SITE_URL;
+    if (origin && origin !== request.nextUrl.origin && origin !== configuredOrigin) return NextResponse.json({ok:false,error:{code:"INVALID_ORIGIN",message:"This request must originate from the website."}},{status:403});
+  }
   if (!editorialContentPublished && isEditorialRoute(request)) {
     return NextResponse.rewrite(routeUrl(request, "/content-review"));
   }
@@ -133,6 +138,7 @@ export const config = {
     "/agent-dashboard/:path*",
     "/api/admin/:path*",
     "/api/user/:path*",
+    "/api/ngo/:path*",
     "/api/events/:path*",
     "/api/donations/:path*",
     "/api/health",

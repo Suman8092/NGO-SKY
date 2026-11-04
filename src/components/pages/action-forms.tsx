@@ -620,6 +620,8 @@ export function DonationForm({
         };
       }
       const result = await postJson("/api/donations", {
+          campaignId: new URLSearchParams(window.location.search).get("campaign") || undefined,
+          referredBy: new URLSearchParams(window.location.search).get("ref") || undefined,
         amount: selectedAmount,
         currency: "INR",
         frequency,

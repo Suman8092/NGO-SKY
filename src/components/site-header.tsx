@@ -28,6 +28,8 @@ const navigation = [
       ["Our story", "/about", "Why Skymeredian exists"],
       ["Impact & evidence", "/impact", "What changed, and how we know"],
       ["Stories", "/stories", "Voices from the field"],
+      ["News & activities", "/community/news", "Published foundation updates"],
+      ["Management body", "/community/team", "Meet the published management team"],
     ],
   },
   {
@@ -45,6 +47,9 @@ const navigation = [
     href: "/volunteer",
     links: [
       ["Volunteer", "/volunteer", "Give time and expertise"],
+      ["Membership", "/membership", "Apply for a published designation"],
+      ["Internships", "/community/internships", "Explore open internship programs"],
+      ["Complaints & suggestions", "/complaints", "Submit and follow a private case"],
       ["Campaigns", "/campaigns", "Fund urgent, specific work"],
       ["Events", "/events", "Meet, learn, participate"],
       ["Partner", "/contact?subject=partnerships", "Build with us"],

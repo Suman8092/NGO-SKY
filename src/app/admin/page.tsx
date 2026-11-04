@@ -48,6 +48,8 @@ const readinessAreas = [
 ] as const;
 
 const operationalViews = [
+  ["NGO operations", "/admin/manage", "Memberships, beneficiaries, coordinators, documents, publishing, and finance"],
+  ["Consolidated financial reports", "/admin/reports", "Reconciled income, expenditure, and filtered module exports"],
   [
     "Campaign management",
     "/admin/campaigns",

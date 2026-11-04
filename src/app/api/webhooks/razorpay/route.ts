@@ -1,3 +1,5 @@
+import { processNgoOutbox } from "@/lib/server/ngo/jobs";
+import { handleNgoWebhook, onlineReceipt } from "@/lib/server/ngo/payments";
 import { after } from "next/server";
 
 import { sendDonationConfirmation } from "@/lib/server/email/resend";
@@ -36,6 +38,7 @@ export async function POST(request: Request): Promise<Response> {
         "The webhook body is not valid JSON.",
       );
     }
+    if (await handleNgoWebhook(payload, request.headers.get("x-razorpay-event-id") ?? undefined, rawBody)) { after(async()=>{await processNgoOutbox(5).catch(()=>undefined);}); return jsonSuccess({ received: true, processed: true }); }
     const update = razorpayWebhookToDonationUpdate(payload);
     const receipt = await recordPaymentWebhookEvent({
       provider: "razorpay",
@@ -66,6 +69,8 @@ export async function POST(request: Request): Promise<Response> {
     if (processing?.confirmationDonation) {
       const donation = processing.confirmationDonation;
       after(async () => {
+        await onlineReceipt(donation.id).catch((error: unknown) => safeLogError("ngo-receipt", error));
+        await processNgoOutbox(5).catch(()=>undefined);
         await sendDonationConfirmation(donation).catch((error: unknown) => {
           safeLogError("donation-confirmation", error);
         });

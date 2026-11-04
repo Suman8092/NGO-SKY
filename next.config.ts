@@ -1,11 +1,19 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NGO_BUILD_DIR || ".next",
+  outputFileTracingIncludes: {
+    "/api/ngo/documents/*": ["./src/assets/fonts/*.ttf", "./public/brand/*"],
+    "/api/admin/modules/*/export": ["./src/assets/fonts/*.ttf"],
+    "/api/jobs/ngo": ["./src/assets/fonts/*.ttf", "./public/brand/*"],
+    "/api/admin/delivery": ["./src/assets/fonts/*.ttf", "./public/brand/*"],
+  },
   env: {
     NEXT_PUBLIC_CONTENT_VERIFIED:
       process.env.NEXT_PUBLIC_CONTENT_VERIFIED ?? "true",
     NEXT_PUBLIC_CONTENT_RELEASE_ID:
-      process.env.NEXT_PUBLIC_CONTENT_RELEASE_ID ?? "skymeredian-release-2026-v1",
+      process.env.NEXT_PUBLIC_CONTENT_RELEASE_ID ??
+      "skymeredian-release-2026-v1",
   },
   poweredByHeader: false,
   compress: true,
@@ -23,7 +31,11 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion", "@react-three/drei"],
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "@react-three/drei",
+    ],
   },
   async headers() {
     return [
@@ -33,7 +45,10 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(self)" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(self)",
+          },
         ],
       },
     ];

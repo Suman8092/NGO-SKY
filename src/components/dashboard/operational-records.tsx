@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { EnquiryReply } from "@/components/ngo/enquiry-reply";
+import { DeliveryLog } from "@/components/ngo/delivery-log";
 import { WorkspacePreferences } from "./workspace-preferences";
 import { RecordsTable } from "./records-table";
 import { getHealthSnapshot } from "@/lib/server/services/health";
@@ -354,6 +356,7 @@ function ContactTable({ records }: { records: AdminContactRecord[] }) {
                 >
                   Reply by email
                 </a>
+                <EnquiryReply id={record.id} />
               </details>
             </td>
             <td className={cellClass}>
@@ -1111,6 +1114,7 @@ export async function SettingsConsole() {
   return (
     <div className="space-y-8">
       <WorkspacePreferences />
+      <DeliveryLog />
       <section
         aria-labelledby="records-tools-title"
         className="border-t border-ink/15 py-6"
