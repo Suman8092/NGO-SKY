@@ -15,22 +15,18 @@ const questions = [
 export function Faq() {
   const [open, setOpen] = useState(0);
   return (
-    <div className="space-y-3.5">
+    <div className="border-t border-ink/15">
       {questions.map(([question, answer], index) => {
         const active = open === index;
         return (
           <div
             key={question}
-            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
-              active
-                ? "border-forest/25 bg-white/80 shadow-[0_8px_30px_-15px_rgba(12,53,45,0.06)] dark:border-forest/35 dark:bg-white/[0.04]"
-                : "border-ink/[0.06] bg-white/40 hover:border-forest/20 hover:bg-white/60 dark:border-white/[0.06] dark:bg-white/[0.02]"
-            }`}
+            className="overflow-hidden border-b border-ink/15"
           >
             <h3>
               <button
                 type="button"
-                className="flex w-full items-center justify-between gap-5 p-6 text-left font-display text-lg font-bold tracking-tight text-ink transition sm:text-xl"
+                className="flex w-full items-center justify-between gap-5 py-4 text-left font-display text-lg font-bold tracking-tight text-ink transition sm:text-xl"
                 onClick={() => setOpen(active ? -1 : index)}
                 aria-expanded={active}
               >
@@ -55,7 +51,7 @@ export function Faq() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className="overflow-hidden"
                 >
-                  <p className="max-w-3xl px-6 pb-6 text-sm leading-relaxed text-ink/70 sm:text-base">
+                  <p className="max-w-3xl pr-10 pb-5 text-sm leading-relaxed text-ink/70 sm:text-base">
                     {answer}
                   </p>
                 </motion.div>

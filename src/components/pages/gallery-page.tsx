@@ -32,7 +32,7 @@ export function GalleryPage() {
         </div>
         <motion.div layout className="mt-9 columns-1 gap-5 sm:columns-2 lg:columns-3">
           <AnimatePresence mode="popLayout">
-            {items.map((item, index) => <motion.button layout key={item.id} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} type="button" onClick={() => setSelected(item)} className="group relative mb-5 block w-full break-inside-avoid overflow-hidden rounded-3xl text-left shadow-soft" aria-label={`Open ${item.title}`}>
+            {items.map((item, index) => <motion.button layout key={item.id} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} type="button" onClick={() => setSelected(item)} className="group relative mb-5 block w-full break-inside-avoid overflow-hidden rounded-lg text-left shadow-soft" aria-label={`Open ${item.title}`}>
               <Image src={item.image.src} alt={item.image.alt} width={item.image.width} height={item.image.height} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className={`w-full object-cover transition duration-700 group-hover:scale-[1.035] ${index % 3 === 0 ? "aspect-[4/5]" : "aspect-[4/3]"}`} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#07182b]/85 via-transparent to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-5 text-white"><p className="text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-[#7bd6b7]">{item.category}</p><h2 className="mt-2 font-display text-xl font-bold tracking-tight">{item.title}</h2><p className="mt-2 flex items-center gap-1.5 text-xs text-white/55"><MapPin className="size-3.5" />{item.location}</p></div>

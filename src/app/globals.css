@@ -92,7 +92,7 @@ body::before {
   }
 
   .section-space {
-    @apply py-20 md:py-28 lg:py-36;
+    @apply py-12 md:py-14 lg:py-16;
   }
 
   .eyebrow {
@@ -105,15 +105,15 @@ body::before {
   }
 
   .display-title {
-    @apply font-display text-4xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-5xl md:text-6xl lg:text-7xl;
+    @apply font-display text-4xl font-semibold leading-[0.98] tracking-[-0.055em] sm:text-5xl lg:text-[3.25rem];
   }
 
   .button-primary {
-    @apply relative inline-flex min-h-12 items-center justify-center gap-2 overflow-hidden rounded-full bg-forest px-6 py-3 text-sm font-bold text-white shadow-lg shadow-forest/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[#00427d] hover:shadow-xl focus-visible:outline-ember dark:text-[#071327];
+    @apply relative inline-flex min-h-12 items-center justify-center gap-2 overflow-hidden rounded-full bg-forest px-6 py-3 text-sm font-bold text-white shadow-none transition duration-300 hover:bg-[#00427d] focus-visible:outline-ember dark:text-[#071327];
   }
 
   .button-secondary {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink/15 bg-paper/65 px-6 py-3 text-sm font-bold text-ink backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-forest/40 hover:bg-paper;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink/15 bg-transparent px-6 py-3 text-sm font-bold text-ink transition duration-300 hover:-translate-y-0.5 hover:border-forest/40 hover:bg-paper;
   }
 
   .glass-card {
@@ -178,4 +178,10 @@ body::before {
 .brand-on-dark img,
 .dark .brand-logo img {
   filter: brightness(1.8) drop-shadow(0 0 0.5px rgba(255, 255, 255, 0.6));
+}
+
+/* Editorial rhythm: sections grow with their content, with no clipped viewport panels. */
+main section[id], main section[aria-labelledby] { scroll-margin-top: 7rem; }
+@media (min-width: 1024px) {
+  .section-space { padding-block: clamp(2.75rem, 5.5vh, 4rem); }
 }

@@ -45,7 +45,7 @@ export function DonationCalculator({
           </span>
           <h2
             id="giving-title"
-            className="mt-6 font-display text-5xl font-semibold leading-[0.96] tracking-[-0.055em] text-white sm:text-6xl"
+            className="mt-6 font-display text-4xl font-semibold leading-[0.96] tracking-[-0.055em] text-white sm:text-5xl"
           >
             Choose your contribution.
           </h2>
@@ -63,7 +63,7 @@ export function DonationCalculator({
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/15 bg-white/[0.07] p-6 shadow-2xl backdrop-blur-2xl sm:p-9">
+        <div className="relative overflow-hidden border-l border-white/20 pl-6 sm:pl-9">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#91c4ff]">
             Select Giving Tier
           </p>

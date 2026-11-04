@@ -377,7 +377,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
         />
         <div
           aria-hidden="true"
-          className="absolute right-7 top-7 flex h-16 w-16 items-center justify-center rounded-3xl border border-white/15 bg-white/10 backdrop-blur"
+          className="absolute right-7 top-7 flex h-16 w-16 items-center justify-center rounded-lg border border-white/15 bg-white/10 backdrop-blur"
         >
           <Icon className="h-8 w-8 text-teal-100" />
         </div>
@@ -501,7 +501,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
         }
       >
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="rounded-[1.75rem] bg-teal-700 p-7 text-white shadow-xl">
+          <div className="rounded-lg bg-teal-700 p-7 text-white shadow-xl">
             <CircleDollarSign
               aria-hidden="true"
               className="h-7 w-7 text-teal-200"
@@ -513,7 +513,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
               raised across live campaigns
             </p>
           </div>
-          <div className={`rounded-[1.75rem] p-7 ${pageSurface}`}>
+          <div className={`rounded-lg p-7 ${pageSurface}`}>
             <Users aria-hidden="true" className="h-7 w-7 text-amber-500" />
             <p className="mt-8 text-3xl font-semibold text-ink">
               {totalSupporters.toLocaleString("en-IN")}
@@ -522,7 +522,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
               people choosing to act
             </p>
           </div>
-          <div className={`rounded-[1.75rem] p-6 sm:col-span-2 ${pageSurface}`}>
+          <div className={`rounded-lg p-6 sm:col-span-2 ${pageSurface}`}>
             <div className="flex items-start gap-4">
               <ShieldCheck
                 aria-hidden="true"
@@ -543,7 +543,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
       </PageHero>
 
       <section
-        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+        className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16"
         id="active-campaigns"
       >
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -581,7 +581,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-24">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:px-8">
           <SectionHeading
             description="We design campaign giving to be clear before you donate and accountable after you do."
@@ -672,7 +672,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                   </span>
                 ) : null}
               </div>
-              <div className="mt-7 flex h-16 w-16 items-center justify-center rounded-3xl bg-teal-700 text-white shadow-lg shadow-teal-900/20">
+              <div className="mt-7 flex h-16 w-16 items-center justify-center rounded-lg bg-teal-700 text-white shadow-lg shadow-teal-900/20">
                 <Icon aria-hidden="true" className="h-8 w-8" />
               </div>
               <h1 className="mt-7 max-w-4xl text-balance text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-6xl">
@@ -745,7 +745,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_20rem]">
           <article>
             <SectionHeading
@@ -779,7 +779,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
             </div>
           </article>
           <aside className="space-y-5">
-            <div className={`rounded-[1.75rem] p-6 ${pageSurface}`}>
+            <div className={`rounded-lg p-6 ${pageSurface}`}>
               <Sparkles aria-hidden="true" className="h-6 w-6 text-amber-500" />
               <h2 className="mt-6 text-lg font-bold text-ink">
                 Ways to help
@@ -791,7 +791,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                 <li>Fund a defined milestone</li>
               </ul>
             </div>
-            <div className={`rounded-[1.75rem] p-6 ${pageSurface}`}>
+            <div className={`rounded-lg p-6 ${pageSurface}`}>
               <BadgeCheck
                 aria-hidden="true"
                 className="h-6 w-6 text-forest dark:text-[#91c4ff]"
@@ -808,7 +808,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <SectionHeading
@@ -840,7 +840,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
           <div>
             <SectionHeading
@@ -878,7 +878,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section className="bg-slate-950 py-20 text-white lg:py-24">
+      <section className="bg-slate-950 py-12 text-white lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>

@@ -54,7 +54,7 @@ function PolicyPage({
                 {description}
               </p>
             </div>
-            <div className="flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-teal-700 text-white shadow-xl shadow-teal-900/15">
+            <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-teal-700 text-white shadow-xl shadow-teal-900/15">
               <Icon aria-hidden="true" className="h-9 w-9" />
             </div>
           </div>
@@ -66,11 +66,11 @@ function PolicyPage({
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[17rem_minmax(0,1fr)] lg:px-8 lg:py-24">
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[17rem_minmax(0,1fr)] lg:px-8 lg:py-16">
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <nav
             aria-label={`${title} contents`}
-            className={`rounded-[1.75rem] p-5 ${pageSurface}`}
+            className={`rounded-lg p-5 ${pageSurface}`}
           >
             <p className="px-3 text-xs font-extrabold uppercase tracking-[0.16em] text-slate-400">
               On this page
@@ -751,7 +751,7 @@ export function AccessibilityPage() {
         sections={accessibilitySections}
         title="Accessibility Statement"
       />
-      <section className="border-t border-slate-200 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60">
+      <section className="border-t border-slate-200 bg-slate-50 py-12 dark:border-white/10 dark:bg-slate-950/60">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -783,7 +783,7 @@ export function AccessibilityPage() {
               },
             ].map((item) => (
               <article
-                className={`rounded-[1.75rem] p-7 ${pageSurface}`}
+                className={`rounded-lg p-7 ${pageSurface}`}
                 key={item.title}
               >
                 <item.icon

@@ -145,7 +145,7 @@ export function ImpactPage() {
           </>
         }
       >
-        <div className="relative overflow-hidden rounded-xl bg-slate-950 p-8 text-white shadow-2xl sm:p-10">
+        <div className="relative overflow-hidden rounded-xl bg-slate-950 p-8 text-white shadow-none sm:p-10">
           <div
             aria-hidden="true"
             className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-teal-500/20 blur-3xl"
@@ -172,7 +172,7 @@ export function ImpactPage() {
       </PageHero>
 
       <section
-        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+        className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16"
         id="impact-snapshot"
       >
         <SectionHeading
@@ -190,7 +190,7 @@ export function ImpactPage() {
         </p>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
@@ -203,7 +203,7 @@ export function ImpactPage() {
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {outcomes.map((outcome) => (
               <article
-                className={`rounded-[1.75rem] p-7 ${pageSurface}`}
+                className={`rounded-lg p-7 ${pageSurface}`}
                 key={outcome.title}
               >
                 <outcome.icon
@@ -226,7 +226,7 @@ export function ImpactPage() {
       </section>
 
       <section
-        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+        className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16"
         id="methodology"
       >
         <div className="grid gap-14 lg:grid-cols-[.68fr_1.32fr] lg:items-start">
@@ -279,7 +279,7 @@ export function ImpactPage() {
         </div>
       </section>
 
-      <section className="bg-teal-950 py-20 text-white lg:py-28">
+      <section className="bg-teal-950 py-12 text-white lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
             <div>
@@ -325,7 +325,7 @@ export function ImpactPage() {
       </section>
 
       <section
-        className="mx-auto max-w-7xl scroll-mt-28 px-6 py-20 lg:px-8 lg:py-28"
+        className="mx-auto max-w-7xl scroll-mt-28 px-6 py-12 lg:px-8 lg:py-16"
         id="financials"
       >
         <div
@@ -462,8 +462,8 @@ export function StoriesPage() {
         />
       </PageHero>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
-        <div className="grid overflow-hidden rounded-xl bg-teal-950 text-white shadow-2xl lg:grid-cols-[.82fr_1.18fr]">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+        <div className="grid overflow-hidden rounded-xl bg-teal-950 text-white shadow-none lg:grid-cols-[.82fr_1.18fr]">
           <div className="relative min-h-80 overflow-hidden bg-gradient-to-br from-teal-700 via-teal-800 to-slate-950 p-8 sm:p-12">
             <div
               aria-hidden="true"
@@ -510,7 +510,7 @@ export function StoriesPage() {
       </section>
 
       <section
-        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28"
+        className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16"
         id="community-stories"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -567,7 +567,7 @@ export function StoriesPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
           <SectionHeading
             description="People are never content. Our story practice is designed to protect dignity, agency, privacy, and the right to change one’s mind."
@@ -700,7 +700,7 @@ const pastEvents = [
 export function EventCard({ event }: { event: EventItem }) {
   return (
     <article
-      className={`grid overflow-hidden rounded-xl ${event.featured ? "bg-teal-950 text-white shadow-2xl lg:grid-cols-[13rem_1fr]" : pageSurface}`}
+      className={`grid overflow-hidden rounded-xl ${event.featured ? "bg-teal-950 text-white shadow-none lg:grid-cols-[13rem_1fr]" : pageSurface}`}
     >
       <div
         className={`${event.featured ? "flex min-h-48 flex-col justify-between bg-gradient-to-br from-teal-700 to-teal-950 p-7" : "p-7 pb-0"}`}
@@ -808,7 +808,7 @@ export function EventsPage() {
       </PageHero>
 
       <section
-        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+        className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16"
         id="upcoming-events"
       >
         <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
@@ -832,7 +832,7 @@ export function EventsPage() {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -843,7 +843,7 @@ export function EventsPage() {
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {pastEvents.map((event) => (
               <article
-                className={`rounded-[1.75rem] p-7 ${pageSurface}`}
+                className={`rounded-lg p-7 ${pageSurface}`}
                 key={event.title}
               >
                 <div className="flex items-center justify-between">
@@ -874,7 +874,7 @@ export function EventsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
           <div>
             <SectionHeading

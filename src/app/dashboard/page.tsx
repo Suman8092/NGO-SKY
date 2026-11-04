@@ -121,7 +121,7 @@ export default async function UserDashboard() {
   return (
     <div className="mx-auto max-w-[1200px] space-y-6">
       {/* Header Banner */}
-      <header className="rounded-4xl bg-[#0b283f] p-6 text-white shadow-lift sm:p-9">
+      <header className="rounded-lg bg-[#0b283f] p-6 text-white shadow-lift sm:p-9">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#91c4ff]">
             Supporter Portal & Giving Account
@@ -560,7 +560,7 @@ export default async function UserDashboard() {
       </section>
 
       {/* Statutory 80G & Record Integrity Notice */}
-      <section className="rounded-3xl border border-forest/15 bg-forest/[0.06] p-6 sm:p-8">
+      <section className="rounded-lg border border-forest/15 bg-forest/[0.06] p-6 sm:p-8">
         <div className="flex items-center gap-3">
           <ShieldCheck className="size-6 text-forest" aria-hidden="true" />
           <h2 className="font-display text-xl font-bold text-forest">

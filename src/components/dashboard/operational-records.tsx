@@ -62,7 +62,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function UnavailableState({ source }: { source: "database" | "identity" }) {
   return (
-    <div className="flex gap-4 rounded-3xl border border-amber-500/20 bg-amber-500/[0.07] p-6 sm:p-8">
+    <div className="flex gap-4 rounded-lg border border-amber-500/20 bg-amber-500/[0.07] p-6 sm:p-8">
       <CircleAlert
         className="mt-0.5 size-6 shrink-0 text-amber-700 dark:text-amber-300"
         aria-hidden="true"
@@ -833,7 +833,7 @@ export function MediaRecords() {
         {gallery.map((item) => (
           <article
             key={item.id}
-            className="group overflow-hidden rounded-3xl border border-ink/8 bg-white transition hover:shadow-lg dark:bg-white/[0.055]"
+            className="group overflow-hidden rounded-lg border border-ink/8 bg-white transition hover:shadow-lg dark:bg-white/[0.055]"
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-forest/5">
               <Image

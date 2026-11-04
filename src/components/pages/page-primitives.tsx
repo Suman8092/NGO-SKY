@@ -188,7 +188,7 @@ export function SectionHeading({
         </p>
       ) : null}
       <h2
-        className={`mt-3 text-balance text-3xl font-semibold tracking-[-0.035em] sm:text-5xl ${tone === "inverse" ? "text-white" : "text-slate-950 dark:text-white"}`}
+        className={`mt-3 text-balance text-3xl font-semibold tracking-[-0.035em] sm:text-4xl ${tone === "inverse" ? "text-white" : "text-slate-950 dark:text-white"}`}
       >
         {title}
       </h2>
@@ -221,7 +221,7 @@ export function IconCard({
   const content = (
     <>
       <div
-        className={`flex h-11 w-11 items-center justify-center rounded-2xl ${accentStyles[accent].icon} shadow-lg`}
+        className={`flex h-8 w-8 items-center justify-center rounded-md ${accentStyles[accent].icon}`}
       >
         <Icon aria-hidden="true" className="h-5 w-5" />
       </div>
@@ -231,7 +231,7 @@ export function IconCard({
         </p>
       ) : null}
       <h3
-        className={`${meta ? "mt-2" : "mt-7"} text-xl font-bold tracking-tight text-slate-950 dark:text-white`}
+        className={`${meta ? "mt-2" : "mt-4"} text-xl font-bold tracking-tight text-slate-950 dark:text-white`}
       >
         {title}
       </h3>
@@ -250,7 +250,7 @@ export function IconCard({
     </>
   );
 
-  const classes = `group block h-full rounded-[1.75rem] p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_90px_-38px_rgba(15,118,110,0.5)] ${surface}`;
+  const classes = `group block h-full py-5 pr-4 transition-colors duration-200 ${surface}`;
   return href ? (
     <Link
       className={`${classes} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500`}
@@ -272,11 +272,11 @@ export function MetricGrid({
 }) {
   return (
     <dl
-      className={`grid overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_30px_100px_-50px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-slate-900 ${columns === 3 ? "md:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-4"}`}
+      className={`grid border-y border-slate-200 dark:border-white/10 ${columns === 3 ? "md:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-4"}`}
     >
       {metrics.map((metric, index) => (
         <div
-          className={`p-7 sm:p-8 ${index > 0 ? "border-t border-slate-200 dark:border-white/10 sm:border-l sm:border-t-0" : ""} ${columns === 4 && index === 2 ? "sm:border-l-0 lg:border-l" : ""}`}
+          className={`py-5 sm:px-5 ${index > 0 ? "border-t border-slate-200 dark:border-white/10 sm:border-l sm:border-t-0" : ""} ${columns === 4 && index === 2 ? "sm:border-l-0 lg:border-l" : ""}`}
           key={metric.label}
         >
           <dt className="text-sm font-semibold text-slate-500 dark:text-slate-400">
@@ -337,7 +337,7 @@ export function QuotePanel({
   role: string;
 }) {
   return (
-    <figure className="relative overflow-hidden rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl sm:p-10">
+    <figure className="relative overflow-hidden rounded-lg bg-slate-950 p-8 text-white shadow-none sm:p-10">
       <div
         aria-hidden="true"
         className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-teal-500/20 blur-3xl"
@@ -391,8 +391,8 @@ export function CtaBand({
   secondaryAction?: HeroAction;
 }) {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
-      <div className="relative isolate overflow-hidden rounded-xl bg-slate-950 px-7 py-12 text-white shadow-2xl sm:px-12 lg:px-16 lg:py-16">
+    <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+      <div className="relative isolate overflow-hidden rounded-xl bg-slate-950 px-7 py-12 text-white shadow-none sm:px-12 lg:px-16 lg:py-16">
         <div
           aria-hidden="true"
           className="absolute -left-28 -top-32 -z-10 h-80 w-80 rounded-full bg-teal-500/25 blur-3xl"

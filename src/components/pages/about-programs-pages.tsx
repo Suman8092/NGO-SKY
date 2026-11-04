@@ -144,7 +144,7 @@ export function AboutPage() {
         </div>
       </PageHero>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-14 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
           <SectionHeading
             description="We imagine a future where a person’s postcode, income, gender, age, or identity never determines the life they are able to build."
@@ -172,7 +172,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -193,7 +193,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-14 lg:grid-cols-[minmax(0,.78fr)_minmax(0,1.22fr)] lg:items-center">
           <div>
             <SectionHeading
@@ -216,7 +216,7 @@ export function AboutPage() {
                 <span className="relative z-10 mt-1 flex h-10 w-10 items-center justify-center rounded-full border-4 border-white bg-teal-700 text-white shadow dark:border-slate-950">
                   <span className="h-2 w-2 rounded-full bg-white" />
                 </span>
-                <div className={`rounded-3xl p-6 ${pageSurface}`}>
+                <div className={`rounded-lg p-6 ${pageSurface}`}>
                   <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-forest dark:text-[#91c4ff]">
                     {milestone.year}
                   </p>
@@ -234,7 +234,7 @@ export function AboutPage() {
       </section>
 
       <section
-        className="scroll-mt-28 bg-teal-950 py-20 text-white lg:py-24"
+        className="scroll-mt-28 bg-teal-950 py-12 text-white lg:py-16"
         id="reports"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -423,7 +423,7 @@ export function ProgramsPage() {
           </>
         }
       >
-        <div className="relative min-h-[23rem] overflow-hidden rounded-xl bg-teal-950 p-8 text-white shadow-2xl">
+        <div className="relative min-h-[23rem] overflow-hidden rounded-xl bg-teal-950 p-8 text-white shadow-none">
           <div
             aria-hidden="true"
             className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-teal-400/20 blur-3xl"
@@ -457,7 +457,7 @@ export function ProgramsPage() {
         </div>
       </PageHero>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <SectionHeading
           align="center"
           description="Every programme can stand on its own. Together, they address the overlapping realities that shape a family’s choices."
@@ -490,7 +490,7 @@ export function ProgramsPage() {
         </div>
       </section>
 
-      <section className="overflow-hidden border-y border-ink/[0.08]/80 bg-slate-950 py-20 text-white dark:border-white/10 lg:py-28">
+      <section className="overflow-hidden border-y border-ink/[0.08]/80 bg-slate-950 py-12 text-white dark:border-white/10 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
             <div>
@@ -508,7 +508,7 @@ export function ProgramsPage() {
             <ol className="grid gap-4 sm:grid-cols-2">
               {programmeModel.map((step) => (
                 <li
-                  className="rounded-[1.75rem] border border-white/10 bg-white/[0.06] p-7"
+                  className="rounded-lg border border-white/10 bg-white/[0.06] p-7"
                   key={step.number}
                 >
                   <span className="text-sm font-extrabold text-amber-300">
@@ -525,7 +525,7 @@ export function ProgramsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[1fr_.9fr] lg:items-center">
           <div>
             <SectionHeading

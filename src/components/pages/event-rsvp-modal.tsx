@@ -119,7 +119,7 @@ export function EventRsvpModal({
           initial={{ opacity: 0, scale: 0.95, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
-          className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-ink/10 bg-white p-6 shadow-2xl dark:border-white/10 dark:bg-[#0c1a2e] sm:p-8"
+          className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-lg border border-ink/10 bg-white p-6 shadow-none dark:border-white/10 dark:bg-[#0c1a2e] sm:p-8"
         >
           {/* Close button */}
           <button

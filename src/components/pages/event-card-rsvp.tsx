@@ -21,9 +21,9 @@ export function EventCardWithRsvp({
   return (
     <>
       <article
-        className={`grid overflow-hidden rounded-[2rem] border transition-all duration-300 hover:shadow-lift ${
+        className={`grid overflow-hidden rounded-lg border transition-all duration-300 hover:shadow-lift ${
           event.featured
-            ? "border-teal-800 bg-[#071e33] text-white shadow-2xl lg:grid-cols-[13rem_1fr]"
+            ? "border-teal-800 bg-[#071e33] text-white shadow-none lg:grid-cols-[13rem_1fr]"
             : "border-ink/[0.08] bg-white/80 backdrop-blur-xl dark:border-white/[0.08] dark:bg-white/[0.04]"
         }`}
       >

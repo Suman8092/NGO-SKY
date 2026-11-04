@@ -144,7 +144,7 @@ export function VolunteerPage({
       </PageHero>
 
       <section
-        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+        className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16"
         id="roles"
       >
         <SectionHeading
@@ -166,7 +166,7 @@ export function VolunteerPage({
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <div>
@@ -189,7 +189,7 @@ export function VolunteerPage({
             <ol className="grid gap-4 sm:grid-cols-2">
               {volunteerSteps.map((step) => (
                 <li
-                  className={`rounded-[1.75rem] p-7 ${pageSurface}`}
+                  className={`rounded-lg p-7 ${pageSurface}`}
                   key={step.number}
                 >
                   <p className="text-xs font-extrabold text-forest dark:text-[#91c4ff]">
@@ -208,7 +208,7 @@ export function VolunteerPage({
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
         <div className="grid gap-12 lg:grid-cols-[1fr_.95fr] lg:items-center">
           <div>
             <SectionHeading
@@ -239,7 +239,7 @@ export function VolunteerPage({
               />
             </div>
           </div>
-          <aside className="rounded-xl bg-teal-950 p-8 text-white shadow-2xl sm:p-10">
+          <aside className="rounded-xl bg-teal-950 p-8 text-white shadow-none sm:p-10">
             <ShieldCheck aria-hidden="true" className="h-9 w-9 text-teal-300" />
             <h3 className="mt-8 text-2xl font-bold">
               Safeguarding is everyone’s responsibility
@@ -261,7 +261,7 @@ export function VolunteerPage({
       </section>
 
       <section
-        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-28"
+        className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16"
         id="apply"
       >
         <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[.7fr_1.3fr] lg:px-8">
@@ -279,7 +279,7 @@ export function VolunteerPage({
                   : "Applications are currently unavailable"
               }
             />
-            <div className={`mt-8 rounded-[1.75rem] p-6 ${pageSurface}`}>
+            <div className={`mt-8 rounded-lg p-6 ${pageSurface}`}>
               <p className="font-bold text-ink">
                 {submissionsAvailable
                   ? "What happens after you apply?"
@@ -371,7 +371,7 @@ export function ContactPage({
           {contactOptions.length ? (
             contactOptions.map((option) => (
               <a
-                className={`group rounded-[1.5rem] p-6 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${pageSurface}`}
+                className={`group rounded-[1.5rem] p-6 transition hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${pageSurface}`}
                 href={option.href}
                 key={option.title}
               >
@@ -410,7 +410,7 @@ export function ContactPage({
         </div>
       </PageHero>
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[.72fr_1.28fr] lg:px-8 lg:py-28">
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 lg:grid-cols-[.72fr_1.28fr] lg:px-8 lg:py-16">
         <div>
           <SectionHeading
             description={
@@ -503,7 +503,7 @@ export function DonatePage({
           </>
         }
       >
-        <div className="relative overflow-hidden rounded-xl bg-teal-950 p-8 text-white shadow-2xl sm:p-10">
+        <div className="relative overflow-hidden rounded-xl bg-teal-950 p-8 text-white shadow-none sm:p-10">
           <div
             aria-hidden="true"
             className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-teal-400/20 blur-3xl"
@@ -557,7 +557,7 @@ export function DonatePage({
         </section>
       ) : null}
 
-      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[.72fr_1.28fr] lg:items-start lg:px-8 lg:py-28">
+      <section className="mx-auto grid max-w-7xl gap-12 px-6 py-12 lg:grid-cols-[.72fr_1.28fr] lg:items-start lg:px-8 lg:py-16">
         <aside className="lg:sticky lg:top-28">
           <SectionHeading
             description="No pledge or payment is accepted when the production checkout is unavailable."
@@ -574,7 +574,7 @@ export function DonatePage({
               ]}
             />
           </div>
-          <div className={`mt-8 rounded-[1.75rem] p-6 ${pageSurface}`}>
+          <div className={`mt-8 rounded-lg p-6 ${pageSurface}`}>
             <div className="flex items-start gap-3">
               <ShieldCheck
                 aria-hidden="true"
@@ -606,7 +606,7 @@ export function DonatePage({
             </div>
           ) : null}
           {paymentsUnavailable ? (
-            <div className="rounded-[1.75rem] border border-amber-200 bg-amber-50 p-7 text-amber-950 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-7 text-amber-950 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100">
               <ShieldCheck aria-hidden="true" className="h-7 w-7" />
               <h2 className="mt-5 text-2xl font-bold">No checkout is active</h2>
               <p className="mt-3 leading-7">
@@ -630,7 +630,7 @@ export function DonatePage({
         </div>
       </section>
 
-      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-24">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-12 dark:border-white/[0.08] dark:bg-[#061427]/60 lg:py-16">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -802,7 +802,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
         </div>
       </section>
 
-      <section className="mx-auto min-h-[34rem] max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+      <section className="mx-auto min-h-[34rem] max-w-7xl px-6 py-16 lg:px-8 lg:py-12">
         {normalizedQuery ? (
           <>
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/[0.08] pb-6 dark:border-white/10">
@@ -821,7 +821,7 @@ export function SearchPage({ query = "" }: { query?: string }) {
               <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {results.map((result) => (
                   <Link
-                    className={`group rounded-[1.75rem] p-7 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${pageSurface}`}
+                    className={`group rounded-lg p-7 transition hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${pageSurface}`}
                     href={result.href}
                     key={`${result.type}-${result.title}`}
                   >
@@ -849,8 +849,8 @@ export function SearchPage({ query = "" }: { query?: string }) {
                 ))}
               </div>
             ) : (
-              <div className="mx-auto max-w-xl py-20 text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
+              <div className="mx-auto max-w-xl py-12 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#91c4ff]">
                   <Search aria-hidden="true" className="h-7 w-7" />
                 </div>
                 <h2 className="mt-7 text-2xl font-bold text-ink">

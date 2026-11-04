@@ -31,11 +31,10 @@ export function Hero() {
     if (reduced) return;
     const context = gsap.context(() => {
       gsap.from("[data-hero-reveal]", {
-        y: 42,
+        y: 16,
         opacity: 0,
-        filter: "blur(12px)",
-        duration: 1.05,
-        stagger: 0.11,
+        duration: 0.45,
+        stagger: 0.05,
         ease: "power3.out",
         delay: 0.15,
       });
@@ -46,7 +45,7 @@ export function Hero() {
   return (
     <section
       ref={root}
-      className="relative isolate min-h-[760px] overflow-hidden bg-[#07182b] text-white sm:min-h-[800px] lg:min-h-[860px]"
+      className="relative isolate min-h-[100svh] overflow-hidden bg-[#07182b] text-white  lg:min-h-[min(800px,100svh)]"
       onPointerMove={(event) => {
         const bounds = event.currentTarget.getBoundingClientRect();
         mouseX.set((event.clientX - bounds.left) / bounds.width);
@@ -71,12 +70,12 @@ export function Hero() {
       <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,21,44,.93)_0%,transparent_42%,rgba(5,21,44,.2)_100%)]" />
       <div className="absolute inset-0 opacity-30 [background:radial-gradient(circle_at_72%_30%,rgba(245,158,11,.25),transparent_24rem)]" />
 
-      <div className="page-shell relative z-10 flex min-h-[760px] items-end pb-16 pt-32 sm:min-h-[800px] md:items-center md:pb-20 lg:min-h-[860px]">
-        <div className="w-full pt-20 md:pt-24">
+      <div className="page-shell relative z-10 flex min-h-[100svh] items-center pb-10 pt-32  md:items-center md:pb-12 lg:min-h-[min(800px,100svh)]">
+        <div className="w-full">
           <div className="max-w-[760px]">
             <div
               data-hero-reveal
-              className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.22em] text-white/85 shadow-sm backdrop-blur-2xl"
+              className="inline-flex items-center gap-2.5 border-l-2 border-ember pl-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.22em] text-white/85 shadow-sm backdrop-blur-2xl"
             >
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#91c4ff] opacity-75" />
@@ -84,7 +83,7 @@ export function Hero() {
               </span>
               Clear information · Verified impact
             </div>
-            <h1 className="mt-7 font-display text-[clamp(3.25rem,8vw,7.6rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
+            <h1 className="mt-5 font-display text-[clamp(2.75rem,6.1vw,5.4rem)] font-semibold leading-[1.02] tracking-[-0.07em]">
               <span data-hero-reveal className="block">
                 Hope should
               </span>
@@ -100,7 +99,7 @@ export function Hero() {
             </h1>
             <p
               data-hero-reveal
-              className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8"
+              className="mt-5 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8"
             >
               Empowering grassroots community leadership across education,
               sustainable livelihoods, clean water, and local ecosystems.
@@ -128,21 +127,21 @@ export function Hero() {
             data-hero-reveal
             className="mt-12 flex flex-wrap items-center gap-3 text-xs text-white/70"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur-md">
+            <span className="inline-flex items-center gap-2 py-1">
               <ShieldCheck
                 className="size-4 text-[#91c4ff]"
                 aria-hidden="true"
               />{" "}
               Server-validated forms
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur-md">
+            <span className="inline-flex items-center gap-2 py-1">
               <BadgeCheck
                 className="size-4 text-[#91c4ff]"
                 aria-hidden="true"
               />{" "}
               Verified field logs
             </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur-md">
+            <span className="inline-flex items-center gap-2 py-1">
               <Sparkles className="size-4 text-[#ff9f1c]" aria-hidden="true" />{" "}
               Statutory 80G tax benefits
             </span>

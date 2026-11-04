@@ -135,7 +135,7 @@ export function DonationReturnStatus({ donationId }: { donationId?: string }) {
     return (
       <div
         aria-live="polite"
-        className="flex items-start gap-4 rounded-[1.75rem] border border-sky-200 bg-sky-50 p-7 text-sky-950 dark:border-sky-400/20 dark:bg-sky-400/10 dark:text-sky-100 sm:p-8"
+        className="flex items-start gap-4 rounded-lg border border-sky-200 bg-sky-50 p-7 text-sky-950 dark:border-sky-400/20 dark:bg-sky-400/10 dark:text-sky-100 sm:p-8"
         role="status"
       >
         <RefreshCcw
@@ -157,7 +157,7 @@ export function DonationReturnStatus({ donationId }: { donationId?: string }) {
     return (
       <div
         aria-live="polite"
-        className="rounded-[1.75rem] border border-slate-200 bg-white p-7 text-slate-950 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-white sm:p-8"
+        className="rounded-lg border border-slate-200 bg-white p-7 text-slate-950 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-white sm:p-8"
         role="status"
       >
         <Clock3
@@ -190,7 +190,7 @@ export function DonationReturnStatus({ donationId }: { donationId?: string }) {
   return (
     <div
       aria-live="polite"
-      className={`rounded-[1.75rem] border p-7 sm:p-8 ${content.tone}`}
+      className={`rounded-lg border p-7 sm:p-8 ${content.tone}`}
       role="status"
     >
       <Icon aria-hidden="true" className="h-7 w-7" />

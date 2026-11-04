@@ -155,7 +155,7 @@ export default async function AdminDashboard() {
             ].map(([label, value]) => (
               <article
                 key={label}
-                className="rounded-3xl border border-ink/8 bg-white p-5 dark:bg-white/[0.055]"
+                className="border-t border-ink/20 py-5"
               >
                 <p className="font-display text-3xl font-bold">{value}</p>
                 <p className="mt-2 text-xs leading-5 text-ink/48">{label}</p>
@@ -165,7 +165,7 @@ export default async function AdminDashboard() {
         </section>
       ) : (
         <section
-          className="mt-5 rounded-3xl border border-amber-500/20 bg-amber-500/[0.07] p-6 sm:p-8"
+          className="mt-5 rounded-lg border border-amber-500/20 bg-amber-500/[0.07] p-6 sm:p-8"
           aria-labelledby="reporting-status-title"
         >
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
@@ -210,7 +210,7 @@ export default async function AdminDashboard() {
             return (
               <article
                 key={area.title}
-                className="rounded-3xl border border-ink/8 bg-white p-5 dark:bg-white/[0.055]"
+                className="border-t border-ink/20 py-5"
               >
                 <span className="grid size-10 place-items-center rounded-2xl bg-forest/10 text-forest">
                   <Icon className="size-5" aria-hidden="true" />
