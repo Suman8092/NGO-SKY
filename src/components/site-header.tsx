@@ -90,23 +90,17 @@ export function SiteHeader({
         className={cn(
           "fixed inset-x-0 top-0 z-50 border-b transition-all duration-500",
           scrolled || openMenu || mobileOpen
-            ? "border-ink/10 bg-paper/88 py-2 shadow-[0_8px_40px_rgba(9,50,42,0.06)] backdrop-blur-2xl"
-            : "border-transparent bg-transparent py-3",
+            ? "border-ink/[0.07] bg-paper/90 py-2.5 shadow-[0_12px_40px_-15px_rgba(9,50,42,0.08)] backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#061915]/90"
+            : "border-transparent bg-transparent py-3.5",
         )}
       >
-        <div className="page-shell flex h-16 items-center justify-between gap-5">
+        <div className="page-shell flex min-h-20 items-center justify-between gap-3 sm:min-h-24 sm:gap-5">
           <Link
             href="/"
             className="group flex shrink-0 items-center gap-3"
             aria-label="Skymeredian Foundation home"
           >
-            <BrandMark className="transition-transform duration-500 group-hover:rotate-6" />
-            <span className="font-display text-[0.93rem] font-extrabold uppercase leading-[1.05] tracking-[-0.03em]">
-              Skymeredian
-              <span className="block text-[0.56rem] font-semibold tracking-[0.2em] text-ink/55">
-                Foundation
-              </span>
-            </span>
+            <BrandMark className="w-[84px] sm:w-[100px]" priority />
           </Link>
 
           <nav
@@ -147,31 +141,31 @@ export function SiteHeader({
                           transition={{ duration: 0.2 }}
                           className="absolute left-1/2 top-full w-[390px] -translate-x-1/2 pt-4"
                         >
-                          <div className="glass-card rounded-3xl p-3">
+                          <div className="rounded-[2rem] border border-ink/[0.08] bg-white/95 p-3.5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-[#071d18]/95">
                             {item.links.map(([label, href, description]) => (
                               <Link
                                 key={label}
                                 href={href}
-                                className="group flex items-center justify-between rounded-2xl px-4 py-3 transition hover:bg-forest/[0.07]"
+                                className="group flex items-center justify-between rounded-2xl px-4 py-3 transition-colors duration-200 hover:bg-forest/[0.07] dark:hover:bg-white/[0.06]"
                                 onClick={() => setOpenMenu(null)}
                               >
                                 <span>
-                                  <span className="block text-sm font-bold">
+                                  <span className="block text-sm font-bold text-ink transition group-hover:text-forest dark:group-hover:text-[#70d5b3]">
                                     {label}
                                   </span>
-                                  <span className="mt-0.5 block text-xs text-ink/52">
+                                  <span className="mt-0.5 block text-xs text-ink/55">
                                     {description}
                                   </span>
                                 </span>
                                 <ArrowUpRight
-                                  className="size-4 text-forest opacity-0 transition group-hover:opacity-100"
+                                  className="size-4 text-forest opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100 dark:text-[#70d5b3]"
                                   aria-hidden="true"
                                 />
                               </Link>
                             ))}
                             <Link
                               href={item.href}
-                              className="mt-2 flex items-center gap-2 rounded-2xl bg-forest px-4 py-3 text-sm font-bold text-white dark:text-[#071813]"
+                              className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-forest px-4 py-3 text-sm font-bold text-white shadow-md transition duration-300 hover:bg-[#075f52] dark:bg-[#70d5b3] dark:text-[#061e19]"
                             >
                               <Sparkles className="size-4" aria-hidden="true" />{" "}
                               Explore {item.label.toLowerCase()}

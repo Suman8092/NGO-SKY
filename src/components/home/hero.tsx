@@ -76,13 +76,13 @@ export function Hero() {
           <div className="max-w-[760px]">
             <div
               data-hero-reveal
-              className="inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/[0.08] px-3 py-2 text-[0.67rem] font-bold uppercase tracking-[0.2em] text-white/76 backdrop-blur-xl"
+              className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.22em] text-white/85 shadow-sm backdrop-blur-2xl"
             >
               <span className="relative flex size-2">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#73d7b7] opacity-75" />
                 <span className="relative inline-flex size-2 rounded-full bg-[#73d7b7]" />
               </span>
-              Clear information · Safe actions
+              Clear information · Verified impact
             </div>
             <h1 className="mt-7 font-display text-[clamp(3.25rem,8vw,7.6rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
               <span data-hero-reveal className="block">
@@ -93,58 +93,58 @@ export function Hero() {
               </span>
               <span
                 data-hero-reveal
-                className="mt-2 block font-medium italic text-[#f3bd67]"
+                className="mt-2 block bg-gradient-to-r from-[#ffe4ab] via-[#f3bd67] to-[#e89f38] bg-clip-text font-serif italic text-transparent drop-shadow-sm"
               >
                 It should arrive.
               </span>
             </h1>
             <p
               data-hero-reveal
-              className="mt-7 max-w-xl text-base leading-7 text-white/72 sm:text-lg sm:leading-8"
+              className="mt-7 max-w-xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8"
             >
-              Explore the organisation, ask questions, register interest, and
-              use only the services verified for this deployment.
+              Empowering grassroots community leadership across education,
+              sustainable livelihoods, clean water, and local ecosystems.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col gap-3.5 sm:flex-row">
               {/* A native anchor keeps this critical route usable before the large homepage finishes hydrating. */}
               <a
                 href="/donate"
-                className="button-primary bg-[#f3bd67] text-[#10211d] shadow-[#f3bd67]/20 hover:bg-[#ffd182]"
+                className="group relative inline-flex min-h-13 items-center justify-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-[#ffd385] to-[#f3bd67] px-8 py-3.5 text-sm font-extrabold text-[#091e19] shadow-[0_12px_36px_rgba(243,189,103,0.32)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_44px_rgba(243,189,103,0.45)]"
               >
                 Support our work{" "}
-                <Heart className="size-4 fill-current" aria-hidden="true" />
+                <Heart className="size-4 fill-current transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
               </a>
               <Link
                 href="/contact"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/[0.08] px-6 py-3 text-sm font-bold text-white backdrop-blur-lg transition hover:bg-white/[0.15]"
+                className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/10 px-7 py-3.5 text-sm font-bold text-white backdrop-blur-xl transition duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/15"
               >
                 Contact the team{" "}
-                <ArrowUpRight className="size-4" aria-hidden="true" />
+                <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
               </Link>
             </div>
           </div>
 
           <div
             data-hero-reveal
-            className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-white/58"
+            className="mt-12 flex flex-wrap items-center gap-3 text-xs text-white/70"
           >
-            <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur-md">
               <ShieldCheck
                 className="size-4 text-[#73d7b7]"
                 aria-hidden="true"
               />{" "}
               Server-validated forms
             </span>
-            <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur-md">
               <BadgeCheck
                 className="size-4 text-[#73d7b7]"
                 aria-hidden="true"
               />{" "}
-              Protected accounts
+              Verified field logs
             </span>
-            <span className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 backdrop-blur-md">
               <Sparkles className="size-4 text-[#f3bd67]" aria-hidden="true" />{" "}
-              Live payments only
+              Statutory 80G tax benefits
             </span>
           </div>
         </div>

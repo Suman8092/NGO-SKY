@@ -3,11 +3,13 @@ import "server-only";
 import {
   ContactSubmissionModel,
   DonationModel,
+  EventRegistrationModel,
   NewsletterSubscriberModel,
   VolunteerApplicationModel,
 } from "@/models";
 
 import { connectMongo } from "./db";
+import { updateDemoRecord } from "./memory-store";
 
 export type OperationalRead<T> =
   | { state: "ready"; data: T }
@@ -66,6 +68,7 @@ export type AdminContactRecord = {
   email: string;
   phone?: string;
   subject: string;
+  message: string;
   status: "new" | "read" | "resolved" | "spam";
   createdAt: string;
 };
@@ -221,7 +224,7 @@ export async function getAdminSubmissionRecords(
   return readMongo(async () => {
     const [contacts, newsletter] = await Promise.all([
       ContactSubmissionModel.find({})
-        .select("name email phone subject status createdAt")
+        .select("name email phone subject message status createdAt")
         .sort({ createdAt: -1 })
         .limit(recordLimit),
       NewsletterSubscriberModel.find({})
@@ -237,6 +240,7 @@ export async function getAdminSubmissionRecords(
         email: document.email,
         phone: document.phone,
         subject: document.subject,
+        message: document.message,
         status: document.status,
         createdAt: document.createdAt.toISOString(),
       })),
@@ -379,6 +383,26 @@ export type UserVolunteerRecord = {
   createdAt: string;
 };
 
+
+export type UserEventRegistrationRecord = {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate?: string;
+  eventLocation?: string;
+  ticketCode: string;
+  ticketsCount: number;
+  status: "confirmed" | "attended" | "cancelled";
+  createdAt: string;
+};
+
+export type AdminEventRegistrationRecord = UserEventRegistrationRecord & {
+  name: string;
+  email: string;
+  phone?: string;
+  notes?: string;
+};
+
 export type UserContactRecord = {
   id: string;
   subject: string;
@@ -396,6 +420,7 @@ export type UserDashboardData = {
   };
   volunteers: UserVolunteerRecord[];
   contacts: UserContactRecord[];
+  eventRegistrations: UserEventRegistrationRecord[];
   newsletterSubscribed: boolean;
 };
 
@@ -421,6 +446,7 @@ export async function getUserDashboardData(
         },
         volunteers: [],
         contacts: [],
+        eventRegistrations: [],
         newsletterSubscribed: false,
       },
     };
@@ -432,7 +458,7 @@ export async function getUserDashboardData(
         ? {
             $or: [
               { accountUserId: userId },
-              { "donor.email": { $in: emails } },
+              { "donor.email": { $in: emails }, accountUserId: { $in: [null, ""] } },
             ],
           }
         : userId
@@ -441,7 +467,21 @@ export async function getUserDashboardData(
 
     const emailFilter = emails.length > 0 ? { email: { $in: emails } } : null;
 
-    const [donationDocs, volunteerDocs, contactDocs, subscriberDoc] =
+    const eventQuery =
+      userId && emails.length > 0
+        ? {
+            $or: [
+              { accountUserId: userId },
+              { email: { $in: emails }, accountUserId: { $in: [null, ""] } },
+            ],
+          }
+        : userId
+          ? { accountUserId: userId }
+          : emails.length > 0
+            ? { email: { $in: emails } }
+            : null;
+
+    const [donationDocs, volunteerDocs, contactDocs, subscriberDoc, eventDocs] =
       await Promise.all([
         DonationModel.find(donationQuery)
           .select(
@@ -469,6 +509,11 @@ export async function getUserDashboardData(
               status: "active",
             }).select("_id")
           : Promise.resolve(null),
+        eventQuery
+          ? EventRegistrationModel.find(eventQuery)
+              .sort({ createdAt: -1 })
+              .limit(50)
+          : Promise.resolve([]),
       ]);
 
     const donations: AccountDonationRecord[] = donationDocs.map((d) => ({
@@ -484,7 +529,7 @@ export async function getUserDashboardData(
     }));
 
     const paidDonations = donations.filter((d) => d.status === "paid");
-    const totalDonatedMinor = paidDonations.reduce(
+    const totalDonatedMinor = paidDonations.filter((d) => d.currency === "INR").reduce(
       (sum, d) => sum + d.amountMinor,
       0,
     );
@@ -505,6 +550,19 @@ export async function getUserDashboardData(
     const latestVolunteer = volunteers[0];
     const volunteerStatus = latestVolunteer ? latestVolunteer.status : "none";
 
+
+    const eventRegistrations: UserEventRegistrationRecord[] = (eventDocs || []).map((e) => ({
+      id: e._id.toString(),
+      eventId: e.eventId,
+      eventTitle: e.eventTitle,
+      eventDate: e.eventDate,
+      eventLocation: e.eventLocation,
+      ticketCode: e.ticketCode,
+      ticketsCount: e.ticketsCount,
+      status: e.status,
+      createdAt: e.createdAt.toISOString(),
+    }));
+
     const contacts: UserContactRecord[] = contactDocs.map((c) => ({
       id: c._id.toString(),
       subject: c.subject,
@@ -522,6 +580,7 @@ export async function getUserDashboardData(
       },
       volunteers,
       contacts,
+      eventRegistrations,
       newsletterSubscribed: Boolean(subscriberDoc),
     };
   });
@@ -532,6 +591,24 @@ export async function updateVolunteerStatus(
   status: "submitted" | "reviewing" | "approved" | "rejected",
 ): Promise<OperationalRead<AdminVolunteerRecord | null>> {
   return readMongo(async () => {
+    if (id.startsWith("demo_")) {
+      const updated = updateDemoRecord<AdminVolunteerRecord & Record<string, unknown> & { updatedAt: string }>("volunteers", id, { status });
+      return updated
+        ? {
+            id,
+            name: updated.name,
+            email: updated.email,
+            phone: updated.phone,
+            city: updated.city,
+            country: updated.country,
+            areaOfInterest: updated.areaOfInterest,
+            availability: updated.availability,
+            status,
+            createdAt: updated.createdAt,
+          }
+        : null;
+    }
+    if (!/^[a-f0-9]{24}$/i.test(id)) return null;
     const document = await VolunteerApplicationModel.findByIdAndUpdate(
       id,
       { status },
@@ -558,6 +635,22 @@ export async function updateContactStatus(
   status: "new" | "read" | "resolved" | "spam",
 ): Promise<OperationalRead<AdminContactRecord | null>> {
   return readMongo(async () => {
+    if (id.startsWith("demo_")) {
+      const updated = updateDemoRecord<AdminContactRecord & Record<string, unknown> & { updatedAt: string }>("contacts", id, { status });
+      return updated
+        ? {
+            id,
+            name: updated.name,
+            email: updated.email,
+            phone: updated.phone,
+            subject: updated.subject,
+            message: updated.message,
+            status,
+            createdAt: updated.createdAt,
+          }
+        : null;
+    }
+    if (!/^[a-f0-9]{24}$/i.test(id)) return null;
     const document = await ContactSubmissionModel.findByIdAndUpdate(
       id,
       { status },
@@ -570,8 +663,39 @@ export async function updateContactStatus(
       email: document.email,
       phone: document.phone,
       subject: document.subject,
+        message: document.message,
       status: document.status,
       createdAt: document.createdAt.toISOString(),
     };
+  });
+}
+
+
+export async function getAdminEventRegistrations(
+  limit = 50,
+): Promise<OperationalRead<AdminEventRegistrationRecord[]>> {
+  return readMongo(async () => {
+    const documents = await EventRegistrationModel.find({})
+      .select(
+        "eventId eventTitle eventDate eventLocation ticketCode name email phone ticketsCount notes status createdAt",
+      )
+      .sort({ createdAt: -1 })
+      .limit(boundedLimit(limit));
+
+    return documents.map((d) => ({
+      id: d._id.toString(),
+      eventId: d.eventId,
+      eventTitle: d.eventTitle,
+      eventDate: d.eventDate,
+      eventLocation: d.eventLocation,
+      ticketCode: d.ticketCode,
+      name: d.name,
+      email: d.email,
+      phone: d.phone,
+      ticketsCount: d.ticketsCount,
+      notes: d.notes,
+      status: d.status,
+      createdAt: d.createdAt.toISOString(),
+    }));
   });
 }

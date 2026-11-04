@@ -1,3 +1,5 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { isAdminUserId, isClerkConfigured } from "@/lib/auth-config";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
 import { ApiError } from "@/lib/server/errors";
@@ -21,6 +23,9 @@ export async function GET(
 ): Promise<Response> {
   const requestId = getRequestId(request);
   try {
+    if (!isClerkConfigured()) throw new ApiError(503, "AUTH_UNAVAILABLE", "Sign-in is required to download a receipt.");
+    const { userId } = await auth();
+    if (!userId) throw new ApiError(401, "UNAUTHORIZED", "Please sign in to download your receipt.");
     const { id } = await params;
     if (!/^(?:[a-f0-9]{24}|demo_[a-f0-9]{20})$/i.test(id)) {
       throw new ApiError(
@@ -40,6 +45,13 @@ export async function GET(
     }
 
     const donation = result.record;
+    if (!isAdminUserId(userId) && donation.accountUserId !== userId) {
+      const user = await currentUser();
+      const verifiedOwner = !donation.accountUserId && user?.emailAddresses.some(
+        (email) => email.verification?.status === "verified" && email.emailAddress.toLowerCase() === donation.donor.email.toLowerCase(),
+      );
+      if (!verifiedOwner) throw new ApiError(403, "FORBIDDEN", "This receipt belongs to another account.");
+    }
     if (donation.status !== "paid") {
       throw new ApiError(
         400,
@@ -47,6 +59,7 @@ export async function GET(
         "Receipt is only available for confirmed (paid) donations.",
       );
     }
+
 
     // Generate PDF Receipt
     const pdfDoc = await PDFDocument.create();

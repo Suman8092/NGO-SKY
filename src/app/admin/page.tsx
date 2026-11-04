@@ -232,7 +232,7 @@ export default async function AdminDashboard() {
       </section>
 
       <section
-        className="mt-5 overflow-hidden rounded-3xl border border-ink/8 bg-white dark:bg-white/[0.055]"
+        className="mt-5 overflow-hidden border-y border-ink/15"
         aria-labelledby="operations-views-title"
       >
         <div className="border-b border-ink/8 p-5 sm:px-7 sm:py-6">

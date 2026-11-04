@@ -21,7 +21,17 @@ export class ApiError extends Error {
   }
 }
 
+function sanitizeErrorMessage(msg: string): string {
+  return msg.replace(/(:\/\/[\w.-]+:)([^@]+)(@)/g, "$1***$3");
+}
+
 export function safeLogError(context: string, error: unknown): void {
   const name = error instanceof Error ? error.name : "UnknownError";
-  console.error(`[server:${context}]`, { name });
+  const code = error instanceof ApiError ? error.code : undefined;
+  const message = error instanceof Error ? sanitizeErrorMessage(error.message) : String(error);
+  const cause =
+    error instanceof Error && error.cause instanceof Error
+      ? sanitizeErrorMessage(error.cause.message)
+      : undefined;
+  console.error(`[server:${context}]`, { name, code, message, cause });
 }

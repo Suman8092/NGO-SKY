@@ -15,18 +15,51 @@ const questions = [
 export function Faq() {
   const [open, setOpen] = useState(0);
   return (
-    <div className="divide-y divide-ink/10">
+    <div className="space-y-3.5">
       {questions.map(([question, answer], index) => {
         const active = open === index;
         return (
-          <div key={question}>
+          <div
+            key={question}
+            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
+              active
+                ? "border-forest/25 bg-white/80 shadow-[0_8px_30px_-15px_rgba(12,53,45,0.06)] dark:border-forest/35 dark:bg-white/[0.04]"
+                : "border-ink/[0.06] bg-white/40 hover:border-forest/20 hover:bg-white/60 dark:border-white/[0.06] dark:bg-white/[0.02]"
+            }`}
+          >
             <h3>
-              <button type="button" className="flex w-full items-center justify-between gap-5 py-6 text-left font-display text-lg font-bold tracking-tight sm:text-xl" onClick={() => setOpen(active ? -1 : index)} aria-expanded={active}>
-                {question}<span className={`grid size-9 shrink-0 place-items-center rounded-full transition ${active ? "bg-forest text-white dark:text-[#071813]" : "bg-ink/5"}`}>{active ? <Minus className="size-4" /> : <Plus className="size-4" />}</span>
+              <button
+                type="button"
+                className="flex w-full items-center justify-between gap-5 p-6 text-left font-display text-lg font-bold tracking-tight text-ink transition sm:text-xl"
+                onClick={() => setOpen(active ? -1 : index)}
+                aria-expanded={active}
+              >
+                <span>{question}</span>
+                <span
+                  className={`grid size-9 shrink-0 place-items-center rounded-full transition-colors duration-300 ${
+                    active
+                      ? "bg-forest text-white dark:text-[#071813]"
+                      : "bg-ink/[0.06] text-ink/70 dark:bg-white/10 dark:text-white/80"
+                  }`}
+                >
+                  {active ? <Minus className="size-4" /> : <Plus className="size-4" />}
+                </span>
               </button>
             </h3>
             <AnimatePresence initial={false}>
-              {active ? <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden"><p className="max-w-3xl pb-6 pr-12 text-sm leading-7 text-ink/62 sm:text-base">{answer}</p></motion.div> : null}
+              {active ? (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="overflow-hidden"
+                >
+                  <p className="max-w-3xl px-6 pb-6 text-sm leading-relaxed text-ink/70 sm:text-base">
+                    {answer}
+                  </p>
+                </motion.div>
+              ) : null}
             </AnimatePresence>
           </div>
         );

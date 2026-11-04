@@ -57,10 +57,14 @@ export function SiteFooter() {
       ];
 
   return (
-    <footer className="relative overflow-hidden bg-[#081d19] text-[#edf5ef]">
+    <footer className="relative overflow-hidden border-t border-white/[0.08] bg-[#051713] text-[#edf5ef]">
       <div
         aria-hidden="true"
-        className="absolute -right-32 -top-32 size-[30rem] rounded-full bg-moss/20 blur-[100px]"
+        className="pointer-events-none absolute -right-32 -top-32 size-[36rem] rounded-full bg-forest/20 blur-[130px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 bottom-0 size-[28rem] rounded-full bg-ember/10 blur-[120px]"
       />
       <div className="page-shell relative py-16 md:py-24">
         {newsletterAvailable ? (
@@ -102,13 +106,7 @@ export function SiteFooter() {
         >
           <div>
             <Link href="/" className="inline-flex items-center gap-3">
-              <BrandMark className="text-[#5dc3a1]" />
-              <span className="font-display text-lg font-extrabold uppercase tracking-tight">
-                Skymeredian{" "}
-                <span className="block text-[0.55rem] tracking-[0.22em] text-white/45">
-                  Foundation
-                </span>
-              </span>
+              <BrandMark className="w-48 sm:w-52" />
             </Link>
             <p className="mt-6 max-w-sm text-sm leading-7 text-white/55">
               {managedContactAvailable

@@ -105,38 +105,38 @@ export function AboutPage() {
         title={
           <>
             Hope becomes powerful when it is{" "}
-            <span className="text-teal-700 dark:text-teal-300">shared.</span>
+            <span className="text-forest dark:text-[#70d5b3]">shared.</span>
           </>
         }
       >
         <div
-          className={`relative overflow-hidden rounded-[2rem] p-8 sm:p-10 ${pageSurface}`}
+          className={`relative overflow-hidden rounded-xl p-8 sm:p-10 ${pageSurface}`}
         >
           <div
             aria-hidden="true"
             className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-amber-400/20 blur-3xl"
           />
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#70d5b3]">
             Our promise
           </p>
-          <p className="mt-5 text-pretty text-2xl font-semibold leading-9 tracking-tight text-slate-950 dark:text-white">
+          <p className="mt-5 text-pretty text-2xl font-semibold leading-9 tracking-tight text-ink">
             Listen deeply. Act with care. Measure what changes. Stay until
             communities can lead the way.
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-4 border-t border-slate-200 pt-6 dark:border-white/10">
+          <div className="mt-8 grid grid-cols-2 gap-4 border-t border-ink/[0.08] pt-6 dark:border-white/10">
             <div>
-              <p className="text-3xl font-semibold tracking-tight text-teal-700 dark:text-teal-300">
+              <p className="text-3xl font-semibold tracking-tight text-forest dark:text-[#70d5b3]">
                 28K+
               </p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-ink/50">
                 people reached
               </p>
             </div>
             <div>
-              <p className="text-3xl font-semibold tracking-tight text-teal-700 dark:text-teal-300">
+              <p className="text-3xl font-semibold tracking-tight text-forest dark:text-[#70d5b3]">
                 42
               </p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-ink/50">
                 community partners
               </p>
             </div>
@@ -152,7 +152,7 @@ export function AboutPage() {
             title="Progress designed with people, not for them"
           />
           <div className="grid gap-5 sm:grid-cols-2">
-            <article className="rounded-[2rem] bg-teal-700 p-8 text-white shadow-xl shadow-teal-900/15">
+            <article className="rounded-xl bg-teal-700 p-8 text-white shadow-xl shadow-teal-900/15">
               <Target aria-hidden="true" className="h-8 w-8 text-teal-200" />
               <h3 className="mt-10 text-2xl font-bold">Our mission</h3>
               <p className="mt-4 leading-7 text-teal-50">
@@ -160,7 +160,7 @@ export function AboutPage() {
                 people around the barriers that matter most.
               </p>
             </article>
-            <article className="rounded-[2rem] bg-amber-400 p-8 text-slate-950 shadow-xl shadow-amber-900/10 sm:translate-y-8">
+            <article className="rounded-xl bg-amber-400 p-8 text-slate-950 shadow-xl shadow-amber-900/10 sm:translate-y-8">
               <Sparkles aria-hidden="true" className="h-8 w-8" />
               <h3 className="mt-10 text-2xl font-bold">Our vision</h3>
               <p className="mt-4 leading-7 text-slate-800">
@@ -172,7 +172,7 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -217,13 +217,13 @@ export function AboutPage() {
                   <span className="h-2 w-2 rounded-full bg-white" />
                 </span>
                 <div className={`rounded-3xl p-6 ${pageSurface}`}>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-teal-700 dark:text-teal-300">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-forest dark:text-[#70d5b3]">
                     {milestone.year}
                   </p>
-                  <h3 className="mt-2 text-lg font-bold text-slate-950 dark:text-white">
+                  <h3 className="mt-2 text-lg font-bold text-ink">
                     {milestone.title}
                   </h3>
-                  <p className="mt-2 leading-6 text-slate-600 dark:text-slate-300">
+                  <p className="mt-2 leading-6 text-ink/65">
                     {milestone.detail}
                   </p>
                 </div>
@@ -417,13 +417,13 @@ export function ProgramsPage() {
         title={
           <>
             Whole-person support.{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               Community-wide change.
             </span>
           </>
         }
       >
-        <div className="relative min-h-[23rem] overflow-hidden rounded-[2.25rem] bg-teal-950 p-8 text-white shadow-2xl">
+        <div className="relative min-h-[23rem] overflow-hidden rounded-xl bg-teal-950 p-8 text-white shadow-2xl">
           <div
             aria-hidden="true"
             className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-teal-400/20 blur-3xl"
@@ -490,7 +490,7 @@ export function ProgramsPage() {
         </div>
       </section>
 
-      <section className="overflow-hidden border-y border-slate-200/80 bg-slate-950 py-20 text-white dark:border-white/10 lg:py-28">
+      <section className="overflow-hidden border-y border-ink/[0.08]/80 bg-slate-950 py-20 text-white dark:border-white/10 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
             <div>
@@ -552,15 +552,15 @@ export function ProgramsPage() {
               <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
-          <div className={`rounded-[2rem] p-8 sm:p-10 ${pageSurface}`}>
+          <div className={`rounded-xl p-8 sm:p-10 ${pageSurface}`}>
             <Building2
               aria-hidden="true"
-              className="h-9 w-9 text-teal-700 dark:text-teal-300"
+              className="h-9 w-9 text-forest dark:text-[#70d5b3]"
             />
-            <h3 className="mt-8 text-2xl font-bold text-slate-950 dark:text-white">
+            <h3 className="mt-8 text-2xl font-bold text-ink">
               Partner with our programmes
             </h3>
-            <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
+            <p className="mt-4 leading-7 text-ink/65">
               We work with community organisations, public systems, responsible
               businesses, and specialists who share our standards.
             </p>
@@ -574,7 +574,7 @@ export function ProgramsPage() {
               />
             </div>
             <Link
-              className="mt-8 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-teal-700 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950"
+              className="mt-8 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#075f52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950"
               href="/contact?interest=partnerships"
             >
               Start a partnership conversation

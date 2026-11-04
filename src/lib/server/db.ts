@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { getServerEnv, hasMongoConfig } from "./env";
+import { allowsInMemoryPersistence, getServerEnv, hasMongoConfig } from "./env";
 import { ApiError } from "./errors";
 
 type MongooseCache = {
@@ -31,8 +31,9 @@ export async function connectMongo(): Promise<typeof mongoose | null> {
     bufferCommands: false,
     maxPoolSize: 10,
     minPoolSize: 0,
+    connectTimeoutMS: 5_000,
     serverSelectionTimeoutMS: 5_000,
-    socketTimeoutMS: 15_000,
+    socketTimeoutMS: 10_000,
   });
 
   try {
@@ -41,6 +42,12 @@ export async function connectMongo(): Promise<typeof mongoose | null> {
   } catch (cause) {
     cache.promise = null;
     cache.connection = null;
+    if (allowsInMemoryPersistence()) {
+      console.warn(
+        `[server:db] MongoDB connection failed (${cause instanceof Error ? cause.message : String(cause)}). Falling back to in-memory persistence in development.`,
+      );
+      return null;
+    }
     throw new ApiError(503, "DATABASE_UNAVAILABLE", "The service is temporarily unavailable.", {
       retryAfter: 30,
       cause,

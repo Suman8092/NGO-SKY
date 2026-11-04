@@ -1,3 +1,4 @@
+import { EventCardWithRsvp } from "./event-card-rsvp";
 import {
   ArrowRight,
   BarChart3,
@@ -138,13 +139,13 @@ export function ImpactPage() {
         title={
           <>
             Every number should answer a{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               human question.
             </span>
           </>
         }
       >
-        <div className="relative overflow-hidden rounded-[2.25rem] bg-slate-950 p-8 text-white shadow-2xl sm:p-10">
+        <div className="relative overflow-hidden rounded-xl bg-slate-950 p-8 text-white shadow-2xl sm:p-10">
           <div
             aria-hidden="true"
             className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-teal-500/20 blur-3xl"
@@ -183,13 +184,13 @@ export function ImpactPage() {
         <div className="mt-12">
           <MetricGrid metrics={impactMetrics} />
         </div>
-        <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-5 text-slate-500 dark:text-slate-400">
+        <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-5 text-ink/50">
           Reporting period: April 2025–March 2026. Figures are de-duplicated
           within programmes where reliable identifiers and consent allow.
         </p>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeading
@@ -207,15 +208,15 @@ export function ImpactPage() {
               >
                 <outcome.icon
                   aria-hidden="true"
-                  className="h-7 w-7 text-teal-700 dark:text-teal-300"
+                  className="h-7 w-7 text-forest dark:text-[#70d5b3]"
                 />
-                <p className="mt-8 text-4xl font-semibold tracking-[-0.045em] text-slate-950 dark:text-white">
+                <p className="mt-8 text-4xl font-semibold tracking-[-0.045em] text-ink">
                   {outcome.value}
                 </p>
-                <h3 className="mt-3 font-bold text-slate-950 dark:text-white">
+                <h3 className="mt-3 font-bold text-ink">
                   {outcome.title}
                 </h3>
-                <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-3 text-sm leading-6 text-ink/65">
                   {outcome.description}
                 </p>
               </article>
@@ -249,26 +250,26 @@ export function ImpactPage() {
           <ol className="grid gap-5 sm:grid-cols-2">
             {evidenceCycle.map((step, index) => (
               <li
-                className={`rounded-[2rem] p-8 ${index === 0 || index === 3 ? "bg-teal-700 text-white shadow-xl shadow-teal-900/15" : pageSurface}`}
+                className={`rounded-xl p-8 ${index === 0 || index === 3 ? "bg-teal-700 text-white shadow-xl shadow-teal-900/15" : pageSurface}`}
                 key={step.title}
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 0 || index === 3 ? "bg-white/10 text-teal-100" : "bg-teal-100 text-teal-800 dark:bg-teal-400/10 dark:text-teal-300"}`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 0 || index === 3 ? "bg-white/10 text-teal-100" : "bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]"}`}
                 >
                   <step.icon aria-hidden="true" className="h-6 w-6" />
                 </div>
                 <p
-                  className={`mt-8 text-xs font-extrabold uppercase tracking-[0.16em] ${index === 0 || index === 3 ? "text-teal-200" : "text-teal-700 dark:text-teal-300"}`}
+                  className={`mt-8 text-xs font-extrabold uppercase tracking-[0.16em] ${index === 0 || index === 3 ? "text-teal-200" : "text-forest dark:text-[#70d5b3]"}`}
                 >
                   Step 0{index + 1}
                 </p>
                 <h3
-                  className={`mt-2 text-2xl font-bold ${index === 0 || index === 3 ? "text-white" : "text-slate-950 dark:text-white"}`}
+                  className={`mt-2 text-2xl font-bold ${index === 0 || index === 3 ? "text-white" : "text-ink"}`}
                 >
                   {step.title}
                 </h3>
                 <p
-                  className={`mt-3 leading-7 ${index === 0 || index === 3 ? "text-teal-50" : "text-slate-600 dark:text-slate-300"}`}
+                  className={`mt-3 leading-7 ${index === 0 || index === 3 ? "text-teal-50" : "text-ink/65"}`}
                 >
                   {step.description}
                 </p>
@@ -328,16 +329,16 @@ export function ImpactPage() {
         id="financials"
       >
         <div
-          className={`grid gap-10 rounded-[2.25rem] p-8 sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center ${pageSurface}`}
+          className={`grid gap-10 rounded-xl p-8 sm:p-12 lg:grid-cols-[1fr_auto] lg:items-center ${pageSurface}`}
         >
           <div>
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400 text-slate-950">
               <BookOpenCheck aria-hidden="true" className="h-6 w-6" />
             </div>
-            <h2 className="mt-7 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-4xl">
+            <h2 className="mt-7 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
               Read the complete annual impact review
             </h2>
-            <p className="mt-4 max-w-2xl leading-7 text-slate-600 dark:text-slate-300">
+            <p className="mt-4 max-w-2xl leading-7 text-ink/65">
               Explore programme-level results, methodology notes, governance
               practices, partner acknowledgements, and our priorities for the
               next cycle.
@@ -448,7 +449,7 @@ export function StoriesPage() {
         title={
           <>
             Change has a voice.{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               We are here to listen.
             </span>
           </>
@@ -462,7 +463,7 @@ export function StoriesPage() {
       </PageHero>
 
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
-        <div className="grid overflow-hidden rounded-[2.25rem] bg-teal-950 text-white shadow-2xl lg:grid-cols-[.82fr_1.18fr]">
+        <div className="grid overflow-hidden rounded-xl bg-teal-950 text-white shadow-2xl lg:grid-cols-[.82fr_1.18fr]">
           <div className="relative min-h-80 overflow-hidden bg-gradient-to-br from-teal-700 via-teal-800 to-slate-950 p-8 sm:p-12">
             <div
               aria-hidden="true"
@@ -509,7 +510,7 @@ export function StoriesPage() {
       </section>
 
       <section
-        className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28"
+        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28"
         id="community-stories"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -522,32 +523,32 @@ export function StoriesPage() {
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {stories.map((story, index) => (
               <article
-                className={`group flex flex-col rounded-[2rem] p-7 ${index === 1 || index === 5 ? "bg-teal-700 text-white shadow-xl shadow-teal-900/15" : pageSurface}`}
+                className={`group flex flex-col rounded-xl p-7 ${index === 1 || index === 5 ? "bg-teal-700 text-white shadow-xl shadow-teal-900/15" : pageSurface}`}
                 key={story.title}
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 1 || index === 5 ? "bg-white/10 text-teal-100" : "bg-teal-100 text-teal-800 dark:bg-teal-400/10 dark:text-teal-300"}`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-2xl ${index === 1 || index === 5 ? "bg-white/10 text-teal-100" : "bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]"}`}
                 >
                   <story.icon aria-hidden="true" className="h-6 w-6" />
                 </div>
                 <div
-                  className={`mt-8 flex items-center gap-1.5 text-xs font-bold ${index === 1 || index === 5 ? "text-teal-200" : "text-teal-700 dark:text-teal-300"}`}
+                  className={`mt-8 flex items-center gap-1.5 text-xs font-bold ${index === 1 || index === 5 ? "text-teal-200" : "text-forest dark:text-[#70d5b3]"}`}
                 >
                   <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
                   {story.location} · {story.category}
                 </div>
                 <h2
-                  className={`mt-3 text-2xl font-bold tracking-tight ${index === 1 || index === 5 ? "text-white" : "text-slate-950 dark:text-white"}`}
+                  className={`mt-3 text-2xl font-bold tracking-tight ${index === 1 || index === 5 ? "text-white" : "text-ink"}`}
                 >
                   {story.title}
                 </h2>
                 <p
-                  className={`mt-4 flex-1 leading-7 ${index === 1 || index === 5 ? "text-teal-50" : "text-slate-600 dark:text-slate-300"}`}
+                  className={`mt-4 flex-1 leading-7 ${index === 1 || index === 5 ? "text-teal-50" : "text-ink/65"}`}
                 >
                   {story.excerpt}
                 </p>
                 <div
-                  className={`mt-7 border-t pt-5 ${index === 1 || index === 5 ? "border-white/10" : "border-slate-200 dark:border-white/10"}`}
+                  className={`mt-7 border-t pt-5 ${index === 1 || index === 5 ? "border-white/10" : "border-ink/[0.08] dark:border-white/[0.08]"}`}
                 >
                   <p
                     className={`text-xs font-bold uppercase tracking-[0.14em] ${index === 1 || index === 5 ? "text-amber-300" : "text-slate-400"}`}
@@ -555,7 +556,7 @@ export function StoriesPage() {
                     {story.outcome}
                   </p>
                   <p
-                    className={`mt-2 text-sm font-semibold ${index === 1 || index === 5 ? "text-white" : "text-slate-800 dark:text-slate-200"}`}
+                    className={`mt-2 text-sm font-semibold ${index === 1 || index === 5 ? "text-white" : "text-ink/90"}`}
                   >
                     {story.person}
                   </p>
@@ -696,26 +697,26 @@ const pastEvents = [
   },
 ];
 
-function EventCard({ event }: { event: EventItem }) {
+export function EventCard({ event }: { event: EventItem }) {
   return (
     <article
-      className={`grid overflow-hidden rounded-[2rem] ${event.featured ? "bg-teal-950 text-white shadow-2xl lg:grid-cols-[13rem_1fr]" : pageSurface}`}
+      className={`grid overflow-hidden rounded-xl ${event.featured ? "bg-teal-950 text-white shadow-2xl lg:grid-cols-[13rem_1fr]" : pageSurface}`}
     >
       <div
         className={`${event.featured ? "flex min-h-48 flex-col justify-between bg-gradient-to-br from-teal-700 to-teal-950 p-7" : "p-7 pb-0"}`}
       >
         <CalendarDays
           aria-hidden="true"
-          className={`h-7 w-7 ${event.featured ? "text-amber-300" : "text-teal-700 dark:text-teal-300"}`}
+          className={`h-7 w-7 ${event.featured ? "text-amber-300" : "text-forest dark:text-[#70d5b3]"}`}
         />
         <div className="mt-8">
           <p
-            className={`text-xs font-bold uppercase tracking-[0.16em] ${event.featured ? "text-teal-200" : "text-teal-700 dark:text-teal-300"}`}
+            className={`text-xs font-bold uppercase tracking-[0.16em] ${event.featured ? "text-teal-200" : "text-forest dark:text-[#70d5b3]"}`}
           >
             {event.type}
           </p>
           <p
-            className={`mt-2 text-xl font-bold ${event.featured ? "text-white" : "text-slate-950 dark:text-white"}`}
+            className={`mt-2 text-xl font-bold ${event.featured ? "text-white" : "text-ink"}`}
           >
             {event.date}
           </p>
@@ -726,17 +727,17 @@ function EventCard({ event }: { event: EventItem }) {
           <Pill>{event.format}</Pill>
         </div>
         <h2
-          className={`mt-4 text-2xl font-bold tracking-tight ${event.featured ? "text-white" : "text-slate-950 dark:text-white"}`}
+          className={`mt-4 text-2xl font-bold tracking-tight ${event.featured ? "text-white" : "text-ink"}`}
         >
           {event.title}
         </h2>
         <p
-          className={`mt-3 flex-1 leading-7 ${event.featured ? "text-slate-300" : "text-slate-600 dark:text-slate-300"}`}
+          className={`mt-3 flex-1 leading-7 ${event.featured ? "text-slate-300" : "text-ink/65"}`}
         >
           {event.description}
         </p>
         <div
-          className={`mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold ${event.featured ? "text-slate-300" : "text-slate-500 dark:text-slate-400"}`}
+          className={`mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold ${event.featured ? "text-slate-300" : "text-ink/50"}`}
         >
           <span className="flex items-center gap-1.5">
             <Clock3 aria-hidden="true" className="h-3.5 w-3.5" />
@@ -748,7 +749,7 @@ function EventCard({ event }: { event: EventItem }) {
           </span>
         </div>
         <Link
-          className={`mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${event.featured ? "bg-amber-400 text-slate-950 hover:bg-amber-300" : "bg-teal-700 text-white hover:bg-teal-800 dark:bg-teal-500 dark:text-slate-950"}`}
+          className={`mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${event.featured ? "bg-amber-400 text-slate-950 hover:bg-amber-300" : "bg-forest text-white hover:bg-[#075f52] dark:bg-teal-500 dark:text-slate-950"}`}
           href={event.href}
         >
           Reserve your place{" "}
@@ -771,12 +772,12 @@ export function EventsPage() {
         title={
           <>
             Come closer to the{" "}
-            <span className="text-teal-700 dark:text-teal-300">change.</span>
+            <span className="text-forest dark:text-[#70d5b3]">change.</span>
           </>
         }
       >
-        <div className={`rounded-[2rem] p-8 ${pageSurface}`}>
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
+        <div className={`rounded-xl p-8 ${pageSurface}`}>
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#70d5b3]">
             Next gathering
           </p>
           <div className="mt-6 flex items-center gap-5">
@@ -785,20 +786,20 @@ export function EventsPage() {
               <span className="text-3xl font-extrabold leading-none">22</span>
             </div>
             <div>
-              <p className="text-xl font-bold text-slate-950 dark:text-white">
+              <p className="text-xl font-bold text-ink">
                 The Long Table
               </p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-ink/50">
                 Bengaluru · 5:00 PM IST
               </p>
             </div>
           </div>
-          <p className="mt-6 leading-7 text-slate-600 dark:text-slate-300">
+          <p className="mt-6 leading-7 text-ink/65">
             An intimate evening with community partners, volunteers, and people
             curious about building change differently.
           </p>
           <Link
-            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-teal-700 dark:text-teal-300"
+            className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]"
             href="/contact?event=the-long-table"
           >
             View details <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -817,7 +818,7 @@ export function EventsPage() {
             title="Upcoming events"
           />
           <Link
-            className="inline-flex items-center gap-2 text-sm font-bold text-teal-700 dark:text-teal-300"
+            className="inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]"
             href="/contact?subject=events"
           >
             <CalendarDays aria-hidden="true" className="h-4 w-4" />
@@ -826,12 +827,12 @@ export function EventsPage() {
         </div>
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           {upcomingEvents.map((event) => (
-            <EventCard event={event} key={event.title} />
+            <EventCardWithRsvp event={event} key={event.title} />
           ))}
         </div>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -848,16 +849,16 @@ export function EventsPage() {
                 <div className="flex items-center justify-between">
                   <event.icon
                     aria-hidden="true"
-                    className="h-7 w-7 text-teal-700 dark:text-teal-300"
+                    className="h-7 w-7 text-forest dark:text-[#70d5b3]"
                   />
                   <span className="text-xs font-bold text-slate-400">
                     {event.date}
                   </span>
                 </div>
-                <p className="mt-8 text-xs font-extrabold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
+                <p className="mt-8 text-xs font-extrabold uppercase tracking-[0.16em] text-forest dark:text-[#70d5b3]">
                   {event.format}
                 </p>
-                <h3 className="mt-3 text-xl font-bold text-slate-950 dark:text-white">
+                <h3 className="mt-3 text-xl font-bold text-ink">
                   {event.title}
                 </h3>
                 <Link

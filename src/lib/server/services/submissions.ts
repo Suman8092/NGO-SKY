@@ -1,12 +1,14 @@
 import {
   sendContactAcknowledgements,
   sendNewsletterWelcome,
+  sendEventRegistrationConfirmation,
   sendVolunteerAcknowledgements,
   type EmailDeliverySummary,
 } from "../email/resend";
 import {
   storeContact,
   storeNewsletterSubscription,
+  storeEventRegistration,
   storeVolunteerApplication,
   type RequestMetadata,
   unsubscribeNewsletterSubscription,
@@ -18,6 +20,7 @@ import {
 import { ApiError } from "../errors";
 import type {
   ContactInput,
+  EventRegistrationInput,
   NewsletterInput,
   VolunteerInput,
 } from "../validation";
@@ -29,7 +32,7 @@ const skippedEmail: EmailDeliverySummary = {
 };
 
 export function assertSubmissionWorkflow(
-  kind: "contact" | "newsletter" | "volunteer",
+  kind: "contact" | "newsletter" | "volunteer" | "event",
 ) {
   const available =
     kind === "newsletter"
@@ -88,6 +91,31 @@ export async function submitVolunteerApplication(
   const email =
     stored.persistence === "mongodb"
       ? await sendVolunteerAcknowledgements(input, stored.record.id)
+      : skippedEmail;
+  return { ...stored, email };
+}
+
+
+export async function submitEventRegistration(
+  input: EventRegistrationInput,
+  metadata: RequestMetadata,
+) {
+  assertSubmissionWorkflow("event");
+  const stored = await storeEventRegistration(input, metadata);
+  const email =
+    stored.persistence === "mongodb"
+      ? await sendEventRegistrationConfirmation(
+          {
+            name: input.name,
+            email: input.email,
+            eventTitle: input.eventTitle,
+            eventDate: input.eventDate,
+            eventLocation: input.eventLocation,
+            ticketCode: stored.record.ticketCode,
+            ticketsCount: input.ticketsCount,
+          },
+          stored.record.id,
+        )
       : skippedEmail;
   return { ...stored, email };
 }

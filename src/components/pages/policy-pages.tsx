@@ -119,7 +119,7 @@ function PolicyPage({
               </section>
             ))}
           </div>
-          <div className="mt-14 rounded-[2rem] bg-teal-950 p-8 text-white">
+          <div className="mt-14 rounded-xl bg-teal-950 p-8 text-white">
             <Mail aria-hidden="true" className="h-7 w-7 text-teal-300" />
             <h2 className="mt-6 text-2xl font-bold">
               Questions about this policy?

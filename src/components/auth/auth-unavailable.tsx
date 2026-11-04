@@ -20,11 +20,17 @@ export function AuthUnavailable({
 
   return (
     <div className="max-w-md rounded-3xl border border-ink/10 bg-paper p-8 shadow-soft">
-      <BrandMark />
+      <BrandMark className="w-40" priority />
       <h1 className="mt-6 font-display text-3xl font-bold">{heading}</h1>
       <p className="mt-4 text-sm leading-7 text-ink/55">{description}</p>
-      <Link href={allowPreview ? "/dashboard" : "/"} className={allowPreview ? "button-primary mt-7" : "button-secondary mt-7"}>
-        {allowPreview ? "Preview dashboard" : "Return home"} <span aria-hidden="true">→</span>
+      <Link
+        href={allowPreview ? "/dashboard" : "/"}
+        className={
+          allowPreview ? "button-primary mt-7" : "button-secondary mt-7"
+        }
+      >
+        {allowPreview ? "Preview dashboard" : "Return home"}{" "}
+        <span aria-hidden="true">→</span>
       </Link>
     </div>
   );

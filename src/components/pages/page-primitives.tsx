@@ -10,7 +10,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 const surface =
-  "border border-slate-200/80 bg-white/85 shadow-[0_24px_80px_-40px_rgba(15,118,110,0.35)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/75";
+  "border-t border-slate-200/80 bg-transparent dark:border-white/10";
 
 export type Accent = "teal" | "amber" | "emerald";
 
@@ -392,7 +392,7 @@ export function CtaBand({
 }) {
   return (
     <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
-      <div className="relative isolate overflow-hidden rounded-[2.25rem] bg-slate-950 px-7 py-12 text-white shadow-2xl sm:px-12 lg:px-16 lg:py-16">
+      <div className="relative isolate overflow-hidden rounded-xl bg-slate-950 px-7 py-12 text-white shadow-2xl sm:px-12 lg:px-16 lg:py-16">
         <div
           aria-hidden="true"
           className="absolute -left-28 -top-32 -z-10 h-80 w-80 rounded-full bg-teal-500/25 blur-3xl"

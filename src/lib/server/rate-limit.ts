@@ -105,10 +105,17 @@ export async function enforceRateLimit(
   }
 
   const collection = database.collection<RateLimitDocument>("rate_limits");
-  globalThis.__skiesRateLimitIndexPromise ??= collection.createIndex(
-    { resetAt: 1 },
-    { expireAfterSeconds: 0, name: "rate_limit_expiry" },
-  );
+  if (!globalThis.__skiesRateLimitIndexPromise) {
+    globalThis.__skiesRateLimitIndexPromise = collection
+      .createIndex(
+        { resetAt: 1 },
+        { expireAfterSeconds: 0, name: "rate_limit_expiry" },
+      )
+      .catch((error) => {
+        globalThis.__skiesRateLimitIndexPromise = undefined;
+        throw error;
+      });
+  }
   await globalThis.__skiesRateLimitIndexPromise;
 
   const windowStart = Math.floor(now / options.windowMs) * options.windowMs;

@@ -21,8 +21,8 @@ type SubmissionState = {
 };
 
 const fieldClass =
-  "mt-2 min-h-12 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10 dark:border-white/15 dark:bg-white/5 dark:text-white dark:placeholder:text-slate-500 dark:focus:border-teal-400";
-const labelClass = "text-sm font-bold text-slate-800 dark:text-slate-200";
+  "mt-2 min-h-12 w-full rounded-2xl border border-ink/[0.12] bg-white/80 px-4 py-3.5 text-sm text-ink outline-none backdrop-blur-md shadow-sm transition-all duration-200 placeholder:text-ink/35 focus:border-forest focus:bg-white focus:ring-4 focus:ring-forest/10 dark:border-white/15 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/30 dark:focus:border-[#70d5b3] dark:focus:bg-white/[0.08]";
+const labelClass = "text-xs font-bold uppercase tracking-wider text-ink/75 dark:text-white/80";
 
 async function postJson(endpoint: string, payload: unknown) {
   const response = await fetch(endpoint, {
@@ -66,15 +66,19 @@ function SubmissionNotice({ state }: { state: SubmissionState }) {
   return (
     <div
       aria-live="polite"
-      className={`mt-5 flex items-start gap-3 rounded-2xl border p-4 text-sm ${success ? "border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-100" : "border-red-200 bg-red-50 text-red-900 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-100"}`}
+      className={`mt-5 flex items-start gap-3 rounded-2xl border p-4.5 text-sm backdrop-blur-md shadow-sm ${
+        success
+          ? "border-emerald-500/20 bg-emerald-50/90 text-emerald-950 dark:border-emerald-400/20 dark:bg-emerald-950/30 dark:text-emerald-200"
+          : "border-rose-500/20 bg-rose-50/90 text-rose-950 dark:border-rose-400/20 dark:bg-rose-950/30 dark:text-rose-200"
+      }`}
       role={success ? "status" : "alert"}
     >
       {success ? (
-        <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+        <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
       ) : (
-        <AlertCircle aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0" />
+        <AlertCircle aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400" />
       )}
-      <p className="leading-6">{state.message}</p>
+      <p className="leading-relaxed font-medium">{state.message}</p>
     </div>
   );
 }
@@ -91,14 +95,14 @@ function SubmitButton({
   const pending = state.kind === "submitting";
   return (
     <button
-      className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-teal-700 px-6 py-3 text-sm font-extrabold text-white shadow-lg shadow-teal-900/10 transition hover:-translate-y-0.5 hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 disabled:cursor-wait disabled:opacity-70 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400"
+      className="group relative inline-flex min-h-13 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-forest px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#075f52] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest disabled:cursor-wait disabled:opacity-70 dark:bg-[#70d5b3] dark:text-[#061e19] dark:hover:bg-[#85e5c6]"
       disabled={pending}
       type="submit"
     >
       {pending ? (
         <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" />
       ) : (
-        <Send aria-hidden="true" className="h-4 w-4" />
+        <Send aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       )}
       {pending ? submittingLabel : label}
     </button>

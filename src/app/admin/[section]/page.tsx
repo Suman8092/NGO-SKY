@@ -275,11 +275,13 @@ export default async function AdminSectionPage({
         </section>
       )}
 
+      <details className="mt-8 border-t border-ink/15 pt-5">
+      <summary className="cursor-pointer text-sm font-semibold text-ink/60">Data sources and operational requirements</summary>
       <section
         className="mt-5 grid gap-5 lg:grid-cols-2"
         aria-label={`${data.title} connection requirements`}
       >
-        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-7">
+        <article className="border-t border-ink/15 py-6">
           <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
             System of record
           </p>
@@ -289,7 +291,7 @@ export default async function AdminSectionPage({
           <p className="mt-3 text-sm leading-7 text-ink/55">{data.source}</p>
         </article>
 
-        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-7">
+        <article className="border-t border-ink/15 py-6">
           <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
             Before enabling
           </p>
@@ -310,6 +312,7 @@ export default async function AdminSectionPage({
         </article>
       </section>
 
+      </details>
       <div className="mt-5 flex flex-wrap gap-3">
         <Link
           href="/api/health?deep=true"

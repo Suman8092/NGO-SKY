@@ -1,9 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { revalidateTag } from "next/cache";
+import { z } from "zod";
 
-import { isAdminUserId } from "@/lib/auth-config";
+import { isAdminUserId, isClerkConfigured } from "@/lib/auth-config";
 import { ApiError } from "@/lib/server/errors";
-import { errorResponse, getRequestId, jsonSuccess } from "@/lib/server/http";
+import { errorResponse, getRequestId, jsonSuccess, parseJsonRequest } from "@/lib/server/http";
 import {
   updateContactStatus,
   updateVolunteerStatus,
@@ -17,8 +18,17 @@ export async function POST(request: Request): Promise<Response> {
   const requestId = getRequestId(request);
 
   try {
-    const { userId } = await auth();
-    if (!isAdminUserId(userId)) {
+    let userId: string | null = null;
+    if (isClerkConfigured()) {
+      try {
+        const authResult = await auth();
+        userId = authResult.userId;
+      } catch {
+        userId = null;
+      }
+    }
+
+    if (!isClerkConfigured() || !isAdminUserId(userId)) {
       throw new ApiError(
         403,
         "FORBIDDEN",
@@ -26,10 +36,11 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    const body = (await request.json().catch(() => ({}))) as Record<
-      string,
-      unknown
-    >;
+    const body = await parseJsonRequest(request, z.object({
+      action: z.string().trim().min(1).max(80),
+      id: z.string().trim().max(100).optional(),
+      status: z.string().trim().max(30).optional(),
+    }).strict());
     const action = String(body.action || "").trim();
 
     if (action === "update_volunteer_status") {

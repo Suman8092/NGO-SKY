@@ -3,19 +3,19 @@ import {
   ArrowRight,
   CheckCircle2,
   CircleAlert,
-  Clock,
   Download,
   HeartHandshake,
   Mail,
   MessageSquare,
   ReceiptText,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 
 import { AccountGreeting } from "@/components/dashboard/account-greeting";
 import { AccountIdentity } from "@/components/dashboard/account-identity";
+import { DonorTaxProfileCard } from "@/components/dashboard/donor-tax-profile";
+import { Ticket } from "lucide-react";
 import { isClerkConfigured } from "@/lib/auth-config";
 import { isEditorialContentPublished } from "@/lib/content-config";
 import {
@@ -83,7 +83,7 @@ async function loadUserData(
 
     const user = await currentUser();
     const emails =
-      user?.emailAddresses?.map((e) => e.emailAddress.toLowerCase()) ?? [];
+      user?.emailAddresses?.filter((e) => e.verification?.status === "verified").map((e) => e.emailAddress.toLowerCase()) ?? [];
 
     return getUserDashboardData(userId, emails);
   } catch {
@@ -109,12 +109,14 @@ export default async function UserDashboard() {
           },
           volunteers: [],
           contacts: [],
+          eventRegistrations: [],
           newsletterSubscribed: false,
         };
 
   const hasDonations = data.donations.length > 0;
   const hasVolunteers = data.volunteers.length > 0;
   const hasContacts = data.contacts.length > 0;
+  const hasEvents = (data.eventRegistrations?.length ?? 0) > 0;
 
   return (
     <div className="mx-auto max-w-[1200px] space-y-6">
@@ -126,7 +128,7 @@ export default async function UserDashboard() {
           </p>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white/85 backdrop-blur-sm">
             <CheckCircle2 className="size-3.5 text-[#70d5b3]" />
-            Verified Supporter
+            Supporter account
           </span>
         </div>
 
@@ -134,9 +136,7 @@ export default async function UserDashboard() {
           <AccountGreeting clerkEnabled={clerkEnabled} role="user" />
         </h1>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
-          View your verified philanthropic contributions, download statutory
-          80G tax exemption certificates, and track volunteer applications in
-          real time.
+          View your contributions, download donation receipts, and follow your volunteer applications and event registrations.
         </p>
       </header>
 
@@ -145,13 +145,13 @@ export default async function UserDashboard() {
 
       {/* KPI Cards Grid */}
       <section aria-label="Account Overview Metrics" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {/* Total Donated */}
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055]">
+        {/* INR contributions */}
+        <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest">
-              Total Donated
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+              INR contributions
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
               <ReceiptText className="size-4" />
             </span>
           </div>
@@ -164,30 +164,30 @@ export default async function UserDashboard() {
         </div>
 
         {/* 80G Tax Exemption Claimable */}
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055]">
+        <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest">
-              Section 80G Deduction
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
+              INR contributions
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
               <ShieldCheck className="size-4" />
             </span>
           </div>
           <p className="mt-4 font-display text-3xl font-bold tracking-tight text-ink">
-            {formatCurrency(Math.round(data.kpis.taxExemptMinor / 200))}
+            {formatCurrency(data.kpis.taxExemptMinor / 100)}
           </p>
           <p className="mt-1 text-xs text-ink/50">
-            50% deduction on {formatCurrency(data.kpis.taxExemptMinor / 100)} eligible
+            Paid INR gifts; eligibility is confirmed separately
           </p>
         </div>
 
         {/* Volunteer Engagement */}
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055]">
+        <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest">
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
               Volunteer Status
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
               <HeartHandshake className="size-4" />
             </span>
           </div>
@@ -208,12 +208,12 @@ export default async function UserDashboard() {
         </div>
 
         {/* Newsletter & Updates */}
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055]">
+        <div className="border-t border-ink/20 py-6 sm:pr-5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-forest">
+            <span className="text-xs font-bold uppercase tracking-wider text-forest dark:text-[#70d5b3]">
               Dispatches
             </span>
-            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest">
+            <span className="grid size-9 place-items-center rounded-xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
               <Mail className="size-4" />
             </span>
           </div>
@@ -232,7 +232,7 @@ export default async function UserDashboard() {
 
       {/* Section 1: Verified Giving History & Receipts */}
       <section aria-labelledby="giving-records-title">
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055] sm:p-8">
+        <div className="border-t border-ink/15 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
@@ -296,7 +296,7 @@ export default async function UserDashboard() {
                               className="inline-flex items-center gap-1.5 rounded-lg border border-forest/20 bg-forest/5 px-2.5 py-1 text-xs font-bold text-forest transition hover:bg-forest hover:text-white"
                             >
                               <Download className="size-3.5" />
-                              80G Receipt (PDF)
+                              Donation receipt (PDF)
                             </a>
                           ) : (
                             <span className="text-xs text-ink/40">
@@ -324,9 +324,13 @@ export default async function UserDashboard() {
         </div>
       </section>
 
+
+      {/* Statutory 80G Tax Profile & PAN Manager */}
+      <DonorTaxProfileCard />
+
       {/* Section 2: Volunteer Applications */}
       <section aria-labelledby="volunteer-records-title">
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055] sm:p-8">
+        <div className="border-t border-ink/15 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">
@@ -402,9 +406,92 @@ export default async function UserDashboard() {
         </div>
       </section>
 
+
+      {/* Section 2.5: Event Passes & RSVPs */}
+      <section aria-labelledby="event-passes-title">
+        <div className="border-t border-ink/15 py-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest dark:text-[#70d5b3]">
+                Gatherings & Forums
+              </p>
+              <h2
+                id="event-passes-title"
+                className="mt-1 font-display text-2xl font-bold tracking-tight text-ink dark:text-white"
+              >
+                My Event Passes & RSVPs
+              </h2>
+            </div>
+
+            <Link href="/events" className="button-secondary min-h-10 text-xs">
+              Explore events
+              <ArrowRight className="size-3.5" aria-hidden="true" />
+            </Link>
+          </div>
+
+          {hasEvents ? (
+            <div className="mt-6 overflow-hidden rounded-2xl border border-ink/8">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[700px] text-left text-sm">
+                  <thead className="bg-forest/[0.06] text-xs uppercase tracking-[0.12em] text-ink/55">
+                    <tr>
+                      <th className="px-5 py-4 font-bold" scope="col">Pass Reference</th>
+                      <th className="px-5 py-4 font-bold" scope="col">Event</th>
+                      <th className="px-5 py-4 font-bold" scope="col">Date & Time</th>
+                      <th className="px-5 py-4 font-bold" scope="col">Location</th>
+                      <th className="px-5 py-4 font-bold" scope="col">Seats</th>
+                      <th className="px-5 py-4 font-bold" scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-ink/8">
+                    {data.eventRegistrations.map((reg) => (
+                      <tr key={reg.id} className="hover:bg-forest/[0.02]">
+                        <td className="whitespace-nowrap px-5 py-4 font-mono font-bold text-forest dark:text-[#70d5b3]">
+                          {reg.ticketCode}
+                        </td>
+                        <td className="px-5 py-4 font-bold text-ink dark:text-white">
+                          {reg.eventTitle}
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4 text-xs text-ink/65 dark:text-white/65">
+                          {reg.eventDate || "TBA"}
+                        </td>
+                        <td className="whitespace-nowrap px-5 py-4 text-xs text-ink/65 dark:text-white/65">
+                          {reg.eventLocation || "Online / Bengaluru"}
+                        </td>
+                        <td className="px-5 py-4 font-medium text-ink dark:text-white">
+                          {reg.ticketsCount}
+                        </td>
+                        <td className="px-5 py-4">
+                          <StatusBadge status={reg.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 rounded-2xl border border-dashed border-ink/15 p-6 text-center sm:p-8">
+              <Ticket className="mx-auto size-8 text-forest/60" />
+              <h3 className="mt-3 font-display text-base font-bold text-ink dark:text-white">
+                No active event reservations
+              </h3>
+              <p className="mt-1 text-xs text-ink/55 dark:text-white/55">
+                Join our symposiums, community table discussions, and field workshops.
+              </p>
+              <div className="mt-4">
+                <Link href="/events" className="button-primary min-h-9 text-xs">
+                  Browse upcoming events
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Section 3: Support Inquiries */}
       <section aria-labelledby="inquiry-records-title">
-        <div className="rounded-3xl border border-ink/8 bg-white p-6 shadow-sm dark:bg-white/[0.055] sm:p-8">
+        <div className="border-t border-ink/15 py-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-forest">

@@ -1,4 +1,4 @@
-const CACHE_NAME = "skymeredian-shell-v2";
+const CACHE_NAME = "skymeredian-shell-v3";
 const OFFLINE_URL = "/offline";
 const PRECACHE = [OFFLINE_URL, "/icon.svg", "/manifest.webmanifest"];
 

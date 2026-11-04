@@ -30,6 +30,12 @@ export function AppProviders({
 
   return publishableKey && clerkEnabled ? (
     <ClerkProvider
+      appearance={{
+        layout: {
+          logoImageUrl: "/brand/foundation-logo.png",
+          logoPlacement: "inside",
+        },
+      }}
       publishableKey={publishableKey}
       signInUrl="/sign-in"
       signUpUrl="/sign-up"

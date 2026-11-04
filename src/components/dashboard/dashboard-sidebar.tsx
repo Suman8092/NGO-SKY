@@ -94,15 +94,15 @@ export function DashboardSidebar({
           <Link
             href="/"
             className="flex items-center gap-3"
+            aria-label="Skymeredian Foundation home"
             onClick={() => setOpen(false)}
           >
-            <BrandMark className="text-[#63c9a8]" />
-            <span className="font-display text-sm font-extrabold uppercase leading-tight">
-              Skymeredian
-              <span className="block text-[0.53rem] tracking-[0.2em] text-white/35">
+            <div>
+              <BrandMark className="w-40" priority />
+              <span className="mt-3 block text-xs font-semibold tracking-wide text-white/60">
                 {role === "admin" ? "Operations" : "My account"}
               </span>
-            </span>
+            </div>
           </Link>
           <button
             type="button"

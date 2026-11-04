@@ -2,10 +2,14 @@ import {
   ArrowUpRight,
   CircleAlert,
   Database,
+  Download,
   ExternalLink,
-  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { RecordsTable } from "./records-table";
+import { getHealthSnapshot } from "@/lib/server/services/health";
+import { isClerkConfigured } from "@/lib/auth-config";
 
 import {
   ContactStatusSelector,
@@ -23,6 +27,7 @@ import {
 import type {
   AdminContactRecord,
   AdminDonationRecord,
+  AdminEventRegistrationRecord,
   AdminNewsletterRecord,
   AdminVolunteerRecord,
   DetailedAnalytics,
@@ -80,7 +85,7 @@ function UnavailableState({ source }: { source: "database" | "identity" }) {
 
 function EmptyState({ label }: { label: string }) {
   return (
-    <div className="flex gap-4 rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-8">
+    <div className="flex gap-4 border-t border-ink/15 py-8">
       <Database className="mt-0.5 size-6 shrink-0 text-forest" aria-hidden="true" />
       <div>
         <h2 className="font-display text-2xl font-bold">No {label} found</h2>
@@ -99,16 +104,7 @@ function TableShell({
   label: string;
   children: React.ReactNode;
 }) {
-  return (
-    <div className="overflow-hidden rounded-3xl border border-ink/8 bg-white dark:bg-white/[0.055]">
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px] text-left text-sm">
-          <caption className="sr-only">{label}</caption>
-          {children}
-        </table>
-      </div>
-    </div>
-  );
+  return <RecordsTable label={label}>{children}</RecordsTable>;
 }
 
 const headClass =
@@ -127,7 +123,18 @@ export function DonationRecords({
   if (result.data.length === 0) return <EmptyState label="donation records" />;
 
   return (
-    <TableShell label="Latest donation records">
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <a
+          href="/api/admin/export/donations"
+          download
+          className="inline-flex items-center gap-2 rounded-xl border border-ink/10 bg-white px-3.5 py-2 text-xs font-semibold text-ink shadow-sm transition hover:bg-forest/5 dark:bg-white/5 dark:text-white"
+        >
+          <Download className="size-3.5" />
+          Export Donations CSV
+        </a>
+      </div>
+      <TableShell label="Latest donation records">
       <thead className={headClass}>
         <tr>
           {[
@@ -170,6 +177,7 @@ export function DonationRecords({
         ))}
       </tbody>
     </TableShell>
+    </div>
   );
 }
 
@@ -186,7 +194,18 @@ export function VolunteerRecords({
   }
 
   return (
-    <TableShell label="Latest volunteer applications">
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <a
+          href="/api/admin/export/volunteers"
+          download
+          className="inline-flex items-center gap-2 rounded-xl border border-ink/10 bg-white px-3.5 py-2 text-xs font-semibold text-ink shadow-sm transition hover:bg-forest/5 dark:bg-white/5 dark:text-white"
+        >
+          <Download className="size-3.5" />
+          Export Volunteer Roster CSV
+        </a>
+      </div>
+      <TableShell label="Latest volunteer applications">
       <thead className={headClass}>
         <tr>
           {[
@@ -232,6 +251,7 @@ export function VolunteerRecords({
         ))}
       </tbody>
     </TableShell>
+    </div>
   );
 }
 
@@ -309,7 +329,13 @@ function ContactTable({ records }: { records: AdminContactRecord[] }) {
             <td className={`${cellClass} font-bold text-ink`}>{record.name}</td>
             <td className={`${cellClass} break-all`}>{record.email}</td>
             <td className={cellClass}>{record.phone ?? "Not provided"}</td>
-            <td className={cellClass}>{record.subject}</td>
+            <td className={cellClass}>
+              <details className="max-w-md">
+                <summary className="cursor-pointer font-semibold text-forest">{record.subject}</summary>
+                <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-6">{record.message}</p>
+                <a className="mt-3 inline-flex font-semibold text-forest hover:underline" href={`mailto:${record.email}?subject=${encodeURIComponent(`Re: ${record.subject}`)}`}>Reply by email</a>
+              </details>
+            </td>
             <td className={cellClass}>
               <ContactStatusSelector
                 id={record.id}
@@ -531,83 +557,176 @@ export function CampaignRecords() {
   );
 }
 
-export function EventRecords() {
+export function EventRecords({
+  registrationsResult,
+}: {
+  registrationsResult?: OperationalRead<AdminEventRegistrationRecord[]>;
+} = {}) {
+  const registrations = registrationsResult?.state === "ready" ? registrationsResult.data : [];
+  const hasRegistrations = registrations.length > 0;
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h2 className="font-display text-xl font-bold">
-            Scheduled Events & Gatherings ({events.length})
-          </h2>
-          <p className="text-xs text-ink/50">
-            Field workshops, learning symposiums, and community assemblies.
-          </p>
+    <div className="space-y-10">
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="font-display text-xl font-bold">
+              Scheduled Events & Gatherings ({events.length})
+            </h2>
+            <p className="text-xs text-ink/50">
+              Field workshops, learning symposiums, and community assemblies.
+            </p>
+          </div>
+          <Link
+            href="/events"
+            target="_blank"
+            className="button-secondary min-h-9 text-xs"
+          >
+            Public events page <ExternalLink className="size-3.5" />
+          </Link>
         </div>
-        <Link
-          href="/events"
-          target="_blank"
-          className="button-secondary min-h-9 text-xs"
-        >
-          Public events page <ExternalLink className="size-3.5" />
-        </Link>
+
+        <TableShell label="Scheduled events">
+          <thead className={headClass}>
+            <tr>
+              {[
+                "Date & Time",
+                "Event title",
+                "Venue & Location",
+                "Format",
+                "Capacity",
+                "Registration",
+                "Action",
+              ].map((label) => (
+                <th key={label} className={headerCellClass} scope="col">
+                  {label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-ink/8">
+            {events.map((e) => (
+              <tr key={e.slug}>
+                <td className={`${cellClass} whitespace-nowrap`}>
+                  <div className="font-bold text-ink">{formatDate(e.start)}</div>
+                  <div className="text-xs text-ink/45">{e.timezone}</div>
+                </td>
+                <td className={cellClass}>
+                  <div className="font-bold text-ink">{e.title}</div>
+                  <p className="line-clamp-1 text-xs text-ink/45">{e.summary}</p>
+                </td>
+                <td className={cellClass}>
+                  <div className="text-xs font-medium text-ink">{e.venue}</div>
+                  <div className="text-[0.7rem] text-ink/40">{e.location}</div>
+                </td>
+                <td className={cellClass}>
+                  <span className="rounded-md bg-forest/10 px-2 py-0.5 text-xs font-semibold capitalize text-forest">
+                    {e.format}
+                  </span>
+                </td>
+                <td className={`${cellClass} whitespace-nowrap text-xs`}>
+                  {e.remainingPlaces} / {e.capacity} seats left
+                </td>
+                <td className={cellClass}>
+                  <StatusBadge status={e.status} />
+                </td>
+                <td className={cellClass}>
+                  <Link
+                    href={`/events#${e.slug}`}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-forest hover:underline"
+                  >
+                    Details <ArrowUpRight className="size-3" />
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </TableShell>
       </div>
 
-      <TableShell label="Scheduled events">
-        <thead className={headClass}>
-          <tr>
-            {[
-              "Date & Time",
-              "Event title",
-              "Venue & Location",
-              "Format",
-              "Capacity",
-              "Registration",
-              "Action",
-            ].map((label) => (
-              <th key={label} className={headerCellClass} scope="col">
-                {label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-ink/8">
-          {events.map((e) => (
-            <tr key={e.slug}>
-              <td className={`${cellClass} whitespace-nowrap`}>
-                <div className="font-bold text-ink">{formatDate(e.start)}</div>
-                <div className="text-xs text-ink/45">{e.timezone}</div>
-              </td>
-              <td className={cellClass}>
-                <div className="font-bold text-ink">{e.title}</div>
-                <p className="line-clamp-1 text-xs text-ink/45">{e.summary}</p>
-              </td>
-              <td className={cellClass}>
-                <div className="text-xs font-medium text-ink">{e.venue}</div>
-                <div className="text-[0.7rem] text-ink/40">{e.location}</div>
-              </td>
-              <td className={cellClass}>
-                <span className="rounded-md bg-forest/10 px-2 py-0.5 text-xs font-semibold capitalize text-forest">
-                  {e.format}
-                </span>
-              </td>
-              <td className={`${cellClass} whitespace-nowrap text-xs`}>
-                {e.remainingPlaces} / {e.capacity} seats left
-              </td>
-              <td className={cellClass}>
-                <StatusBadge status={e.status} />
-              </td>
-              <td className={cellClass}>
-                <Link
-                  href={`/events#${e.slug}`}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-forest hover:underline"
-                >
-                  Details <ArrowUpRight className="size-3" />
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </TableShell>
+      {/* Real attendee roster from MongoDB */}
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="font-display text-xl font-bold">
+              Attendee Roster & Confirmed RSVPs ({registrations.length})
+            </h2>
+            <p className="text-xs text-ink/50">
+              Live registrations submitted via public RSVP modals and verified community passes.
+            </p>
+          </div>
+          {hasRegistrations && (
+            <a
+              href="/api/admin/export/events"
+              download
+              className="inline-flex items-center gap-2 rounded-xl border border-ink/10 bg-white px-3.5 py-2 text-xs font-semibold text-ink shadow-sm transition hover:bg-forest/5 dark:bg-white/5 dark:text-white"
+            >
+              <Download className="size-3.5" />
+              Export Attendee Roster CSV
+            </a>
+          )}
+        </div>
+
+        {hasRegistrations ? (
+          <TableShell label="Attendee roster">
+            <thead className={headClass}>
+              <tr>
+                {[
+                  "Pass Code",
+                  "Attendee Name",
+                  "Contact Details",
+                  "Event Name",
+                  "Seats",
+                  "Notes / Needs",
+                  "Status",
+                  "Registered At",
+                ].map((label) => (
+                  <th key={label} className={headerCellClass} scope="col">
+                    {label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-ink/8">
+              {registrations.map((reg) => (
+                <tr key={reg.id}>
+                  <td className={`${cellClass} font-mono font-bold text-forest dark:text-[#70d5b3]`}>
+                    {reg.ticketCode}
+                  </td>
+                  <td className={`${cellClass} font-bold text-ink`}>
+                    {reg.name}
+                  </td>
+                  <td className={cellClass}>
+                    <div className="text-xs font-medium text-ink">{reg.email}</div>
+                    {reg.phone && <div className="text-[0.7rem] text-ink/45">{reg.phone}</div>}
+                  </td>
+                  <td className={cellClass}>
+                    <div className="text-xs font-bold text-ink">{reg.eventTitle}</div>
+                    {reg.eventDate && <div className="text-[0.7rem] text-ink/45">{reg.eventDate}</div>}
+                  </td>
+                  <td className={`${cellClass} font-semibold`}>
+                    {reg.ticketsCount}
+                  </td>
+                  <td className={`${cellClass} text-xs text-ink/60 max-w-[200px] truncate`}>
+                    {reg.notes || "None"}
+                  </td>
+                  <td className={cellClass}>
+                    <StatusBadge status={reg.status} />
+                  </td>
+                  <td className={`${cellClass} whitespace-nowrap text-xs text-ink/45`}>
+                    {formatDate(reg.createdAt)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </TableShell>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-ink/15 p-6 text-center">
+            <p className="text-sm font-bold text-ink/60">No attendees have registered yet.</p>
+            <p className="mt-1 text-xs text-ink/45">Attendee RSVPs submitted on the website will appear here in real time.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -717,7 +836,9 @@ export function MediaRecords() {
             className="group overflow-hidden rounded-3xl border border-ink/8 bg-white transition hover:shadow-lg dark:bg-white/[0.055]"
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-forest/5">
-              <img
+              <Image
+                width={item.image.width}
+                height={item.image.height}
                 src={item.image.src}
                 alt={item.image.alt}
                 className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
@@ -775,7 +896,7 @@ export function AnalyticsDashboard({
   return (
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]">
+        <article className="border-t border-ink/15 py-6">
           <p className="text-[0.65rem] font-extrabold uppercase tracking-widest text-forest">
             Donations Raised
           </p>
@@ -787,7 +908,7 @@ export function AnalyticsDashboard({
           </p>
         </article>
 
-        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]">
+        <article className="border-t border-ink/15 py-6">
           <p className="text-[0.65rem] font-extrabold uppercase tracking-widest text-forest">
             Average Gift
           </p>
@@ -799,7 +920,7 @@ export function AnalyticsDashboard({
           </p>
         </article>
 
-        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]">
+        <article className="border-t border-ink/15 py-6">
           <p className="text-[0.65rem] font-extrabold uppercase tracking-widest text-forest">
             Volunteer Pipeline
           </p>
@@ -811,7 +932,7 @@ export function AnalyticsDashboard({
           </p>
         </article>
 
-        <article className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]">
+        <article className="border-t border-ink/15 py-6">
           <p className="text-[0.65rem] font-extrabold uppercase tracking-widest text-forest">
             Audience Reach
           </p>
@@ -825,7 +946,7 @@ export function AnalyticsDashboard({
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]">
+        <section className="border-t border-ink/15 py-6">
           <h3 className="font-display text-lg font-bold">
             Inquiry & Support Response Status
           </h3>
@@ -876,7 +997,7 @@ export function AnalyticsDashboard({
           </div>
         </section>
 
-        <section className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]">
+        <section className="border-t border-ink/15 py-6">
           <h3 className="font-display text-lg font-bold">
             System Runtime & Diagnostics
           </h3>
@@ -886,7 +1007,7 @@ export function AnalyticsDashboard({
           <dl className="mt-6 divide-y divide-ink/8 text-sm">
             <div className="flex justify-between py-2.5">
               <dt className="text-ink/50">Database Cluster</dt>
-              <dd className="font-bold text-forest">MongoDB Atlas (Connected)</dd>
+              <dd className="font-bold text-forest">Persistent database</dd>
             </div>
             <div className="flex justify-between py-2.5">
               <dt className="text-ink/50">Node.js Process Uptime</dt>
@@ -907,120 +1028,39 @@ export function AnalyticsDashboard({
   );
 }
 
-export function SettingsConsole() {
+export async function SettingsConsole() {
+  const { body: health } = await getHealthSnapshot(true);
+  const integrations = [
+    ["Database", health.integrations.database],
+    ["Razorpay payments", health.integrations.razorpay],
+    ["Transactional email", health.integrations.resend],
+    ["Editorial CMS", health.integrations.sanity],
+    ["Public submissions", health.integrations.publicSubmissions],
+    ["Newsletter", health.integrations.newsletter],
+    ["Account authentication", isClerkConfigured() ? "configured" : "disabled"],
+  ];
   return (
-    <div className="space-y-8">
-      <section className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-[0.65rem] font-extrabold uppercase tracking-widest text-forest">
-              Legal & Statutory Identity
-            </p>
-            <h2 className="mt-1 font-display text-2xl font-bold">{brand.legalName}</h2>
-          </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-forest/10 px-3 py-1 text-xs font-bold text-forest">
-            <ShieldCheck className="size-4" /> Active Non-Profit
-          </span>
-        </div>
-
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-2xl border border-ink/8 bg-forest/[0.02] p-4">
-            <p className="text-xs font-medium text-ink/45">Government Accreditation</p>
-            <p className="mt-1 text-sm font-bold text-ink">
-              {brand.registration.ngoId}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-ink/8 bg-forest/[0.02] p-4">
-            <p className="text-xs font-medium text-ink/45">Tax Exemption</p>
-            <p className="mt-1 text-sm font-bold text-ink">
-              {brand.registration.taxExemption}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-ink/8 bg-forest/[0.02] p-4">
-            <p className="text-xs font-medium text-ink/45">Institutional Email</p>
-            <p className="mt-1 text-sm font-bold text-ink">{brand.contact.email}</p>
-          </div>
-        </div>
+    <div className="space-y-10">
+      <section className="border-t border-ink/15 py-6">
+        <p className="eyebrow">Foundation details</p>
+        <h2 className="mt-3 text-2xl font-semibold">{brand.legalName}</h2>
+        <dl className="mt-5 divide-y divide-ink/10 text-sm">
+          {[["Registration", brand.registration.ngoId], ["Tax registration", brand.registration.taxExemption], ["Contact", brand.contact.email]].map(([label, value]) => (
+            <div key={label} className="grid gap-2 py-4 sm:grid-cols-2"><dt className="text-ink/60">{label}</dt><dd className="break-words font-medium">{value}</dd></div>
+          ))}
+        </dl>
       </section>
-
-      <section className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055] sm:p-8">
-        <h2 className="font-display text-xl font-bold">Integrated Production Systems</h2>
-        <p className="mt-1 text-sm text-ink/50">
-          Current state of cloud dependencies, gateways, and data providers.
-        </p>
-
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-2xl border border-ink/8 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">MongoDB Database</span>
-              <span className="size-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            </div>
-            <p className="mt-2 text-xs text-ink/50">Atlas Cluster connected</p>
-            <p className="mt-1 font-mono text-[0.7rem] text-forest">
-              cluster0.hqhhytx.mongodb.net
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-ink/8 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">Razorpay Payments</span>
-              <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-[0.65rem] font-bold text-amber-700 dark:text-amber-300">
-                TEST MODE
-              </span>
-            </div>
-            <p className="mt-2 text-xs text-ink/50">Order generation active</p>
-            <p className="mt-1 font-mono text-[0.7rem] text-forest">
-              rzp_test_T0GSsnErvPviBU
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-ink/8 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">Clerk Identity</span>
-              <span className="size-2.5 rounded-full bg-emerald-500" />
-            </div>
-            <p className="mt-2 text-xs text-ink/50">Admin & supporter auth enabled</p>
-            <p className="mt-1 font-mono text-[0.7rem] text-forest">
-              Middleware protected
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-ink/8 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">Resend Transactional Email</span>
-              <span className="size-2.5 rounded-full bg-emerald-500" />
-            </div>
-            <p className="mt-2 text-xs text-ink/50">Automated notifications active</p>
-            <p className="mt-1 font-mono text-[0.7rem] text-forest">
-              onboarding@resend.dev
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-ink/8 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">Sanity CMS</span>
-              <span className="size-2.5 rounded-full bg-emerald-500" />
-            </div>
-            <p className="mt-2 text-xs text-ink/50">Editorial dataset connected</p>
-            <p className="mt-1 font-mono text-[0.7rem] text-forest">
-              project 7kf36p68 (production)
-            </p>
-            <div className="mt-3">
-              <SanitySyncButton />
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-ink/8 p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">Annual Report Document</span>
-              <span className="size-2.5 rounded-full bg-emerald-500" />
-            </div>
-            <p className="mt-2 text-xs text-ink/50">Audited PDF generated</p>
-            <p className="mt-1 font-mono text-[0.7rem] text-forest">
-              /reports/skymeredian-annual-report-2025-26.pdf
-            </p>
-          </div>
-        </div>
+      <section className="border-t border-ink/15 py-6">
+        <h2 className="text-2xl font-semibold">Integration status</h2>
+        <p className="mt-2 text-sm leading-6 text-ink/60">Database connectivity is checked when this page loads. Other statuses reflect server configuration; provider delivery must be verified separately.</p>
+        <dl className="mt-5 divide-y divide-ink/10">
+          {integrations.map(([name, status]) => (
+            <div key={name} className="flex items-center justify-between gap-4 py-4 text-sm"><dt>{name}</dt><dd><StatusBadge status={status} /></dd></div>
+          ))}
+        </dl>
+        {health.configuration.invalidFields.length > 0 && <p role="status" className="mt-5 text-sm text-amber-700 dark:text-amber-300">Review deployment configuration: {health.configuration.invalidFields.join(", ")}</p>}
+        <div className="mt-6"><SanitySyncButton /></div>
+        <p className="mt-4 text-xs text-ink/50">Credentials are managed in the deployment environment. Last checked: {formatDate(health.timestamp)}.</p>
       </section>
     </div>
   );

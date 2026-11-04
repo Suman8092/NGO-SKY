@@ -13,7 +13,10 @@ import {
 import { isEditorialContentPublished } from "@/lib/content-config";
 
 const isDashboardRoute = createRouteMatcher(["/dashboard/:path*"]);
-const isAdminRoute = createRouteMatcher(["/admin/:path*"]);
+const isAdminRoute = createRouteMatcher(["/admin/:path*", "/agent-dashboard/:path*"]);
+const isAdminApiRoute = createRouteMatcher(["/api/admin/:path*"]);
+const isUserApiRoute = createRouteMatcher(["/api/user/:path*"]);
+const isEventApiRoute = createRouteMatcher(["/api/events/:path*"]);
 const isDonationApiRoute = createRouteMatcher(["/api/donations/:path*"]);
 const isHealthApiRoute = createRouteMatcher(["/api/health"]);
 const isEditorialAssetRoute = createRouteMatcher(["/images/:path*"]);
@@ -47,6 +50,16 @@ function routeUrl(request: NextRequest, pathname: string): URL {
 
 const protectedMiddleware = clerkMiddleware(
   async (auth, request) => {
+    if (
+      isAdminApiRoute(request) ||
+      isUserApiRoute(request) ||
+      isEventApiRoute(request) ||
+      isDonationApiRoute(request) ||
+      isHealthApiRoute(request)
+    ) {
+      return;
+    }
+
     if (!isDashboardRoute(request) && !isAdminRoute(request)) return;
 
     const { userId } = await auth.protect();
@@ -79,6 +92,9 @@ export default function middleware(
   if (
     !isDashboardRoute(request) &&
     !isAdminRoute(request) &&
+    !isAdminApiRoute(request) &&
+    !isUserApiRoute(request) &&
+    !isEventApiRoute(request) &&
     !isDonationApiRoute(request) &&
     !isHealthApiRoute(request)
   ) {
@@ -89,7 +105,13 @@ export default function middleware(
     return protectedMiddleware(request, event);
   }
 
-  if (isDonationApiRoute(request) || isHealthApiRoute(request)) {
+  if (
+    isAdminApiRoute(request) ||
+    isUserApiRoute(request) ||
+    isEventApiRoute(request) ||
+    isDonationApiRoute(request) ||
+    isHealthApiRoute(request)
+  ) {
     return NextResponse.next();
   }
 
@@ -108,6 +130,10 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/admin/:path*",
+    "/agent-dashboard/:path*",
+    "/api/admin/:path*",
+    "/api/user/:path*",
+    "/api/events/:path*",
     "/api/donations/:path*",
     "/api/health",
     "/about/:path*",

@@ -3,6 +3,7 @@
 import { Check, Loader2, RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type VolunteerStatus = "submitted" | "reviewing" | "approved" | "rejected";
 type ContactStatus = "new" | "read" | "resolved" | "spam";
@@ -35,17 +36,18 @@ export function VolunteerStatusSelector({
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to update status");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error?.message || "Failed to update status");
       }
 
       setStatus(newStatus);
       setSaved(true);
       router.refresh();
       setTimeout(() => setSaved(false), 2500);
-    } catch (err) {
-      console.error(err);
-      alert("Could not update volunteer application status.");
+    } catch (err: unknown) {
+
+      toast.error(err instanceof Error ? err.message : "Could not update volunteer application status.");
     } finally {
       setLoading(false);
     }
@@ -54,6 +56,7 @@ export function VolunteerStatusSelector({
   return (
     <div className="flex items-center gap-2">
       <select
+        aria-label={`Status for ${id}`}
         value={status}
         disabled={loading}
         onChange={(e) => handleChange(e.target.value as VolunteerStatus)}
@@ -105,17 +108,18 @@ export function ContactStatusSelector({
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to update status");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error?.message || "Failed to update status");
       }
 
       setStatus(newStatus);
       setSaved(true);
       router.refresh();
       setTimeout(() => setSaved(false), 2500);
-    } catch (err) {
-      console.error(err);
-      alert("Could not update enquiry status.");
+    } catch (err: unknown) {
+
+      toast.error(err instanceof Error ? err.message : "Could not update enquiry status.");
     } finally {
       setLoading(false);
     }
@@ -124,6 +128,7 @@ export function ContactStatusSelector({
   return (
     <div className="flex items-center gap-2">
       <select
+        aria-label={`Status for ${id}`}
         value={status}
         disabled={loading}
         onChange={(e) => handleChange(e.target.value as ContactStatus)}
@@ -166,12 +171,12 @@ export function SanitySyncButton() {
         body: JSON.stringify({ action: "sync_sanity_content" }),
       });
 
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error?.message || "Sync failed");
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error?.message || "Sync failed");
       }
 
-      const docs = data.data.publishedDocuments;
+      const docs = data.data?.publishedDocuments || {};
       const total =
         (docs.campaigns || 0) +
         (docs.events || 0) +
@@ -185,9 +190,9 @@ export function SanitySyncButton() {
       });
 
       router.refresh();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to sync Sanity content.");
+    } catch (err: unknown) {
+
+      toast.error(err instanceof Error ? err.message : "Failed to sync Sanity content.");
     } finally {
       setLoading(false);
     }

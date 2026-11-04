@@ -1,4 +1,4 @@
-import { createHash } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 
 import {
   ContactSubmissionModel,
@@ -6,6 +6,7 @@ import {
   type DonationDocument,
   type DonationStatus,
   type PaymentProvider,
+  EventRegistrationModel,
   NewsletterSubscriberModel,
   VolunteerApplicationModel,
 } from "../../models";
@@ -26,6 +27,7 @@ import {
 import type {
   ContactInput,
   DonationInput,
+  EventRegistrationInput,
   NewsletterInput,
   VolunteerInput,
 } from "./validation";
@@ -71,6 +73,7 @@ export type DonationRecord = {
   externalOrderId?: string;
   externalSessionId?: string;
   externalPaymentId?: string;
+  accountUserId?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -106,6 +109,7 @@ function donationRecord(document: DonationDocument): DonationRecord {
     externalOrderId: document.externalOrderId,
     externalSessionId: document.externalSessionId,
     externalPaymentId: document.externalPaymentId,
+    accountUserId: document.accountUserId,
     createdAt: document.createdAt.toISOString(),
     updatedAt: document.updatedAt.toISOString(),
   };
@@ -452,6 +456,95 @@ export async function storeVolunteerApplication(
       id: document._id.toString(),
       status: "submitted",
       submittedAt: document.createdAt.toISOString(),
+    },
+    persistence: "mongodb",
+    created: true,
+  };
+}
+
+
+export type EventRegistrationRecord = {
+  id: string;
+  ticketCode: string;
+  eventId: string;
+  eventTitle: string;
+  eventDate?: string;
+  eventLocation?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  ticketsCount: number;
+  status: "confirmed" | "attended" | "cancelled";
+  registeredAt: string;
+};
+
+export async function storeEventRegistration(
+  input: EventRegistrationInput,
+  metadata: RequestMetadata,
+): Promise<StoredResult<EventRegistrationRecord>> {
+  const connection = await connectMongo();
+  const ticketCode = `TKT-${randomBytes(4).toString("hex").toUpperCase()}`;
+
+  if (!connection) {
+    assertInMemoryWriteAllowed();
+    const record = putDemoRecord(
+      "event_registrations",
+      {
+        email: input.email,
+        eventId: input.eventId,
+        ticketCode,
+      },
+      {
+        ...input,
+        ticketCode,
+        status: "confirmed",
+        requestId: metadata.requestId,
+        accountUserId: metadata.accountUserId,
+      },
+    );
+    return {
+      record: {
+        id: record.id,
+        ticketCode,
+        eventId: input.eventId,
+        eventTitle: input.eventTitle,
+        eventDate: input.eventDate,
+        eventLocation: input.eventLocation,
+        name: input.name,
+        email: input.email,
+        phone: input.phone,
+        ticketsCount: input.ticketsCount,
+        status: "confirmed",
+        registeredAt: record.createdAt,
+      },
+      persistence: "memory",
+      created: true,
+    };
+  }
+
+  const document = await EventRegistrationModel.create({
+    ...input,
+    ticketCode,
+    status: "confirmed",
+    requestId: metadata.requestId,
+    accountUserId: metadata.accountUserId,
+    ipHash: digest(metadata.ip),
+  });
+
+  return {
+    record: {
+      id: document._id.toString(),
+      ticketCode,
+      eventId: document.eventId,
+      eventTitle: document.eventTitle,
+      eventDate: document.eventDate,
+      eventLocation: document.eventLocation,
+      name: document.name,
+      email: document.email,
+      phone: document.phone,
+      ticketsCount: document.ticketsCount,
+      status: document.status,
+      registeredAt: document.createdAt.toISOString(),
     },
     persistence: "mongodb",
     created: true,

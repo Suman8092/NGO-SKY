@@ -120,18 +120,18 @@ export function VolunteerPage({
         title={
           <>
             Your time can become someone’s{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               turning point.
             </span>
           </>
         }
       >
-        <div className={`rounded-[2rem] p-8 ${pageSurface}`}>
+        <div className={`rounded-xl p-8 ${pageSurface}`}>
           <HeartHandshake
             aria-hidden="true"
-            className="h-10 w-10 text-teal-700 dark:text-teal-300"
+            className="h-10 w-10 text-forest dark:text-[#70d5b3]"
           />
-          <p className="mt-8 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+          <p className="mt-8 text-2xl font-semibold tracking-tight text-ink">
             Volunteer roles are designed around reliability, respect, and real
             programme need.
           </p>
@@ -166,7 +166,7 @@ export function VolunteerPage({
         </div>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <div>
@@ -192,13 +192,13 @@ export function VolunteerPage({
                   className={`rounded-[1.75rem] p-7 ${pageSurface}`}
                   key={step.number}
                 >
-                  <p className="text-xs font-extrabold text-teal-700 dark:text-teal-300">
+                  <p className="text-xs font-extrabold text-forest dark:text-[#70d5b3]">
                     {step.number}
                   </p>
-                  <h3 className="mt-7 text-xl font-bold text-slate-950 dark:text-white">
+                  <h3 className="mt-7 text-xl font-bold text-ink">
                     {step.title}
                   </h3>
-                  <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                  <p className="mt-3 leading-7 text-ink/65">
                     {step.description}
                   </p>
                 </li>
@@ -239,7 +239,7 @@ export function VolunteerPage({
               />
             </div>
           </div>
-          <aside className="rounded-[2rem] bg-teal-950 p-8 text-white shadow-2xl sm:p-10">
+          <aside className="rounded-xl bg-teal-950 p-8 text-white shadow-2xl sm:p-10">
             <ShieldCheck aria-hidden="true" className="h-9 w-9 text-teal-300" />
             <h3 className="mt-8 text-2xl font-bold">
               Safeguarding is everyone’s responsibility
@@ -261,7 +261,7 @@ export function VolunteerPage({
       </section>
 
       <section
-        className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28"
+        className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28"
         id="apply"
       >
         <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[.7fr_1.3fr] lg:px-8">
@@ -280,19 +280,19 @@ export function VolunteerPage({
               }
             />
             <div className={`mt-8 rounded-[1.75rem] p-6 ${pageSurface}`}>
-              <p className="font-bold text-slate-950 dark:text-white">
+              <p className="font-bold text-ink">
                 {submissionsAvailable
                   ? "What happens after you apply?"
                   : "No application will be collected"}
               </p>
-              <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              <p className="mt-3 text-sm leading-6 text-ink/65">
                 {submissionsAvailable
                   ? "Submitted applications enter the managed volunteer review workflow. A submission does not promise a role or response date."
                   : "The form stays hidden until durable storage, managed notification delivery, and an explicit production launch flag are configured."}
               </p>
             </div>
           </div>
-          <div className={`rounded-[2rem] p-7 sm:p-10 ${pageSurface}`}>
+          <div className={`rounded-xl p-7 sm:p-10 ${pageSurface}`}>
             {submissionsAvailable ? (
               <VolunteerForm initialInterest={initialInterest} />
             ) : (
@@ -361,7 +361,7 @@ export function ContactPage({
         title={
           <>
             A good conversation can be the start of{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               meaningful change.
             </span>
           </>
@@ -377,9 +377,9 @@ export function ContactPage({
               >
                 <option.icon
                   aria-hidden="true"
-                  className="h-6 w-6 text-teal-700 dark:text-teal-300"
+                  className="h-6 w-6 text-forest dark:text-[#70d5b3]"
                 />
-                <p className="mt-7 font-bold text-slate-950 dark:text-white">
+                <p className="mt-7 font-bold text-ink">
                   {option.title}
                 </p>
                 <p className="mt-1 break-all text-sm text-slate-500 transition group-hover:text-teal-700 dark:text-slate-400 dark:group-hover:text-teal-300">
@@ -393,14 +393,14 @@ export function ContactPage({
             >
               <MessageCircle
                 aria-hidden="true"
-                className="h-6 w-6 text-teal-700 dark:text-teal-300"
+                className="h-6 w-6 text-forest dark:text-[#70d5b3]"
               />
-              <p className="mt-7 font-bold text-slate-950 dark:text-white">
+              <p className="mt-7 font-bold text-ink">
                 {submissionsAvailable
                   ? "Managed contact form"
                   : "No public contact channel is active"}
               </p>
-              <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm leading-6 text-ink/50">
                 {submissionsAvailable
                   ? "Use the form below. A public email address will appear here only after it is verified."
                   : "No managed form or verified public email address is available on this deployment."}
@@ -425,16 +425,16 @@ export function ContactPage({
           />
           <div className="mt-9 space-y-5">
             <div className="flex gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-teal-100 text-teal-800 dark:bg-teal-400/10 dark:text-teal-300">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
                 <Clock3 aria-hidden="true" className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-950 dark:text-white">
+                <h3 className="font-bold text-ink">
                   {submissionsAvailable
                     ? "Response handling"
                     : "No submission is collected"}
                 </h3>
-                <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-1 text-sm leading-6 text-ink/65">
                   {submissionsAvailable
                     ? "Response times depend on the type of request. Please avoid sending urgent or emergency reports through this website."
                     : "The website cannot accept or route a message while the managed workflow is unavailable."}
@@ -446,12 +446,12 @@ export function ContactPage({
                 <Accessibility aria-hidden="true" className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-bold text-slate-950 dark:text-white">
+                <h3 className="font-bold text-ink">
                   {submissionsAvailable
                     ? "Access support"
                     : "Accessibility contact pending"}
                 </h3>
-                <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-1 text-sm leading-6 text-ink/65">
                   {submissionsAvailable
                     ? "Share your preferred language, format, or communication adjustment in the managed form."
                     : "A verified accessibility contact route will be published before requests are accepted."}
@@ -460,7 +460,7 @@ export function ContactPage({
             </div>
           </div>
         </div>
-        <div className={`rounded-[2rem] p-7 sm:p-10 ${pageSurface}`}>
+        <div className={`rounded-xl p-7 sm:p-10 ${pageSurface}`}>
           {submissionsAvailable ? (
             <ContactForm initialSubject={initialSubject} />
           ) : (
@@ -497,13 +497,13 @@ export function DonatePage({
         title={
           <>
             Turn your care into{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               forward motion.
             </span>
           </>
         }
       >
-        <div className="relative overflow-hidden rounded-[2rem] bg-teal-950 p-8 text-white shadow-2xl sm:p-10">
+        <div className="relative overflow-hidden rounded-xl bg-teal-950 p-8 text-white shadow-2xl sm:p-10">
           <div
             aria-hidden="true"
             className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-teal-400/20 blur-3xl"
@@ -578,13 +578,13 @@ export function DonatePage({
             <div className="flex items-start gap-3">
               <ShieldCheck
                 aria-hidden="true"
-                className="mt-0.5 h-5 w-5 shrink-0 text-teal-700 dark:text-teal-300"
+                className="mt-0.5 h-5 w-5 shrink-0 text-forest dark:text-[#70d5b3]"
               />
               <div>
-                <p className="font-bold text-slate-950 dark:text-white">
+                <p className="font-bold text-ink">
                   Your information is protected
                 </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm leading-6 text-ink/65">
                   The form validates required details on the server and does not
                   store complete card information.
                 </p>
@@ -592,7 +592,7 @@ export function DonatePage({
             </div>
           </div>
         </aside>
-        <div className={`rounded-[2rem] p-7 sm:p-10 ${pageSurface}`}>
+        <div className={`rounded-xl p-7 sm:p-10 ${pageSurface}`}>
           {checkoutCancelled ? (
             <div
               className="mb-7 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-100"
@@ -630,7 +630,7 @@ export function DonatePage({
         </div>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-24">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <SectionHeading
             align="center"
@@ -655,7 +655,7 @@ export function DonatePage({
               title="Visible accountability"
             />
           </div>
-          <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-6 text-slate-500 dark:text-slate-400">
+          <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-6 text-ink/50">
             Questions about payment availability or an existing transaction?{" "}
             <Link
               className="font-bold text-teal-700 underline underline-offset-4 dark:text-teal-300"
@@ -767,12 +767,12 @@ export function SearchPage({ query = "" }: { query?: string }) {
 
   return (
     <main>
-      <section className="border-b border-slate-200 bg-slate-50 pb-16 pt-32 dark:border-white/10 dark:bg-slate-950 sm:pb-20 sm:pt-36">
+      <section className="border-b border-ink/[0.08] bg-paper pb-16 pt-32 dark:border-white/10 dark:bg-slate-950 sm:pb-20 sm:pt-36">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-teal-700 dark:text-teal-300">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-forest dark:text-[#70d5b3]">
             Search Skymeredian
           </p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-white sm:text-6xl">
+          <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-ink sm:text-6xl">
             What are you looking for?
           </h1>
           <form action="/search" className="relative mt-8" role="search">
@@ -805,13 +805,13 @@ export function SearchPage({ query = "" }: { query?: string }) {
       <section className="mx-auto min-h-[34rem] max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
         {normalizedQuery ? (
           <>
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-6 dark:border-white/10">
-              <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink/[0.08] pb-6 dark:border-white/10">
+              <h2 className="text-2xl font-bold text-ink">
                 {results.length} {results.length === 1 ? "result" : "results"}{" "}
                 for “{query.trim()}”
               </h2>
               <Link
-                className="text-sm font-bold text-teal-700 dark:text-teal-300"
+                className="text-sm font-bold text-forest dark:text-[#70d5b3]"
                 href="/search"
               >
                 Clear search
@@ -827,18 +827,18 @@ export function SearchPage({ query = "" }: { query?: string }) {
                   >
                     <result.icon
                       aria-hidden="true"
-                      className="h-7 w-7 text-teal-700 dark:text-teal-300"
+                      className="h-7 w-7 text-forest dark:text-[#70d5b3]"
                     />
                     <p className="mt-7 text-xs font-extrabold uppercase tracking-[0.16em] text-slate-400">
                       {result.type}
                     </p>
-                    <h3 className="mt-2 text-xl font-bold text-slate-950 dark:text-white">
+                    <h3 className="mt-2 text-xl font-bold text-ink">
                       {result.title}
                     </h3>
-                    <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                    <p className="mt-3 leading-7 text-ink/65">
                       {result.description}
                     </p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-teal-700 dark:text-teal-300">
+                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]">
                       Open{" "}
                       <ArrowRight
                         aria-hidden="true"
@@ -850,13 +850,13 @@ export function SearchPage({ query = "" }: { query?: string }) {
               </div>
             ) : (
               <div className="mx-auto max-w-xl py-20 text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-teal-100 text-teal-800 dark:bg-teal-400/10 dark:text-teal-300">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-forest/10 text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
                   <Search aria-hidden="true" className="h-7 w-7" />
                 </div>
-                <h2 className="mt-7 text-2xl font-bold text-slate-950 dark:text-white">
+                <h2 className="mt-7 text-2xl font-bold text-ink">
                   No close matches yet
                 </h2>
-                <p className="mt-3 leading-7 text-slate-600 dark:text-slate-300">
+                <p className="mt-3 leading-7 text-ink/65">
                   Try a shorter phrase or browse the most-used destinations
                   below. You can also ask our team directly.
                 </p>

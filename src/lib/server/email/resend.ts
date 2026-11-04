@@ -189,3 +189,38 @@ export function sendDonationConfirmation(donation: DonationRecord): Promise<Emai
     },
   ]);
 }
+
+
+export function sendEventRegistrationConfirmation(
+  input: {
+    name: string;
+    email: string;
+    eventTitle: string;
+    eventDate?: string;
+    eventLocation?: string;
+    ticketCode: string;
+    ticketsCount: number;
+  },
+  registrationId: string,
+): Promise<EmailDeliverySummary> {
+  const admin = getServerEnv().CONTACT_NOTIFICATION_EMAIL;
+  const messages = [
+    {
+      to: input.email,
+      subject: `Your pass for ${input.eventTitle} (${input.ticketCode})`,
+      key: `event-reg-${registrationId}`,
+      html: `<p>Hello ${escapeHtml(input.name)},</p><p>You are confirmed for <strong>${escapeHtml(input.eventTitle)}</strong>.</p><p><strong>Pass Reference:</strong> ${escapeHtml(input.ticketCode)}<br><strong>Seats reserved:</strong> ${input.ticketsCount}${input.eventDate ? `<br><strong>Date:</strong> ${escapeHtml(input.eventDate)}` : ""}${input.eventLocation ? `<br><strong>Location:</strong> ${escapeHtml(input.eventLocation)}` : ""}</p><p>Please save this reference when arriving at the venue.</p>`,
+    },
+    ...(admin
+      ? [
+          {
+            to: admin,
+            subject: `New event registration: ${input.eventTitle}`,
+            key: `event-admin-${registrationId}`,
+            html: `<p><strong>Attendee:</strong> ${escapeHtml(input.name)} (${escapeHtml(input.email)})</p><p><strong>Event:</strong> ${escapeHtml(input.eventTitle)}</p><p><strong>Pass:</strong> ${escapeHtml(input.ticketCode)} (${input.ticketsCount} seats)</p>`,
+          },
+        ]
+      : []),
+  ];
+  return deliver(messages);
+}

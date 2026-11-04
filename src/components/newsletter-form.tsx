@@ -9,8 +9,9 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     setStatus("loading");
-    const form = new FormData(event.currentTarget);
     try {
       const response = await fetch("/api/newsletter", {
         method: "POST",
@@ -21,7 +22,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
       if (!response.ok) throw new Error(payload.error ?? "Subscription failed");
       setStatus("success");
       setMessage("You’re in. One useful field note, once a month.");
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (error) {
       setStatus("error");
       setMessage(error instanceof Error ? error.message : "Please try again.");
@@ -30,7 +31,7 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
 
   return (
     <div>
-      <form onSubmit={submit} className={compact ? "flex gap-2" : "flex flex-col gap-3 sm:flex-row"}>
+      <form onSubmit={submit} className="relative flex items-center rounded-full border border-white/20 bg-white/[0.08] p-1.5 backdrop-blur-xl transition focus-within:border-[#f3bd67] focus-within:ring-2 focus-within:ring-[#f3bd67]/20">
         <label htmlFor={compact ? "footer-email" : "newsletter-email"} className="sr-only">Email address</label>
         <input
           id={compact ? "footer-email" : "newsletter-email"}
@@ -38,11 +39,22 @@ export function NewsletterForm({ compact = false }: { compact?: boolean }) {
           type="email"
           autoComplete="email"
           required
-          placeholder="you@example.com"
-          className="min-w-0 flex-1 rounded-full border border-current/20 bg-transparent px-5 py-3 text-sm outline-none placeholder:text-current/40 focus:border-ember"
+          placeholder="Enter your email address…"
+          className="min-w-0 flex-1 bg-transparent px-5 py-3 text-sm text-white placeholder:text-white/45 outline-none"
         />
-        <button type="submit" disabled={status === "loading"} className="grid min-h-12 min-w-12 place-items-center rounded-full bg-ember px-5 font-bold text-[#1c211d] transition hover:brightness-105 disabled:opacity-60" aria-label="Subscribe to field notes">
-          {status === "loading" ? <LoaderCircle className="size-5 animate-spin" aria-hidden="true" /> : compact ? <ArrowRight className="size-5" aria-hidden="true" /> : "Get field notes"}
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#ffd385] to-[#f3bd67] px-6 text-sm font-extrabold text-[#091f1a] shadow-md transition hover:scale-[1.02] disabled:opacity-60"
+          aria-label="Subscribe to field notes"
+        >
+          {status === "loading" ? (
+            <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
+          ) : compact ? (
+            <ArrowRight className="size-4 stroke-[2.5]" aria-hidden="true" />
+          ) : (
+            "Join updates"
+          )}
         </button>
       </form>
       <p className="mt-2 min-h-5 text-xs opacity-70" role="status" aria-live="polite">{message}</p>

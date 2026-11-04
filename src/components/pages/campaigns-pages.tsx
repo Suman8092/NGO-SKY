@@ -368,7 +368,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
   const Icon = campaign.icon;
   return (
     <article
-      className={`group flex h-full flex-col overflow-hidden rounded-[2rem] ${pageSurface}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-xl ${pageSurface}`}
     >
       <div className="relative flex min-h-52 items-end overflow-hidden bg-gradient-to-br from-teal-950 via-teal-800 to-cyan-700 p-7 text-white">
         <div
@@ -398,11 +398,11 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
         </div>
       </div>
       <div className="flex flex-1 flex-col p-7">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-ink/50">
           <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
           {campaign.location}
         </div>
-        <h2 className="mt-4 text-2xl font-bold tracking-[-0.025em] text-slate-950 dark:text-white">
+        <h2 className="mt-4 text-2xl font-bold tracking-[-0.025em] text-ink">
           <Link
             className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
             href={`/campaigns/${campaign.slug}`}
@@ -410,7 +410,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
             {campaign.title}
           </Link>
         </h2>
-        <p className="mt-3 flex-1 leading-7 text-slate-600 dark:text-slate-300">
+        <p className="mt-3 flex-1 leading-7 text-ink/65">
           {campaign.shortDescription}
         </p>
         <div className="mt-7">
@@ -418,24 +418,24 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
         </div>
         <div className="mt-5 flex items-end justify-between gap-4">
           <div>
-            <p className="text-lg font-extrabold text-slate-950 dark:text-white">
+            <p className="text-lg font-extrabold text-ink">
               {formatCurrency(campaign.raised)}
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-ink/50">
               raised of {formatCurrency(campaign.goal)}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm font-bold text-slate-800 dark:text-slate-200">
+            <p className="text-sm font-bold text-ink/90">
               {campaign.daysLeft} days
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-ink/50">
               remaining
             </p>
           </div>
         </div>
         <Link
-          className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-teal-700 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400"
+          className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#075f52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:bg-teal-500 dark:text-slate-950 dark:hover:bg-teal-400"
           href={`/campaigns/${campaign.slug}`}
         >
           View campaign{" "}
@@ -494,7 +494,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
         title={
           <>
             Choose the change you want to{" "}
-            <span className="text-teal-700 dark:text-teal-300">
+            <span className="text-forest dark:text-[#70d5b3]">
               move forward.
             </span>
           </>
@@ -515,10 +515,10 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
           </div>
           <div className={`rounded-[1.75rem] p-7 ${pageSurface}`}>
             <Users aria-hidden="true" className="h-7 w-7 text-amber-500" />
-            <p className="mt-8 text-3xl font-semibold text-slate-950 dark:text-white">
+            <p className="mt-8 text-3xl font-semibold text-ink">
               {totalSupporters.toLocaleString("en-IN")}
             </p>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-ink/50">
               people choosing to act
             </p>
           </div>
@@ -526,13 +526,13 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
             <div className="flex items-start gap-4">
               <ShieldCheck
                 aria-hidden="true"
-                className="mt-0.5 h-6 w-6 shrink-0 text-teal-700 dark:text-teal-300"
+                className="mt-0.5 h-6 w-6 shrink-0 text-forest dark:text-[#70d5b3]"
               />
               <div>
-                <p className="font-bold text-slate-950 dark:text-white">
+                <p className="font-bold text-ink">
                   Clear goals. Visible progress.
                 </p>
-                <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-1 text-sm leading-6 text-ink/65">
                   Every campaign explains what funds unlock, reports updates,
                   and closes with a learning summary.
                 </p>
@@ -561,7 +561,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
                 aria-current={
                   activeCategory === item.value ? "page" : undefined
                 }
-                className={`rounded-full border px-4 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${activeCategory === item.value ? "border-teal-700 bg-teal-700 text-white" : "border-slate-200 bg-white text-slate-600 hover:border-teal-500 hover:text-teal-800 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"}`}
+                className={`rounded-full border px-4 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 ${activeCategory === item.value ? "border-teal-700 bg-teal-700 text-white" : "border-ink/[0.08] bg-white text-slate-600 hover:border-teal-500 hover:text-teal-800 dark:border-white/10 dark:bg-white/5 dark:text-slate-300"}`}
                 href={
                   item.value === "all"
                     ? "/campaigns"
@@ -581,7 +581,7 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
         </div>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-24">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[.8fr_1.2fr] lg:items-center lg:px-8">
           <SectionHeading
             description="We design campaign giving to be clear before you donate and accountable after you do."
@@ -612,15 +612,15 @@ export function CampaignsPage({ category = "all" }: { category?: string }) {
               >
                 <item.icon
                   aria-hidden="true"
-                  className="h-6 w-6 text-teal-700 dark:text-teal-300"
+                  className="h-6 w-6 text-forest dark:text-[#70d5b3]"
                 />
                 <p className="mt-7 text-xs font-bold text-slate-400">
                   0{index + 1}
                 </p>
-                <h3 className="mt-2 font-bold text-slate-950 dark:text-white">
+                <h3 className="mt-2 font-bold text-ink">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm leading-6 text-ink/65">
                   {item.text}
                 </p>
               </article>
@@ -650,7 +650,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
 
   return (
     <main>
-      <section className="relative isolate overflow-hidden border-b border-slate-200 bg-slate-50 pb-20 pt-32 dark:border-white/10 dark:bg-slate-950 sm:pb-24 sm:pt-36">
+      <section className="relative isolate overflow-hidden border-b border-ink/[0.08] bg-paper pb-20 pt-32 dark:border-white/10 dark:bg-slate-950 sm:pb-24 sm:pt-36">
         <div
           aria-hidden="true"
           className="absolute -right-24 top-10 -z-10 h-96 w-96 rounded-full bg-teal-400/15 blur-3xl"
@@ -675,44 +675,44 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               <div className="mt-7 flex h-16 w-16 items-center justify-center rounded-3xl bg-teal-700 text-white shadow-lg shadow-teal-900/20">
                 <Icon aria-hidden="true" className="h-8 w-8" />
               </div>
-              <h1 className="mt-7 max-w-4xl text-balance text-4xl font-semibold tracking-[-0.045em] text-slate-950 dark:text-white sm:text-6xl">
+              <h1 className="mt-7 max-w-4xl text-balance text-4xl font-semibold tracking-[-0.045em] text-ink sm:text-6xl">
                 {campaign.title}
               </h1>
-              <p className="mt-6 max-w-3xl text-pretty text-lg leading-8 text-slate-600 dark:text-slate-300 sm:text-xl">
+              <p className="mt-6 max-w-3xl text-pretty text-lg leading-8 text-ink/65 sm:text-xl">
                 {campaign.shortDescription}
               </p>
-              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-slate-600 dark:text-slate-300">
+              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-ink/65">
                 <span className="flex items-center gap-2">
                   <MapPin
                     aria-hidden="true"
-                    className="h-4 w-4 text-teal-700 dark:text-teal-300"
+                    className="h-4 w-4 text-forest dark:text-[#70d5b3]"
                   />
                   {campaign.location}
                 </span>
                 <span className="flex items-center gap-2">
                   <Users
                     aria-hidden="true"
-                    className="h-4 w-4 text-teal-700 dark:text-teal-300"
+                    className="h-4 w-4 text-forest dark:text-[#70d5b3]"
                   />
                   {campaign.supporters.toLocaleString("en-IN")} supporters
                 </span>
                 <span className="flex items-center gap-2">
                   <Clock3
                     aria-hidden="true"
-                    className="h-4 w-4 text-teal-700 dark:text-teal-300"
+                    className="h-4 w-4 text-forest dark:text-[#70d5b3]"
                   />
                   {campaign.daysLeft} days left
                 </span>
               </div>
             </div>
             <aside
-              className={`rounded-[2rem] p-7 lg:sticky lg:top-28 ${pageSurface}`}
+              className={`rounded-xl p-7 lg:sticky lg:top-28 ${pageSurface}`}
               aria-label="Campaign donation summary"
             >
-              <p className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+              <p className="text-3xl font-semibold tracking-tight text-ink">
                 {formatCurrency(campaign.raised)}
               </p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-sm text-ink/50">
                 raised of {formatCurrency(campaign.goal)}
               </p>
               <div className="mt-6">
@@ -726,16 +726,16 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </Link>
               <a
-                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-slate-200 px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:border-teal-500 hover:text-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/10 dark:text-slate-200 dark:hover:text-teal-200"
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-ink/[0.08] px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:border-teal-500 hover:text-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:border-white/10 dark:text-slate-200 dark:hover:text-teal-200"
                 href={`mailto:?subject=${encodeURIComponent(`Support ${campaign.title}`)}&body=${encodeURIComponent(`I thought you might care about this Skymeredian Foundation campaign: /campaigns/${campaign.slug}`)}`}
               >
                 <Share2 aria-hidden="true" className="h-4 w-4" />
                 Share with a friend
               </a>
-              <p className="mt-5 flex items-start gap-2 border-t border-slate-200 pt-5 text-xs leading-5 text-slate-500 dark:border-white/10 dark:text-slate-400">
+              <p className="mt-5 flex items-start gap-2 border-t border-ink/[0.08] pt-5 text-xs leading-5 text-slate-500 dark:border-white/10 dark:text-slate-400">
                 <ShieldCheck
                   aria-hidden="true"
-                  className="mt-0.5 h-4 w-4 shrink-0 text-teal-700 dark:text-teal-300"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-forest dark:text-[#70d5b3]"
                 />
                 Ask the team which verified support options are currently
                 available for this work.
@@ -752,12 +752,12 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               eyebrow="Why this matters"
               title="The story behind the campaign"
             />
-            <div className="mt-8 space-y-6 text-lg leading-8 text-slate-700 dark:text-slate-300">
+            <div className="mt-8 space-y-6 text-lg leading-8 text-ink/80">
               {campaign.story.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
-            <figure className="my-12 rounded-[2rem] bg-teal-950 p-8 text-white sm:p-10">
+            <figure className="my-12 rounded-xl bg-teal-950 p-8 text-white sm:p-10">
               <Quote aria-hidden="true" className="h-8 w-8 text-teal-300" />
               <blockquote className="mt-6 text-pretty text-2xl font-semibold leading-9">
                 “{campaign.quote.text}”
@@ -781,10 +781,10 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
           <aside className="space-y-5">
             <div className={`rounded-[1.75rem] p-6 ${pageSurface}`}>
               <Sparkles aria-hidden="true" className="h-6 w-6 text-amber-500" />
-              <h2 className="mt-6 text-lg font-bold text-slate-950 dark:text-white">
+              <h2 className="mt-6 text-lg font-bold text-ink">
                 Ways to help
               </h2>
-              <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              <ul className="mt-4 space-y-3 text-sm leading-6 text-ink/65">
                 <li>Give any amount securely</li>
                 <li>Invite friends to support</li>
                 <li>Ask your employer to match</li>
@@ -794,12 +794,12 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
             <div className={`rounded-[1.75rem] p-6 ${pageSurface}`}>
               <BadgeCheck
                 aria-hidden="true"
-                className="h-6 w-6 text-teal-700 dark:text-teal-300"
+                className="h-6 w-6 text-forest dark:text-[#70d5b3]"
               />
-              <h2 className="mt-6 text-lg font-bold text-slate-950 dark:text-white">
+              <h2 className="mt-6 text-lg font-bold text-ink">
                 Campaign standards
               </h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+              <p className="mt-3 text-sm leading-6 text-ink/65">
                 Safeguarding, responsible data, budget controls, partner checks,
                 and community feedback are built into delivery.
               </p>
@@ -808,7 +808,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
         </div>
       </section>
 
-      <section className="border-y border-slate-200/80 bg-slate-50 py-20 dark:border-white/10 dark:bg-slate-950/60 lg:py-28">
+      <section className="border-y border-ink/[0.07] bg-paper/60 py-20 dark:border-white/[0.08] dark:bg-[#061814]/60 lg:py-28">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
             <SectionHeading
@@ -823,14 +823,14 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                   key={item.label}
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-bold text-slate-950 dark:text-white">
+                    <h3 className="font-bold text-ink">
                       {item.label}
                     </h3>
-                    <span className="text-lg font-extrabold text-teal-700 dark:text-teal-300">
+                    <span className="text-lg font-extrabold text-forest dark:text-[#70d5b3]">
                       {item.percent}%
                     </span>
                   </div>
-                  <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  <p className="mt-3 text-sm leading-6 text-ink/65">
                     {item.detail}
                   </p>
                 </article>
@@ -849,7 +849,7 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
               title="Campaign updates"
             />
             <Link
-              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-teal-700 dark:text-teal-300"
+              className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-forest dark:text-[#70d5b3]"
               href="/contact"
             >
               Ask a question{" "}
@@ -862,14 +862,14 @@ export function CampaignDetailPage({ campaign }: { campaign: Campaign }) {
                 className={`rounded-[1.5rem] p-6 ${pageSurface}`}
                 key={update.date}
               >
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-forest dark:text-[#70d5b3]">
                   <CalendarDays aria-hidden="true" className="h-4 w-4" />
                   {update.date}
                 </div>
-                <h3 className="mt-4 text-xl font-bold text-slate-950 dark:text-white">
+                <h3 className="mt-4 text-xl font-bold text-ink">
                   {update.title}
                 </h3>
-                <p className="mt-2 leading-7 text-slate-600 dark:text-slate-300">
+                <p className="mt-2 leading-7 text-ink/65">
                   {update.description}
                 </p>
               </li>

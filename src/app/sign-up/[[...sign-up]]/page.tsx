@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { BrandMark } from "@/components/brand-mark";
 import { SignUp } from "@clerk/nextjs";
 
 import { AuthUnavailable } from "@/components/auth/auth-unavailable";
@@ -8,8 +10,11 @@ export default function SignUpPage() {
   return (
     <main
       id="main-content"
-      className="flex min-h-screen items-center justify-center bg-[#ecf0e9] p-6 dark:bg-[#0c1614]"
+      className="flex min-h-screen flex-col items-center justify-center gap-8 bg-[#ecf0e9] p-6 dark:bg-[#0c1614]"
     >
+      <Link href="/" aria-label="Skymeredian Foundation home">
+        <BrandMark className="w-40" priority />
+      </Link>
       {enabled ? (
         <SignUp
           path="/sign-up"

@@ -173,7 +173,30 @@ export const contentQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(50).default(12),
 });
 
+
+export const eventRegistrationSchema = z
+  .object({
+    eventId: cleanSingleLine(2, 120),
+    eventTitle: cleanSingleLine(2, 200),
+    eventDate: optionalText(100),
+    eventLocation: optionalText(150),
+    name: cleanSingleLine(2, 120),
+    email: z.string().trim().toLowerCase().email().max(254),
+    phone: z.preprocess(
+      (value) =>
+        typeof value === "string" && value.trim() === "" ? undefined : value,
+      phone.optional(),
+    ),
+    ticketsCount: z.coerce.number().int().min(1).max(10).default(1),
+    notes: optionalText(1_000),
+    consent: z.literal(true),
+    website: honeypot,
+  })
+  .strict();
+
 export type ContactInput = z.infer<typeof contactSchema>;
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
 export type VolunteerInput = z.infer<typeof volunteerSchema>;
 export type DonationInput = z.infer<typeof donationSchema>;
+
+export type EventRegistrationInput = z.infer<typeof eventRegistrationSchema>;

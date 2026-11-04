@@ -235,16 +235,26 @@ export default function HomePage() {
         <Hero />
 
         <section
-          className="overflow-hidden border-b border-ink/10 bg-paper py-7"
-          aria-label="Our partners"
+          className="relative overflow-hidden border-b border-ink/[0.07] bg-paper/60 py-8 backdrop-blur-sm dark:border-white/[0.07]"
+          aria-label="Our partners and field collaborators"
         >
+          <div className="page-shell mb-4 flex items-center justify-between">
+            <span className="text-[0.65rem] font-bold uppercase tracking-[0.25em] text-ink/40">
+              Trusted Field Collaborators & Institutional Partners
+            </span>
+            <span className="hidden items-center gap-1.5 text-[0.65rem] font-semibold tracking-wider text-forest/70 sm:inline-flex">
+              <span className="size-1.5 rounded-full bg-forest animate-pulse" />
+              Verified Deployments
+            </span>
+          </div>
           <div className="mask-fade-x mx-auto max-w-[1440px] overflow-hidden">
-            <div className="flex w-max animate-marquee items-center gap-14 px-7 motion-reduce:animate-none sm:gap-20">
+            <div className="flex w-max animate-marquee items-center gap-16 px-7 motion-reduce:animate-none sm:gap-24">
               {[...partners, ...partners].map((partner, index) => (
                 <span
                   key={`${partner}-${index}`}
-                  className="whitespace-nowrap font-display text-sm font-extrabold uppercase tracking-[0.12em] text-ink/32"
+                  className="group flex items-center gap-3 whitespace-nowrap font-display text-sm font-extrabold uppercase tracking-[0.15em] text-ink/35 transition hover:text-forest dark:hover:text-[#70d5b3]"
                 >
+                  <span className="size-1 rounded-full bg-ink/20 group-hover:bg-forest transition" />
                   {partner}
                 </span>
               ))}
@@ -320,30 +330,40 @@ export default function HomePage() {
                 <div className="mt-9 grid gap-4 sm:grid-cols-2">
                   {[
                     [
+                      "01",
                       "Listen first",
                       "Every program begins with a paid community design process.",
                     ],
                     [
+                      "02",
                       "Build for ownership",
                       "Local institutions lead delivery, data, and maintenance.",
                     ],
                     [
+                      "03",
                       "Measure what matters",
                       "Outcomes and lived experience—not activity counts alone.",
                     ],
                     [
+                      "04",
                       "Show the full picture",
                       "Budgets, setbacks, corrections, and results are published.",
                     ],
-                  ].map(([title, detail]) => (
+                  ].map(([num, title, detail]) => (
                     <div
                       key={title}
-                      className="rounded-2xl border border-ink/10 bg-white/35 p-5 dark:bg-white/[0.035]"
+                      className="group border-t border-ink/20 py-5"
                     >
-                      <h3 className="font-display text-base font-bold">
+                      <div className="flex items-center justify-between">
+                        <span className="font-display text-xs font-extrabold tracking-wider text-forest/70 dark:text-[#70d5b3]">
+                          {num}
+                        </span>
+                        <span className="size-1.5 rounded-full bg-forest/30 transition group-hover:bg-forest" />
+                      </div>
+                      <h3 className="mt-3 font-display text-base font-bold text-ink">
                         {title}
                       </h3>
-                      <p className="mt-2 text-sm leading-6 text-ink/55">
+                      <p className="mt-2 text-sm leading-relaxed text-ink/60">
                         {detail}
                       </p>
                     </div>
@@ -384,40 +404,81 @@ export default function HomePage() {
                 </Link>
               </Reveal>
             </div>
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {stats.map((stat, index) => {
                 const Icon = stat.icon;
+                const isHero = index === 0;
                 return (
-                  <Reveal key={stat.label} delay={index * 0.06}>
+                  <Reveal key={stat.label} delay={index * 0.06} className={isHero ? "lg:col-span-2" : ""}>
                     <article
-                      className={`card-hover min-h-[230px] rounded-4xl border border-white/65 bg-paper p-6 shadow-soft sm:p-7 ${index === 0 ? "lg:col-span-2 lg:grid lg:grid-cols-[1fr_auto]" : ""}`}
+                      className={`relative overflow-hidden transition-all duration-500 ease-out hover:-translate-y-1 ${
+                        isHero
+                          ? "rounded-xl bg-gradient-to-br from-[#0c382f] via-[#092b24] to-[#051c17] p-8 text-white shadow-lift sm:p-10 flex flex-col justify-between min-h-[300px]"
+                          : "border-t border-ink/20 py-7"
+                      }`}
                     >
-                      <div>
-                        <div className="grid size-11 place-items-center rounded-2xl bg-forest/10 text-forest">
-                          <Icon className="size-5" aria-hidden="true" />
-                        </div>
-                        <p className="mt-7 font-display text-5xl font-semibold tracking-[-0.055em] sm:text-6xl">
-                          <Counter value={stat.value} suffix={stat.suffix} />
-                        </p>
-                        <h3 className="mt-3 font-display text-lg font-bold">
-                          {stat.label}
-                        </h3>
-                        <p className="mt-1 text-xs leading-5 text-ink/45">
-                          {stat.detail}
-                        </p>
-                      </div>
-                      {index === 0 ? (
-                        <div className="mt-6 flex items-end lg:mt-0">
-                          <div className="rounded-2xl bg-forest p-4 text-white dark:text-[#071813]">
-                            <p className="text-[0.6rem] font-bold uppercase tracking-wider opacity-60">
-                              Latest verification
+                      {isHero ? (
+                        <>
+                          <div aria-hidden="true" className="absolute -right-20 -top-20 size-72 rounded-full bg-[#70d5b3]/10 blur-3xl pointer-events-none" />
+                          <div className="flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                              <div className="grid size-12 place-items-center rounded-2xl bg-white/10 text-[#70d5b3] backdrop-blur-md">
+                                <Icon className="size-6" aria-hidden="true" />
+                              </div>
+                              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#70d5b3]">
+                                Core Direct Footprint
+                              </span>
+                            </div>
+                            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1.5 text-[0.68rem] font-bold uppercase tracking-wider text-white/90 backdrop-blur-md">
+                              <span className="size-2 rounded-full bg-[#70d5b3] animate-pulse" />
+                              Verified · 31 July 2026
+                            </span>
+                          </div>
+                          <div className="mt-8 flex flex-col justify-between sm:flex-row sm:items-end gap-6">
+                            <div>
+                              <p className="font-display text-6xl font-semibold tracking-[-0.06em] text-white sm:text-7xl">
+                                <Counter value={stat.value} suffix={stat.suffix} />
+                              </p>
+                              <h3 className="mt-2 font-display text-2xl font-bold tracking-tight text-white">
+                                {stat.label}
+                              </h3>
+                              <p className="mt-1 text-sm text-white/65">
+                                {stat.detail} across 42 grassroots districts
+                              </p>
+                            </div>
+                            <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur-sm sm:max-w-xs">
+                              <p className="text-[0.65rem] font-bold uppercase tracking-wider text-[#70d5b3]">
+                                Accountability
+                              </p>
+                              <p className="mt-1 text-xs leading-relaxed text-white/75">
+                                Every participant is linked to field attendance & statutory review.
+                              </p>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="flex flex-col justify-between h-full">
+                          <div className="flex items-start justify-between">
+                            <div className="grid size-11 place-items-center rounded-2xl bg-forest/[0.08] text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
+                              <Icon className="size-5" aria-hidden="true" />
+                            </div>
+                            <span className="text-[0.65rem] font-bold tracking-wider text-ink/40 uppercase">
+                              Audited Metric
+                            </span>
+                          </div>
+                          <div className="mt-6">
+                            <p className="font-display text-4xl font-semibold tracking-[-0.05em] text-ink sm:text-5xl">
+                              <Counter value={stat.value} suffix={stat.suffix} />
                             </p>
-                            <p className="mt-1 text-sm font-bold">
-                              31 July 2026
+                            <h3 className="mt-2 font-display text-lg font-bold text-ink">
+                              {stat.label}
+                            </h3>
+                            <p className="mt-1 text-xs leading-relaxed text-ink/50">
+                              {stat.detail}
                             </p>
                           </div>
                         </div>
-                      ) : null}
+                      )}
                     </article>
                   </Reveal>
                 );
@@ -458,67 +519,73 @@ export default function HomePage() {
             <div className="mt-12 grid gap-5 lg:grid-cols-3">
               {campaigns.map((campaign, index) => (
                 <Reveal key={campaign.slug} delay={index * 0.08}>
-                  <article className="card-hover group overflow-hidden rounded-[2rem] border border-ink/10 bg-paper shadow-soft">
-                    <Link
-                      href={`/campaigns/${campaign.slug}`}
-                      className="relative block aspect-[4/3] overflow-hidden"
-                    >
-                      <Image
-                        src={campaign.image}
-                        alt={campaign.alt}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 33vw"
-                        className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#071c18]/70 via-transparent to-transparent" />
-                      <span className="absolute left-4 top-4 rounded-full bg-paper/90 px-3 py-1.5 text-[0.65rem] font-extrabold uppercase tracking-wider text-ink backdrop-blur-lg">
-                        {campaign.category}
-                      </span>
-                      <span className="absolute bottom-4 right-4 grid size-11 place-items-center rounded-full bg-white text-[#09231e] transition group-hover:rotate-12">
-                        <ArrowUpRight className="size-5" />
-                      </span>
-                    </Link>
-                    <div className="p-6">
-                      <p className="flex items-center gap-1.5 text-xs text-ink/45">
-                        <MapPin
-                          className="size-3.5 text-forest"
-                          aria-hidden="true"
+                  <article className="group relative flex flex-col justify-between overflow-hidden border-b border-ink/15">
+                    <div>
+                      <Link
+                        href={`/campaigns/${campaign.slug}`}
+                        className="relative block aspect-[16/11] overflow-hidden rounded-t-[2.25rem]"
+                      >
+                        <Image
+                          src={campaign.image}
+                          alt={campaign.alt}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 33vw"
+                          className="object-cover transition duration-700 ease-out group-hover:scale-[1.04]"
                         />
-                        {campaign.location}
-                      </p>
-                      <h3 className="mt-3 font-display text-2xl font-bold leading-tight tracking-tight">
-                        <Link href={`/campaigns/${campaign.slug}`}>
-                          {campaign.title}
-                        </Link>
-                      </h3>
-                      <div className="mt-6 flex items-end justify-between">
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#061e19]/75 via-transparent to-transparent" />
+                        <div className="absolute left-4 top-4 flex items-center gap-2">
+                          <span className="rounded-full border border-white/20 bg-paper/90 px-3 py-1.5 text-[0.65rem] font-extrabold uppercase tracking-wider text-ink shadow-sm backdrop-blur-md dark:bg-[#071c18]/90 dark:text-white">
+                            {campaign.category}
+                          </span>
+                        </div>
+                        <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white text-[#09231e] shadow-lg transition duration-300 group-hover:scale-110 group-hover:bg-[#f3bd67]">
+                          <ArrowUpRight className="size-4" />
+                        </span>
+                      </Link>
+                      <div className="p-7">
+                        <p className="flex items-center gap-1.5 text-xs font-semibold text-forest">
+                          <MapPin
+                            className="size-3.5 text-forest"
+                            aria-hidden="true"
+                          />
+                          {campaign.location}
+                        </p>
+                        <h3 className="mt-3 font-display text-2xl font-bold leading-tight tracking-tight text-ink transition group-hover:text-forest">
+                          <Link href={`/campaigns/${campaign.slug}`}>
+                            {campaign.title}
+                          </Link>
+                        </h3>
+                      </div>
+                    </div>
+                    <div className="px-7 pb-7 pt-0">
+                      <div className="flex items-end justify-between border-t border-ink/[0.06] pt-4 dark:border-white/[0.06]">
                         <p>
-                          <strong className="font-display text-xl">
+                          <strong className="font-display text-2xl font-bold text-ink">
                             {campaign.raised}
                           </strong>
-                          <span className="ml-1 text-xs text-ink/42">
+                          <span className="ml-1 text-xs text-ink/45">
                             raised of {campaign.goal}
                           </span>
                         </p>
-                        <span className="text-xs font-bold text-forest">
+                        <span className="rounded-full bg-forest/10 px-2.5 py-1 text-xs font-extrabold text-forest dark:bg-forest/20 dark:text-[#70d5b3]">
                           {campaign.progress}%
                         </span>
                       </div>
-                      <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/[0.07]">
+                      <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/[0.06] dark:bg-white/[0.08]">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-forest to-moss"
+                          className="h-full rounded-full bg-gradient-to-r from-forest via-moss to-ember"
                           style={{ width: `${campaign.progress}%` }}
                         />
                       </div>
-                      <div className="mt-4 flex items-center justify-between">
-                        <span className="text-xs text-ink/45">
-                          {campaign.days} days left
+                      <div className="mt-4 flex items-center justify-between text-xs">
+                        <span className="font-medium text-ink/50">
+                          {campaign.days} days remaining
                         </span>
                         <Link
                           href="/contact?subject=campaign-support"
-                          className="text-xs font-extrabold text-forest"
+                          className="font-bold text-forest transition hover:underline"
                         >
-                          Ask about support
+                          Ask about support →
                         </Link>
                       </div>
                     </div>
@@ -552,26 +619,29 @@ export default function HomePage() {
                   <Reveal key={program.title} delay={index * 0.07}>
                     <Link
                       href={program.href}
-                      className={`${program.className} group flex min-h-[320px] flex-col justify-between rounded-[2.3rem] p-7 transition duration-500 hover:-translate-y-1 sm:p-9`}
+                      className={`${program.className} group relative flex min-h-[340px] flex-col justify-between overflow-hidden rounded-xl border border-black/[0.04] p-8 shadow-sm transition duration-500 hover:-translate-y-1.5 hover:shadow-lift dark:border-white/[0.08] sm:p-10`}
                     >
-                      <div className="flex items-start justify-between">
-                        <span className="text-xs font-extrabold tracking-[0.16em] text-ink/40">
-                          {program.number}
+                      <span aria-hidden="true" className="absolute -bottom-6 -right-3 select-none font-display text-[9rem] font-black leading-none opacity-[0.06] tracking-tighter">
+                        {program.number}
+                      </span>
+                      <div className="relative z-10 flex items-start justify-between">
+                        <span className="rounded-full bg-black/5 px-3 py-1 text-xs font-extrabold tracking-[0.18em] text-ink/50 dark:bg-white/10 dark:text-white/60">
+                          Program {program.number}
                         </span>
-                        <span className="grid size-12 place-items-center rounded-full bg-paper/60 text-forest">
-                          <Icon className="size-5" />
+                        <span className="grid size-13 place-items-center rounded-2xl bg-paper/70 text-forest shadow-sm backdrop-blur-md dark:bg-black/20">
+                          <Icon className="size-6" />
                         </span>
                       </div>
-                      <div>
-                        <h3 className="max-w-md font-display text-3xl font-semibold leading-tight sm:text-4xl">
+                      <div className="relative z-10">
+                        <h3 className="max-w-md font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl text-ink">
                           {program.title}
                         </h3>
-                        <p className="mt-4 max-w-md text-sm leading-7 text-ink/58">
+                        <p className="mt-4 max-w-md text-sm leading-relaxed text-ink/65">
                           {program.description}
                         </p>
-                        <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-forest">
+                        <span className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-forest transition group-hover:gap-3">
                           Explore program{" "}
-                          <ArrowRight className="size-4 transition group-hover:translate-x-1" />
+                          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
                         </span>
                       </div>
                     </Link>
@@ -695,38 +765,43 @@ export default function HomePage() {
           aria-labelledby="volunteer-title"
         >
           <div className="page-shell">
-            <div className="relative overflow-hidden rounded-[2.7rem] bg-[#f0c16d] px-6 py-12 text-[#17231f] sm:px-10 md:py-16 lg:px-16">
+            <div className="relative overflow-hidden rounded-[2.75rem] bg-gradient-to-br from-[#f5d089] via-[#ecb95e] to-[#e0a13d] p-8 text-[#0a221c] shadow-lift sm:p-12 md:p-16">
               <div
                 aria-hidden="true"
-                className="absolute -right-20 -top-32 size-[28rem] rounded-full border-[80px] border-white/20"
+                className="absolute -right-24 -top-32 size-[32rem] rounded-full border-[70px] border-white/25 blur-sm pointer-events-none"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute -bottom-28 left-1/3 size-64 rounded-full bg-white/20 blur-2xl pointer-events-none"
               />
               <div className="relative grid items-end gap-10 lg:grid-cols-[1fr_auto]">
                 <div className="max-w-3xl">
-                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] opacity-50">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#0a221c]/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#0a221c]">
+                    <span className="size-2 rounded-full bg-[#0a221c]" />
                     Bring what you know
-                  </p>
+                  </div>
                   <h2
                     id="volunteer-title"
-                    className="mt-5 font-display text-5xl font-semibold leading-[0.95] tracking-[-0.055em] sm:text-6xl"
+                    className="mt-6 font-display text-5xl font-semibold leading-[0.94] tracking-[-0.055em] text-[#0a221c] sm:text-6xl lg:text-7xl"
                   >
                     Your time can become someone else’s turning point.
                   </h2>
-                  <p className="mt-6 max-w-xl text-base leading-7 opacity-65">
+                  <p className="mt-6 max-w-xl text-base leading-relaxed text-[#0a221c]/80 sm:text-lg">
                     Mentor a learner, strengthen a data system, document a field
-                    story, or join an emergency response roster. Remote and
-                    field roles are open.
+                    story, or join an emergency response roster. Both remote and
+                    field placements are open.
                   </p>
                 </div>
-                <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+                <div className="flex flex-col gap-3.5 sm:flex-row lg:flex-col">
                   <Link
                     href="/volunteer"
-                    className="button-primary bg-[#102d26]"
+                    className="inline-flex min-h-13 items-center justify-center gap-2.5 rounded-full bg-[#0a221c] px-8 py-3.5 text-sm font-extrabold text-white shadow-xl transition duration-300 hover:-translate-y-0.5 hover:bg-[#12382e]"
                   >
                     Find your role <ArrowRight className="size-4" />
                   </Link>
                   <Link
                     href="/contact?subject=volunteering"
-                    className="inline-flex min-h-12 items-center justify-center rounded-full border border-[#17231f]/20 px-6 text-sm font-bold transition hover:bg-white/20"
+                    className="inline-flex min-h-13 items-center justify-center rounded-full border border-[#0a221c]/25 bg-white/20 px-8 py-3.5 text-sm font-bold text-[#0a221c] backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:bg-white/35"
                   >
                     Offer a skill
                   </Link>
@@ -752,35 +827,40 @@ export default function HomePage() {
                 Full calendar <CalendarDays className="size-4" />
               </Link>
             </Reveal>
-            <div className="mt-10 divide-y divide-ink/12 border-y border-ink/12">
+            <div className="mt-12 space-y-4">
               {events.map((event, index) => (
                 <Reveal key={event.title} delay={index * 0.06}>
                   <Link
                     href="/events"
-                    className="group grid gap-5 py-7 transition hover:pl-2 sm:grid-cols-[110px_1fr_auto] sm:items-center"
+                    className="group relative flex flex-col justify-between gap-6 rounded-3xl border border-ink/[0.07] bg-white/70 p-6 shadow-[0_8px_30px_-15px_rgba(12,53,45,0.05)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-forest/30 hover:bg-white hover:shadow-lift dark:border-white/[0.08] dark:bg-white/[0.035] dark:hover:bg-white/[0.06] sm:flex-row sm:items-center sm:p-7"
                   >
-                    <div className="flex items-baseline gap-2 sm:block">
-                      <span className="font-display text-4xl font-semibold">
-                        {event.date}
-                      </span>
-                      <span className="text-[0.65rem] font-extrabold tracking-[0.17em] text-forest sm:ml-2">
-                        {event.month}
+                    <div className="flex items-center gap-5">
+                      <div className="flex size-16 shrink-0 flex-col items-center justify-center rounded-2xl border border-forest/15 bg-forest/[0.08] text-forest dark:border-forest/25 dark:bg-forest/20 dark:text-[#70d5b3]">
+                        <span className="font-display text-2xl font-bold leading-none">
+                          {event.date}
+                        </span>
+                        <span className="mt-1 text-[0.62rem] font-extrabold uppercase tracking-widest opacity-80">
+                          {event.month}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="inline-flex items-center rounded-full bg-ink/[0.05] px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider text-ink/60 dark:bg-white/10 dark:text-white/70">
+                          {event.type}
+                        </span>
+                        <h3 className="mt-2 font-display text-xl font-bold text-ink transition group-hover:text-forest sm:text-2xl">
+                          {event.title}
+                        </h3>
+                        <p className="mt-1 flex items-center gap-1.5 text-xs text-ink/50">
+                          <MapPin className="size-3 text-forest" />
+                          {event.location}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-end">
+                      <span className="grid size-12 place-items-center rounded-full border border-ink/15 bg-paper/60 text-ink transition duration-300 group-hover:border-forest group-hover:bg-forest group-hover:text-white dark:border-white/15 dark:bg-white/5">
+                        <ArrowUpRight className="size-5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                     </div>
-                    <div>
-                      <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-ink/40">
-                        {event.type}
-                      </p>
-                      <h3 className="mt-2 font-display text-xl font-bold tracking-tight sm:text-2xl">
-                        {event.title}
-                      </h3>
-                      <p className="mt-1 text-xs text-ink/45">
-                        {event.location}
-                      </p>
-                    </div>
-                    <span className="grid size-11 place-items-center rounded-full border border-ink/15 transition group-hover:bg-forest group-hover:text-white">
-                      <ArrowUpRight className="size-4" />
-                    </span>
                   </Link>
                 </Reveal>
               ))}
@@ -1001,7 +1081,7 @@ function ProductionHomePage({
               ).map(([Icon, title, description]) => (
                 <article
                   key={title}
-                  className="rounded-3xl border border-ink/8 bg-white p-6 dark:bg-white/[0.055]"
+                  className="border-t border-ink/15 py-6"
                 >
                   <Icon className="size-6 text-forest" aria-hidden="true" />
                   <h3 className="mt-6 font-display text-xl font-bold">

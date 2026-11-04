@@ -50,7 +50,7 @@ body::before {
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0;
   content: "";
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
 }
@@ -117,11 +117,11 @@ body::before {
   }
 
   .glass-card {
-    @apply border border-white/45 bg-white/55 shadow-soft backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.055];
+    @apply border-t border-ink/15 bg-transparent;
   }
 
   .card-hover {
-    @apply transition duration-500 ease-out hover:-translate-y-1.5 hover:shadow-lift;
+    @apply transition duration-300 ease-out;
   }
 
   .prose-premium {

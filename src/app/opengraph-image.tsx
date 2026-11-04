@@ -1,10 +1,16 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const alt = "Skymeredian Foundation website publication status";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const logo = await readFile(
+    join(process.cwd(), "public/brand/foundation-logo.png"),
+  );
+  const logoSource = `data:image/png;base64,${logo.toString("base64")}`;
   return new ImageResponse(
     <div
       style={{
@@ -30,13 +36,31 @@ export default function OpenGraphImage() {
       >
         <div
           style={{
-            width: 24,
-            height: 24,
-            borderRadius: 99,
-            background: "#f59e0b",
+            display: "flex",
+            width: 170,
+            height: 162,
+            position: "relative",
+            overflow: "hidden",
+            background: "white",
+            borderRadius: 8,
           }}
-        />
-        SKYMEREDIAN FOUNDATION
+        >
+          {/* The source includes whitespace; preserve the complete logo within the visible frame. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoSource}
+            alt="Skymeredian Foundation"
+            width={300}
+            height={300}
+            style={{
+              position: "absolute",
+              width: 300,
+              height: 300,
+              left: -64.5,
+              top: -56,
+            }}
+          />
+        </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", maxWidth: 900 }}>
         <div

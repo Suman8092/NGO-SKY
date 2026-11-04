@@ -1,7 +1,12 @@
 import { createHash } from "node:crypto";
 
 type DemoRecord = Record<string, unknown> & { id: string; createdAt: string; updatedAt: string };
-type DemoCollection = "contacts" | "newsletter" | "volunteers" | "donations";
+type DemoCollection =
+  | "contacts"
+  | "newsletter"
+  | "volunteers"
+  | "donations"
+  | "event_registrations";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -15,6 +20,7 @@ const store =
     ["newsletter", new Map()],
     ["volunteers", new Map()],
     ["donations", new Map()],
+    ["event_registrations", new Map()],
   ]);
 globalThis.__skiesDemoStore = store;
 
@@ -76,5 +82,6 @@ export function getDemoCounts(): Record<DemoCollection, number> {
     newsletter: store.get("newsletter")?.size ?? 0,
     volunteers: store.get("volunteers")?.size ?? 0,
     donations: store.get("donations")?.size ?? 0,
+    event_registrations: store.get("event_registrations")?.size ?? 0,
   };
 }
