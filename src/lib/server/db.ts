@@ -31,6 +31,7 @@ export async function connectMongo(): Promise<typeof mongoose | null> {
     bufferCommands: false,
     maxPoolSize: 10,
     minPoolSize: 0,
+    family: 4,
     connectTimeoutMS: 5_000,
     serverSelectionTimeoutMS: 5_000,
     socketTimeoutMS: 10_000,
@@ -40,6 +41,8 @@ export async function connectMongo(): Promise<typeof mongoose | null> {
     cache.connection = await cache.promise;
     return cache.connection;
   } catch (cause) {
+    const diagnostic = cause as {name?:string;code?:string;reason?:{servers?:Map<string,{error?:{name?:string;code?:string;cause?:{code?:string}}}>}};
+    console.error("[server:database-connectivity]", {name:diagnostic.name,code:diagnostic.code,serverErrors:Array.from(diagnostic.reason?.servers?.values()??[]).map(server=>({name:server.error?.name,code:server.error?.code,causeCode:server.error?.cause?.code}))});
     cache.promise = null;
     cache.connection = null;
     if (allowsInMemoryPersistence()) {
