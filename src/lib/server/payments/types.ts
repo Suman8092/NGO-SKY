@@ -16,7 +16,7 @@ export type CheckoutResult =
     };
 
 export type DonationPaymentUpdate = {
-  provider: "stripe" | "razorpay";
+  provider: "stripe" | "razorpay" | "phonepe" | "payu";
   donationId?: string;
   externalOrderId?: string;
   externalSessionId?: string;

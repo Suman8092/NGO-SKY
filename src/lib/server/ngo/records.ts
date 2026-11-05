@@ -104,10 +104,14 @@ export function listFilter(
   const status = params.get("status");
   if (status && getModule(module)?.statuses.includes(status))
     filter.status = status;
+  const method = params.get("method");
+  if (method) filter["data.method"] = method.slice(0, 40);
   const category = params.get("category");
   if (category) filter["data.category"] = category.slice(0, 120);
   const coordinator = params.get("coordinator");
   if (coordinator && actor.admin) filter["data.coordinator"] = coordinator;
+  const user = params.get("user");
+  if (user && actor.admin) filter.ownerId = user.slice(0, 100);
   const designation = params.get("designation");
   if (designation) filter["data.designation"] = designation;
   const project = params.get("project");
@@ -202,7 +206,23 @@ export async function createDocument(
     source.data._provisional === true ||
     (["membership-certificate", "id-card", "appointment"].includes(type) &&
       !officialIdentityReady);
+  const tax =
+    type === "donation-receipt"
+      ? await (
+          await import("./tax-receipts")
+        ).taxReceiptSnapshot(
+          String(source.data.date),
+          Math.round(Number(source.data.amount) * 100),
+          String(source.data.method),
+          session,
+        )
+      : {};
   const data = {
+    ...tax,
+    _issuerName: String(organization?.data.name ?? ""),
+    _issuerAddress: String(organization?.data.address ?? ""),
+    _issuerEmail: String(organization?.data.email ?? ""),
+    _issuerPhone: String(organization?.data.phone ?? ""),
     _provisional: provisional,
     name: String(source.data.name ?? ""),
     email: String(source.data.email ?? ""),
@@ -489,46 +509,27 @@ export async function applyRecordEffects(
     previousStatus !== "published" &&
     doc.data.sendEmail
   ) {
-    const filter =
-      doc.data.audience === "member"
-        ? {
-            $or: [
-              { reference: doc.data.member },
-              ...(Types.ObjectId.isValid(String(doc.data.member))
-                ? [{ _id: doc.data.member }]
-                : []),
-            ],
-          }
-        : {};
-    const recipientCount = await NgoRecordModel.countDocuments({
-      module: "members",
-      status: "approved",
-      deletedAt: null,
-      ...filter,
-    }).session(session);
-    if (recipientCount > 2000)
-      throw new ApiError(
-        422,
-        "BROADCAST_LIMIT",
-        "Email broadcasts above 2,000 recipients require a bulk delivery service. Publish a dashboard-only message or use a smaller recipient group.",
-      );
-    const members = await NgoRecordModel.find({
-      module: "members",
-      status: "approved",
-      deletedAt: null,
-      ...filter,
-    })
-      .session(session)
-      .limit(2000);
-    for (const member of members)
-      await queueEmail(
-        `message:${doc._id}:${member._id}`,
-        String(member.data.email),
-        String(doc.data.name),
-        String(doc.data.content),
-        undefined,
-        session,
-      );
+    await NgoRecordModel.updateOne(
+      { identityKey: `broadcast:${doc._id}` },
+      {
+        $setOnInsert: {
+          ...recordInput(
+            "broadcast-jobs",
+            {
+              message: doc._id.toString(),
+              cursor: "",
+              cutoff: new Date().toISOString(),
+              member:
+                doc.data.audience === "member" ? String(doc.data.member) : "",
+            },
+            "pending",
+            doc.updatedBy,
+          ),
+          identityKey: `broadcast:${doc._id}`,
+        },
+      },
+      { upsert: true, session },
+    );
   }
   if (
     ["void", "revoked", "blocked", "expired", "rejected"].includes(doc.status)
@@ -652,11 +653,21 @@ export async function saveRecord(
       for (const field of definition.fields.filter(
         (f) => f.reference && data[f.key],
       )) {
-        const linked = await findLinked(
+        let linked = await findLinked(
           field.reference!,
           data[field.key],
           session,
         );
+        if (
+          !linked &&
+          id &&
+          String(doc.data[field.key]) === String(data[field.key]) &&
+          Types.ObjectId.isValid(String(data[field.key]))
+        )
+          linked = await NgoRecordModel.findOne({
+            _id: String(data[field.key]),
+            module: field.reference,
+          }).session(session);
         if (!linked)
           throw new ApiError(
             422,
@@ -726,6 +737,19 @@ export async function saveRecord(
             "CORRECTION_REASON_REQUIRED",
             "Add review notes explaining the validity correction.",
           );
+        if (id && String(doc.data._expires ?? "") !== String(data.validUntil))
+          await NgoRecordModel.updateMany(
+            {
+              module: "documents",
+              "data.source": doc._id.toString(),
+              status: "issued",
+            },
+            {
+              $set: { status: "revoked", updatedBy: actor.id },
+              $inc: { revision: 1 },
+            },
+            { session },
+          );
         computed._expires = String(data.validUntil);
         delete data.validUntil;
       }
@@ -754,6 +778,62 @@ export async function saveRecord(
         doc.ownerId = member.ownerId;
         doc.identityKey = `renewal:${member._id}:pending`;
       }
+      if (module === "tax-approvals" && doc.status === "active") {
+        const fileId = String(data.proof).split("/").pop();
+        const proof = await db.connection
+          .db!.collection("ngoUploads.files")
+          .findOne({ _id: new Types.ObjectId(fileId) }, { session });
+        if (!proof || proof.metadata?.publicImage)
+          throw new ApiError(
+            422,
+            "APPROVAL_EVIDENCE_REQUIRED",
+            "Upload the genuine private approval document before activation.",
+          );
+        if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(String(data.pan)))
+          throw new ApiError(
+            422,
+            "INVALID_PAN",
+            "Enter the organization's genuine PAN in uppercase.",
+          );
+        const org = await NgoRecordModel.findOne({
+          module: "organization",
+          status: "active",
+          deletedAt: null,
+        }).session(session);
+        if (!org?.data.address || !org.data.signatory)
+          throw new ApiError(
+            409,
+            "OFFICIAL_IDENTITY_PENDING",
+            "Configure the real organization profile before activating tax approval.",
+          );
+        await NgoRecordModel.updateMany(
+          { module: "tax-approvals", status: "active", _id: { $ne: doc._id } },
+          {
+            $set: { status: "expired" },
+            $unset: { identityKey: 1 },
+            $inc: { revision: 1 },
+          },
+          { session },
+        );
+        doc.identityKey = "active-tax-approval";
+      } else if (module === "tax-approvals") doc.identityKey = undefined;
+      if (module === "gateways" && doc.status === "active") {
+        const { assertHostedConfigured } = await import("./gateway-config");
+        assertHostedConfigured(
+          String(data.provider) as "razorpay" | "phonepe" | "payu",
+          String(data.environment) as "production" | "sandbox",
+        );
+        await NgoRecordModel.updateMany(
+          { module: "gateways", status: "active", _id: { $ne: doc._id } },
+          {
+            $set: { status: "inactive" },
+            $unset: { identityKey: 1 },
+            $inc: { revision: 1 },
+          },
+          { session },
+        );
+        doc.identityKey = "active-payment-gateway";
+      } else if (module === "gateways") doc.identityKey = undefined;
       if (module === "organization") doc.identityKey = "organization-profile";
       if (module === "members" && doc.ownerId)
         doc.identityKey = `member:${doc.ownerId}`;

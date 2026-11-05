@@ -1,3 +1,4 @@
+import { analyticsRows } from "@/lib/server/ngo/analytics";
 import { after } from "next/server";
 import { processNgoOutbox } from "@/lib/server/ngo/jobs";
 import { listOnline } from "@/lib/server/ngo/online-records";
@@ -32,6 +33,8 @@ export async function GET(
     await requireNgoDatabase();
     const p = new URL(request.url).searchParams;
     const page = Math.min(10000, Math.max(1, Number(p.get("page")) || 1));
+    if (["member-referrals", "campaign-analytics"].includes(module))
+      return jsonSuccess(await analyticsRows(module, p));
     if (module === "online-donations") return jsonSuccess(await listOnline(p));
     if (module === "audit") {
       const [rows, total] = await Promise.all([

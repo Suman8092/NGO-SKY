@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { DonatePage } from "@/components/pages/action-pages";
-import { getPublicPaymentReadiness } from "@/lib/server/public-payment-readiness";
+import { getSelectedPaymentReadiness } from "@/lib/server/public-payment-readiness";
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -18,7 +18,7 @@ type Props = {
 
 export default async function Page({ searchParams }: Props) {
   const params = await searchParams;
-  const paymentReadiness = getPublicPaymentReadiness();
+  const paymentReadiness = await getSelectedPaymentReadiness();
   const rawAmount = Array.isArray(params.amount)
     ? params.amount[0]
     : params.amount;

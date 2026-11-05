@@ -61,6 +61,103 @@ const payment = [
   f("proof", "Supporting document", "file"),
 ];
 export const modules = {
+  "tax-approvals": {
+    title: "80G organization approvals",
+    singular: "tax approval",
+    group: "Administration",
+    description:
+      "Record genuine approval evidence and its validity. Activation requires the real organization profile. This enables approval details on eligible monetary donation acknowledgements; it does not file Form 10BD or generate an Income Tax Department Form 10BE.",
+    statuses: ["draft", "active", "expired", "revoked"],
+    fields: [
+      f("name", "Approval description", "text", true),
+      f("pan", "Organization PAN", "text", true),
+      f(
+        "approvalNumber",
+        "Approval / unique registration number",
+        "text",
+        true,
+      ),
+      f("startDate", "Approval valid from", "date", true),
+      f("endDate", "Approval valid until", "date", true),
+      f("proof", "Official approval evidence", "file", true),
+      f(
+        "verified",
+        "I verified the genuine approval and organization eligibility",
+        "checkbox",
+        true,
+      ),
+    ],
+  },
+  "gateway-payments": {
+    title: "Gateway payment reconciliation",
+    singular: "gateway transaction",
+    group: "Finance",
+    readOnly: true,
+    description:
+      "Provider orders for registration fees and hosted donations. Refresh a transaction to reconcile its server-confirmed status.",
+    statuses: ["pending", "paid", "failed", "setup-failed"],
+    fields: [
+      f("name", "Payer"),
+      f("email", "Email"),
+      f("provider", "Gateway"),
+      f("amountMinor", "Expected amount (paise)", "number"),
+      f("sourceModule", "Registration type"),
+      f("source", "Source reference"),
+      f("paymentId", "Provider payment ID"),
+    ],
+  },
+  gateways: {
+    title: "Payment gateway selection",
+    singular: "gateway configuration",
+    group: "Administration",
+    description:
+      "Activate a configured provider for new donations and registration fees. Existing orders retain their original provider. Merchant secrets are server environment variables; they are never exposed in this form. Recurring mandates continue through Razorpay.",
+    statuses: ["inactive", "active"],
+    fields: [
+      f("name", "Configuration name", "text", true),
+      f("provider", "Provider", "select", true, [
+        "razorpay",
+        "phonepe",
+        "payu",
+      ]),
+      f("environment", "Environment", "select", true, [
+        "production",
+        "sandbox",
+      ]),
+    ],
+  },
+  "member-referrals": {
+    title: "Member referral performance",
+    singular: "referral report",
+    description:
+      "Membership and net confirmed donation referrals per member. Date filters apply to referred registrations and contributions.",
+    group: "Reports",
+    readOnly: true,
+    statuses: ["pending", "approved", "expired", "blocked", "rejected"],
+    fields: [
+      f("name", "Member"),
+      f("members", "Referred members", "number"),
+      f("amount", "Referred donations (INR)", "money"),
+      f("donors", "Unique referred donors", "number"),
+    ],
+  },
+  "campaign-analytics": {
+    title: "Campaign analytics",
+    singular: "campaign report",
+    description:
+      "Confirmed net collection, unique donors and remaining goal for every campaign.",
+    group: "Reports",
+    readOnly: true,
+    statuses: ["draft", "active", "completed", "archived"],
+    fields: [
+      f("name", "Campaign"),
+      f("amount", "Confirmed collection (INR)", "money"),
+      f("goal", "Goal (INR)", "money"),
+      f("remaining", "Remaining goal (INR)", "money"),
+      f("donors", "Unique donors", "number"),
+      f("progress", "Goal progress (%)", "number"),
+    ],
+  },
   organization: {
     title: "Organization letterhead profile",
     singular: "organization profile",

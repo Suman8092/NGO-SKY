@@ -1,3 +1,4 @@
+import { LiveRefresh } from "@/components/ngo/live-refresh";
 import Link from "next/link";
 import { financialSummary } from "@/lib/server/ngo/reports";
 import { moduleEntries } from "@/lib/ngo/catalog";
@@ -22,6 +23,7 @@ export default async function ReportPage() {
   }
   return (
     <div className="mx-auto max-w-[1200px]">
+      <LiveRefresh />
       <p className="eyebrow">Reconciled operations</p>
       <h1 className="mt-4 text-3xl font-semibold">Reports & accountability</h1>
       <p className="mt-4 max-w-3xl text-sm leading-7 text-ink/60">
@@ -91,8 +93,8 @@ export default async function ReportPage() {
             <div key={id} className="grid gap-2 py-4 text-sm sm:grid-cols-2">
               <p className="font-medium">{summary.labels[id] ?? id}</p>
               <p className="text-ink/65">
-                {money(v.donations)} · {v.donors} recorded gifts · {v.members}{" "}
-                members
+                {money(v.donations)} · {v.donors} unique donors · {v.gifts}{" "}
+                gifts · {v.members} members
               </p>
             </div>
           ))}

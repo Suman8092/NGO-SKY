@@ -89,12 +89,20 @@ const amount = z.preprocess(
 
 export const donationSchema = z
   .object({
-    campaignId: z.string().regex(/^(?:[a-f0-9]{24}|CAM-\d{4}-[A-F0-9]{12})$/i).optional(),
-    referredBy: z.string().regex(/^(?:[a-f0-9]{24}|MEM-\d{4}-[A-F0-9]{12})$/i).optional(),
+    campaignId: z
+      .string()
+      .regex(/^(?:[a-f0-9]{24}|CAM-\d{4}-[A-F0-9]{12})$/i)
+      .optional(),
+    referredBy: z
+      .string()
+      .regex(/^(?:[a-f0-9]{24}|MEM-\d{4}-[A-F0-9]{12})$/i)
+      .optional(),
     amount,
     currency: z.enum(["INR", "USD", "EUR", "GBP"]).default("INR"),
     frequency: z.enum(["one_time", "monthly", "yearly"]).default("one_time"),
-    provider: z.enum(["auto", "stripe", "razorpay"]).default("auto"),
+    provider: z
+      .enum(["auto", "stripe", "razorpay", "phonepe", "payu"])
+      .default("auto"),
     donor: z
       .object({
         name: cleanSingleLine(2, 120),
@@ -174,7 +182,6 @@ export const contentQuerySchema = z.object({
   type: z.enum(["campaigns", "programs", "stories", "posts", "events"]),
   limit: z.coerce.number().int().min(1).max(50).default(12),
 });
-
 
 export const eventRegistrationSchema = z
   .object({

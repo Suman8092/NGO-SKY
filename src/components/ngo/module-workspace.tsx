@@ -19,6 +19,8 @@ export function ModuleWorkspace({
     [from, setFrom] = useState(""),
     [to, setTo] = useState(""),
     [category, setCategory] = useState(""),
+    [method, setMethod] = useState(""),
+    [user, setUser] = useState(""),
     [designation, setDesignation] = useState(""),
     [project, setProject] = useState(""),
     [coordinator, setCoordinator] = useState(""),
@@ -36,6 +38,8 @@ export function ModuleWorkspace({
     from,
     to,
     category,
+    method,
+    user,
     designation,
     project,
     coordinator,
@@ -64,11 +68,15 @@ export function ModuleWorkspace({
   );
   useEffect(() => {
     const controller = new AbortController();
+    const refresh = setInterval(() => {
+      if (!document.hidden) void load(controller.signal);
+    }, 30000);
     const timer = setTimeout(() => {
       void load(controller.signal);
     }, 200);
     return () => {
       clearTimeout(timer);
+      clearInterval(refresh);
       controller.abort();
     };
   }, [load]);
@@ -169,6 +177,33 @@ export function ModuleWorkspace({
             />
           </label>
         )}
+        {definition.fields.some((f) => f.key === "method") && (
+          <label className="grid gap-1 text-xs font-medium">
+            Payment method
+            <select
+              value={method}
+              onChange={(e) => {
+                setMethod(e.target.value);
+                setPage(1);
+              }}
+              className="ngo-input"
+            >
+              <option value="">All methods</option>
+              {[
+                "cash",
+                "bank",
+                "upi",
+                "cheque",
+                "other",
+                "razorpay",
+                "phonepe",
+                "payu",
+              ].map((value) => (
+                <option key={value}>{value}</option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="grid gap-1 text-xs font-medium">
           From
           <input
@@ -205,11 +240,16 @@ export function ModuleWorkspace({
             >
               PDF report
             </a>
-            {!field && module !== "online-donations" && (
-              <a href={`/api/admin/backup?module=${module}&${params}`}>
-                JSON backup
-              </a>
-            )}
+            {!field &&
+              ![
+                "online-donations",
+                "member-referrals",
+                "campaign-analytics",
+              ].includes(module) && (
+                <a href={`/api/admin/backup?module=${module}&${params}`}>
+                  JSON backup
+                </a>
+              )}
           </div>
         )}
       </div>
@@ -218,6 +258,18 @@ export function ModuleWorkspace({
           Period and assignment filters
         </summary>
         <div className="mt-3 flex flex-wrap gap-3">
+          {!field && (
+            <input
+              aria-label="User account ID"
+              placeholder="User account ID"
+              value={user}
+              onChange={(e) => {
+                setUser(e.target.value);
+                setPage(1);
+              }}
+              className="ngo-input"
+            />
+          )}
           {[
             ["Today", 0],
             ["Last 7 days", 6],
@@ -367,10 +419,109 @@ export function ModuleWorkspace({
                       </td>
                       <td className="px-3 py-4 align-top">
                         <div className="flex flex-wrap gap-3 text-xs font-semibold text-forest">
-                          {module === "audit" && (
+                          {module === "recurring-donations" &&
+                            !field &&
+                            ![
+                              "cancelled",
+                              "completed",
+                              "expired",
+                              "setup-failed",
+                            ].includes(record.status) &&
+                            [
+                              ...(record.status === "active"
+                                ? ["pause"]
+                                : record.status === "paused"
+                                  ? ["resume"]
+                                  : []),
+                              "cancel",
+                            ].map((action) => (
+                              <button
+                                key={action}
+                                type="button"
+                                onClick={async () => {
+                                  if (
+                                    action === "cancel" &&
+                                    !window.confirm(
+                                      "Stop this donor's future recurring payments?",
+                                    )
+                                  )
+                                    return;
+                                  try {
+                                    const r = await fetch(
+                                      "/api/ngo/recurring",
+                                      {
+                                        method: "PATCH",
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                          id: record.id,
+                                          action,
+                                        }),
+                                      },
+                                    );
+                                    const b = await r.json();
+                                    if (!r.ok)
+                                      throw new Error(
+                                        b.error?.message ||
+                                          "Gateway action failed",
+                                      );
+                                    toast.success(
+                                      `Provider confirmed: ${b.data.status}`,
+                                    );
+                                    void load();
+                                  } catch (e) {
+                                    toast.error(
+                                      e instanceof Error
+                                        ? e.message
+                                        : "Subscription action failed",
+                                    );
+                                  }
+                                }}
+                              >
+                                {action === "cancel"
+                                  ? "Stop future payments"
+                                  : action === "pause"
+                                    ? "Pause mandate"
+                                    : "Resume mandate"}
+                              </button>
+                            ))}
+                          {module === "gateway-payments" &&
+                            ["phonepe", "payu"].includes(
+                              String(record.data.provider),
+                            ) &&
+                            record.status !== "paid" && (
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  try {
+                                    const r = await fetch(
+                                      `/api/admin/payments/${record.id}/refresh`,
+                                      { method: "POST" },
+                                    );
+                                    const b = await r.json();
+                                    if (!r.ok)
+                                      throw new Error(b.error?.message);
+                                    toast.info(
+                                      `Provider status: ${b.data.status}`,
+                                    );
+                                    void load();
+                                  } catch (e) {
+                                    toast.error(
+                                      e instanceof Error
+                                        ? e.message
+                                        : "Reconciliation failed",
+                                    );
+                                  }
+                                }}
+                              >
+                                Refresh provider status
+                              </button>
+                            )}
+                          {definition.readOnly && (
                             <details className="w-full">
                               <summary className="cursor-pointer">
-                                Full activity details
+                                Full record details
                               </summary>
                               <dl className="mt-3 space-y-2 text-ink/65">
                                 {Object.entries(record.data).map(([k, v]) => (

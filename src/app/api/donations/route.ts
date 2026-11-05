@@ -1,3 +1,5 @@
+import { selectedGateway } from "@/lib/server/ngo/gateway-config";
+import { createHostedDonation } from "@/lib/server/ngo/hosted-donations";
 import { auth } from "@clerk/nextjs/server";
 
 import { isClerkConfigured } from "@/lib/auth-config";
@@ -35,12 +37,22 @@ export async function POST(request: Request): Promise<Response> {
     });
     const input = await parseJsonRequest(request, donationSchema);
     const accountUserId = await optionalAccountUserId();
-    const result = await createDonationIntent(input, {
+    const gateway = await selectedGateway();
+    const metadata = {
       requestId,
       ip,
       userAgent: request.headers.get("user-agent") ?? undefined,
       accountUserId,
-    });
+    };
+    const result =
+      gateway.provider === "razorpay"
+        ? await createDonationIntent(input, metadata)
+        : await createHostedDonation(
+            input,
+            metadata,
+            gateway.provider,
+            gateway.mode,
+          );
     const donation = result.record;
     return jsonSuccess(
       {

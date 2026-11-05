@@ -1,9 +1,9 @@
 export type DonationFrequency = "one_time" | "monthly" | "yearly";
-export type PublicPaymentProvider = "razorpay";
+export type PublicPaymentProvider = "razorpay" | "phonepe" | "payu";
 
 export type PublicPaymentReadiness = {
   persistenceReady: boolean;
-  oneTimeProvider: "razorpay" | null;
+  oneTimeProvider: PublicPaymentProvider | null;
   recurringProvider: null;
 };
 
@@ -17,6 +17,8 @@ export function paymentProviderForFrequency(
 export function paymentProviderLabel(
   provider: PublicPaymentProvider | null,
 ): string {
+  if (provider === "phonepe") return "PhonePe";
+  if (provider === "payu") return "PayU";
   if (provider === "razorpay") return "Razorpay";
   return "Unavailable";
 }

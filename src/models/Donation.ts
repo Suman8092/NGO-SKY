@@ -2,7 +2,7 @@ import { type Model, type Types, Schema, model, models } from "mongoose";
 
 export type DonationStatus =
   "pending" | "processing" | "paid" | "failed" | "refunded" | "cancelled";
-export type PaymentProvider = "stripe" | "razorpay";
+export type PaymentProvider = "stripe" | "razorpay" | "phonepe" | "payu";
 
 export interface DonationDocument {
   _id: Types.ObjectId;
@@ -51,7 +51,11 @@ const donationSchema = new Schema<DonationDocument>(
       enum: ["one_time", "monthly", "yearly"],
       required: true,
     },
-    provider: { type: String, enum: ["stripe", "razorpay"], required: true },
+    provider: {
+      type: String,
+      enum: ["stripe", "razorpay", "phonepe", "payu"],
+      required: true,
+    },
     donor: {
       name: { type: String, required: true, trim: true, maxlength: 120 },
       email: {

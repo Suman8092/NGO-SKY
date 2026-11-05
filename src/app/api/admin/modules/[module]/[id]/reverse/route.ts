@@ -44,7 +44,9 @@ export async function POST(
             "STALE_RECORD",
             "Reload the financial record before reversing it.",
           );
-        if (record.data.method === "razorpay")
+        if (
+          ["razorpay", "phonepe", "payu"].includes(String(record.data.method))
+        )
           throw new ApiError(
             409,
             "PROVIDER_REFUND_REQUIRED",

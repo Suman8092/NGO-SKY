@@ -23,14 +23,9 @@ export type AccountDonationRecord = {
   amountMinor: number;
   currency: "INR" | "USD" | "EUR" | "GBP";
   frequency: "one_time" | "monthly" | "yearly";
-  provider: "stripe" | "razorpay";
+  provider: "stripe" | "razorpay" | "phonepe" | "payu";
   status:
-    | "pending"
-    | "processing"
-    | "paid"
-    | "failed"
-    | "refunded"
-    | "cancelled";
+    "pending" | "processing" | "paid" | "failed" | "refunded" | "cancelled";
   paidAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -88,7 +83,9 @@ function boundedLimit(limit: number): number {
   return Math.min(100, Math.max(1, Math.trunc(limit)));
 }
 
-async function readMongo<T>(read: () => Promise<T>): Promise<OperationalRead<T>> {
+async function readMongo<T>(
+  read: () => Promise<T>,
+): Promise<OperationalRead<T>> {
   try {
     const connection = await connectMongo();
     if (!connection) {
@@ -212,9 +209,7 @@ export async function getAdminVolunteerRecords(
   });
 }
 
-export async function getAdminSubmissionRecords(
-  limit = 50,
-): Promise<
+export async function getAdminSubmissionRecords(limit = 50): Promise<
   OperationalRead<{
     contacts: AdminContactRecord[];
     newsletter: AdminNewsletterRecord[];
@@ -310,7 +305,11 @@ export async function getDetailedAnalytics(): Promise<
     ] = await Promise.all([
       DonationModel.countDocuments({}),
       DonationModel.countDocuments({ status: "paid" }),
-      DonationModel.aggregate<{ _id: null; totalMinor: number; avgMinor: number }>([
+      DonationModel.aggregate<{
+        _id: null;
+        totalMinor: number;
+        avgMinor: number;
+      }>([
         { $match: { status: "paid" } },
         {
           $group: {
@@ -383,7 +382,6 @@ export type UserVolunteerRecord = {
   createdAt: string;
 };
 
-
 export type UserEventRegistrationRecord = {
   id: string;
   eventId: string;
@@ -416,7 +414,8 @@ export type UserDashboardData = {
     totalDonatedMinor: number;
     donationCount: number;
     taxExemptMinor: number;
-    volunteerStatus: "none" | "submitted" | "reviewing" | "approved" | "rejected";
+    volunteerStatus:
+      "none" | "submitted" | "reviewing" | "approved" | "rejected";
   };
   volunteers: UserVolunteerRecord[];
   contacts: UserContactRecord[];
@@ -458,7 +457,10 @@ export async function getUserDashboardData(
         ? {
             $or: [
               { accountUserId: userId },
-              { "donor.email": { $in: emails }, accountUserId: { $in: [null, ""] } },
+              {
+                "donor.email": { $in: emails },
+                accountUserId: { $in: [null, ""] },
+              },
             ],
           }
         : userId
@@ -529,10 +531,9 @@ export async function getUserDashboardData(
     }));
 
     const paidDonations = donations.filter((d) => d.status === "paid");
-    const totalDonatedMinor = paidDonations.filter((d) => d.currency === "INR").reduce(
-      (sum, d) => sum + d.amountMinor,
-      0,
-    );
+    const totalDonatedMinor = paidDonations
+      .filter((d) => d.currency === "INR")
+      .reduce((sum, d) => sum + d.amountMinor, 0);
     const taxExemptMinor = paidDonations
       .filter((d) => d.currency === "INR")
       .reduce((sum, d) => sum + d.amountMinor, 0);
@@ -550,8 +551,9 @@ export async function getUserDashboardData(
     const latestVolunteer = volunteers[0];
     const volunteerStatus = latestVolunteer ? latestVolunteer.status : "none";
 
-
-    const eventRegistrations: UserEventRegistrationRecord[] = (eventDocs || []).map((e) => ({
+    const eventRegistrations: UserEventRegistrationRecord[] = (
+      eventDocs || []
+    ).map((e) => ({
       id: e._id.toString(),
       eventId: e.eventId,
       eventTitle: e.eventTitle,
@@ -592,7 +594,9 @@ export async function updateVolunteerStatus(
 ): Promise<OperationalRead<AdminVolunteerRecord | null>> {
   return readMongo(async () => {
     if (id.startsWith("demo_")) {
-      const updated = updateDemoRecord<AdminVolunteerRecord & Record<string, unknown> & { updatedAt: string }>("volunteers", id, { status });
+      const updated = updateDemoRecord<
+        AdminVolunteerRecord & Record<string, unknown> & { updatedAt: string }
+      >("volunteers", id, { status });
       return updated
         ? {
             id,
@@ -636,7 +640,9 @@ export async function updateContactStatus(
 ): Promise<OperationalRead<AdminContactRecord | null>> {
   return readMongo(async () => {
     if (id.startsWith("demo_")) {
-      const updated = updateDemoRecord<AdminContactRecord & Record<string, unknown> & { updatedAt: string }>("contacts", id, { status });
+      const updated = updateDemoRecord<
+        AdminContactRecord & Record<string, unknown> & { updatedAt: string }
+      >("contacts", id, { status });
       return updated
         ? {
             id,
@@ -663,13 +669,12 @@ export async function updateContactStatus(
       email: document.email,
       phone: document.phone,
       subject: document.subject,
-        message: document.message,
+      message: document.message,
       status: document.status,
       createdAt: document.createdAt.toISOString(),
     };
   });
 }
-
 
 export async function getAdminEventRegistrations(
   limit = 50,

@@ -31,18 +31,33 @@ Audit date: 2026-11-05. The supplied specification contains 191 numbered require
 This release must not be represented as all 191 requirements completed or fully production-certified.
 
 - Live Razorpay keys, enabled collection flag and end-to-end live payment acceptance remain operator prerequisites. Current production collection stays disabled. No real charge was created in QA.
-- PhonePe and PayU adapters and gateway switching are not implemented. Existing supported gateways are preserved; NGO fee/recurring flows use Razorpay.
+- PhonePe and PayU hosted adapters and admin gateway switching now have implementations for new donations and registration fees. Existing checkouts retain their provider. Actual merchant sandbox/live acceptance and provider webhook registration remain pending; recurring mandates use Razorpay.
 - Automatic email delivery awaits a verified sending domain/address. Queueing is functional; a resend.dev sender is rejected for production sending. No test email was sent to real recipients.
 - Official registered address and authorized signatory await the organization. No official identity has been seeded. Provisional PDFs cannot verify as official documents.
-- Automated full database/file backups and restore orchestration are not implemented. JSON exports are bounded per-module records, not a disaster recovery backup and do not contain uploaded binaries. Use managed database backups separately.
-- 80G statutory eligibility/certificate activation is not implemented. PDFs expressly do not imply tax exemption.
-- Public projects display progress; detailed public project income/expense transparency reports remain future scope. Admin project accounting is available.
-- In-kind records track received/distributed states and quantities; lot-level partial distribution/stock movement accounting is not implemented.
-- Audience email fan-out is limited to 2,000 members per publication; larger broadcasts need a batching service. Daily jobs currently process up to 10,000 approved members and 20 queued deliveries; scale scheduling requires batching.
+- Encrypted full MongoDB + GridFS snapshot export and isolated restore tooling are implemented in `scripts/ngo-backup.mjs`, including BSON types, collection options and indexes. Restore refuses non-empty databases and only permits `ngo_restore_*` targets. Offsite storage, recurring scheduling and operational recovery drills still require hosting setup. The existing per-module JSON export remains separate.
+- Genuine 80G approval configuration, private evidence upload, validity checks and approval snapshots on monetary donation acknowledgements are implemented. No approval is seeded or invented. Statutory Form 10BD filing and portal-issued Form 10BE remain the organization’s external tax workflow; the application does not fabricate them.
+- Public project pages now display confirmed funding, approved spending and category totals, with PDF/XLSX accountability reports that exclude donor contacts, beneficiary information and private bills.
+- In-kind records implement the six supplied item-donation requirements. Lot-level partial distribution is an optional expansion, not one of the 191 numbered requirements.
+- Member broadcasts now use resumable, idempotent database batches with no 2,000-recipient rejection. Membership expiry is a bulk operation and birthday matching no longer truncates at 10,000 members. Delivery processing remains bounded per invocation; frequent offsite workers or repeated admin processing are needed for large queues.
 - Only existing admin IDs and configured coordinator roles grant staff access. New authentication provider production keys remain an operator setup item.
 
 ## Validation
 
-115 automated regression/unit tests pass. An additional isolated MongoDB integration test passes 12 workflow checks including unpaid approval rejection, incorrect fee rollback, paid approval/documents, blocking QR validity, paid renewal extension, coordinator isolation, publication visibility, PDF/XLSX exports, six Unicode PDF layouts, duplicate webhook idempotency and refund verification. The disposable QA database is deleted afterward. Production build succeeds. Mobile public pages were checked for overflow. Authenticated production admin browser interaction and actual external payment/email delivery are not included in that evidence.
+119 automated regression/unit tests pass. An additional isolated MongoDB integration test passes 21 workflow checks including unpaid approval rejection, incorrect fee rollback, paid approval/documents, blocking QR validity, paid renewal extension, coordinator isolation, publication visibility, PDF/XLSX exports, six Unicode PDF layouts, duplicate webhook idempotency and refund verification. The disposable QA database is deleted afterward. Production build succeeds. Mobile public pages were checked for overflow. Authenticated production admin browser interaction and actual external payment/email delivery are not included in that evidence.
 
 Dependency audit still reports transitive vulnerabilities; Next.js was updated to 15.5.29. No forced major dependency upgrades were applied. Review the package audit before a claim of security certification.
+
+## Completion follow-up
+
+The earlier module-level audit was too broad to establish acceptance of all 191 items. See [the item-by-item register](ngo-requirements-checklist.md). Code presence, provider activation and production acceptance are tracked separately.
+
+Production database diagnostic: the deployed API returns 503 and all Atlas replicas reject its TLS handshake with `ERR_SSL_TLSV1_ALERT_INTERNAL_ERROR`. The same database is reachable from the local test environment. Matching production credentials, pinning Node 24 and forcing IPv4 did not resolve it. Atlas network/security settings and the deployed server's outbound access need checking with account access. TLS verification has not been disabled. This is not yet a confirmed root-cause diagnosis.
+
+New operator commands:
+
+```
+node scripts/ngo-backup.mjs backup .ngo-backups/foundation.ngobackup
+node scripts/ngo-backup.mjs restore .ngo-backups/foundation.ngobackup ngo_restore_review
+```
+
+Set `BACKUP_ENCRYPTION_KEY` to a securely stored random 32-byte hex key. Losing that key makes the archive unrecoverable. Restore never overwrites the live database. For merchant integrations, see [provider activation](ngo-provider-activation.md).

@@ -1,4 +1,6 @@
 import "server-only";
+import { analyticsRows } from "./analytics";
+import { projectAccounting } from "./project-accounting";
 import "regenerator-runtime/runtime";
 
 import { onlineFilter, onlineRecord } from "./online-records";
@@ -39,6 +41,25 @@ export async function reportRows(
   if (!definition || module === "audit")
     throw new ApiError(404, "NOT_FOUND", "Choose a report module.");
 
+  if (["member-referrals", "campaign-analytics"].includes(module)) {
+    const result = await analyticsRows(module, params, true);
+    return {
+      headers: [
+        "Reference",
+        "Status",
+        ...definition.fields.map((f) => f.label),
+      ],
+      rows: result.rows.map((r) => [
+        r.reference,
+        r.status,
+        ...definition.fields.map(
+          (f) =>
+            (r.data as Record<string, string | number | boolean>)[f.key] ?? "",
+        ),
+      ]),
+      definition,
+    };
+  }
   if (module === "online-donations") {
     const filter = await onlineFilter(params);
     const count = await DonationModel.countDocuments(filter);
@@ -308,9 +329,10 @@ export async function financialSummary() {
   const periods: Record<string, { income: number; expenses: number }> = {};
   const coordinators: Record<
     string,
-    { donations: number; donors: number; members: number }
+    { donations: number; donors: number; gifts: number; members: number }
   > = {};
   const projects: Record<string, { income: number; expenses: number }> = {};
+  const coordinatorDonors = new Map<string, Set<string>>();
 
   for (const d of all) {
     const key = String(
@@ -335,10 +357,18 @@ export async function financialSummary() {
 
     if (d.data.coordinator) {
       const k = String(d.data.coordinator);
-      coordinators[k] ??= { donations: 0, donors: 0, members: 0 };
+      coordinators[k] ??= { donations: 0, donors: 0, gifts: 0, members: 0 };
       if (d.module === "offline-donations" && d.status === "confirmed") {
         coordinators[k].donations += amount;
-        coordinators[k].donors++;
+        coordinators[k].gifts++;
+        const donors = coordinatorDonors.get(k) ?? new Set<string>();
+        donors.add(
+          String(d.data.email || d.data.phone || d._id)
+            .trim()
+            .toLowerCase(),
+        );
+        coordinatorDonors.set(k, donors);
+        coordinators[k].donors = donors.size;
       }
       if (d.module === "members") coordinators[k].members++;
     }
@@ -348,6 +378,13 @@ export async function financialSummary() {
     const key = String(row._id);
     periods[key] ??= { income: 0, expenses: 0 };
     periods[key].income += Number(row.total);
+  }
+
+  const projectTotals = await projectAccounting(
+    all.filter((d) => d.module === "projects").map((d) => d._id.toString()),
+  );
+  for (const [id, total] of Object.entries(projectTotals)) {
+    projects[id] = { income: total.incomeMinor, expenses: total.expenseMinor };
   }
 
   const labels = Object.fromEntries(

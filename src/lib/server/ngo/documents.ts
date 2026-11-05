@@ -188,12 +188,16 @@ export async function renderNgoDocument(doc: NgoDocument) {
     deletedAt: null,
   }).lean();
 
-  const issuerName = String(organization?.data.name ?? brand.legalName);
+  const issuerName = String(
+    doc.data._issuerName !== undefined
+      ? doc.data._issuerName || brand.legalName
+      : organization?.data.name || brand.legalName,
+  );
 
   const issuerContact = [
-    organization?.data.address,
-    organization?.data.email,
-    organization?.data.phone,
+    doc.data._issuerAddress ?? organization?.data.address,
+    doc.data._issuerEmail ?? organization?.data.email,
+    doc.data._issuerPhone ?? organization?.data.phone,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -397,6 +401,21 @@ export async function renderNgoDocument(doc: NgoDocument) {
       y -= 8;
     }
 
+    if (doc.data._taxApproval) {
+      text(
+        `Organization approval under section 80G: ${doc.data._taxApproval}`,
+        9,
+      );
+      text(
+        `Organization PAN: ${doc.data._taxPan} · Approval valid until ${doc.data._taxValidUntil}`,
+        9,
+      );
+      text(
+        "Donation acknowledgement only. Form 10BE, where applicable, is issued separately after statutory reporting.",
+        8,
+      );
+      y -= 8;
+    }
     text(
       String(doc.data.content ?? doc.data.purpose ?? ""),
       certificate ? 13 : 11,

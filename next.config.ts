@@ -3,10 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   distDir: process.env.NGO_BUILD_DIR || ".next",
   outputFileTracingIncludes: {
-    "/api/ngo/documents/*": ["./src/assets/fonts/*.ttf", "./public/brand/*"],
-    "/api/admin/modules/*/export": ["./src/assets/fonts/*.ttf"],
-    "/api/jobs/ngo": ["./src/assets/fonts/*.ttf", "./public/brand/*"],
-    "/api/admin/delivery": ["./src/assets/fonts/*.ttf", "./public/brand/*"],
+    "/api/**": [
+      "./src/assets/fonts/*.ttf",
+      "./public/brand/foundation-logo-transparent.png",
+    ],
   },
   env: {
     NEXT_PUBLIC_CONTENT_VERIFIED:

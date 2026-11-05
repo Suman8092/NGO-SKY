@@ -155,6 +155,16 @@ export function validateData(module: string, input: Record<string, unknown>) {
       "INVALID_QUANTITY",
       "Item quantities must be at least one.",
     );
+  if (
+    module === "designations" &&
+    data.provisional === true &&
+    Number(data.fee) > 0
+  )
+    throw new ApiError(
+      422,
+      "PROVISIONAL_FEE_NOT_ALLOWED",
+      "Provisional testing categories must have a zero fee. Remove the test flag only when the category is official.",
+    );
   return data;
 }
 export const recordId = z.string().regex(/^[a-f0-9]{24}$/i);

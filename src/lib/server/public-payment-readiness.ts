@@ -21,3 +21,25 @@ export function getPublicPaymentReadiness(): PublicPaymentReadiness {
     recurringProvider: null,
   };
 }
+
+export async function getSelectedPaymentReadiness(): Promise<PublicPaymentReadiness> {
+  const readiness = getPublicPaymentReadiness();
+  if (
+    !isDonationsEnabled() ||
+    !hasMongoConfig() ||
+    !hasSafePaymentRedirectOrigin()
+  )
+    return readiness;
+  try {
+    const { selectedGateway, assertHostedConfigured } =
+      await import("./ngo/gateway-config");
+    const selected = await selectedGateway();
+    if (selected.provider === "razorpay") return readiness;
+    if (selected.mode !== "production")
+      return { ...readiness, oneTimeProvider: null };
+    assertHostedConfigured(selected.provider, selected.mode);
+    return { ...readiness, oneTimeProvider: selected.provider };
+  } catch {
+    return { ...readiness, oneTimeProvider: null };
+  }
+}

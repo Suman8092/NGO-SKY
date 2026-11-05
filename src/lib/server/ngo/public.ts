@@ -1,4 +1,5 @@
 import "server-only";
+import { projectAccounting } from "./project-accounting";
 import { DonationModel } from "@/models/Donation";
 import { NgoRecordModel } from "@/models/NgoRecord";
 import { getModule } from "@/lib/ngo/catalog";
@@ -66,7 +67,12 @@ export async function publishedRecords(module: string) {
       String(item._id),
       (totals.get(String(item._id)) ?? 0) + Number(item.total),
     );
+  const accounting =
+    module === "projects"
+      ? await projectAccounting(docs.map((d) => d._id.toString()))
+      : {};
   return docs.map((d) => ({
+    accounting: accounting[d._id.toString()],
     id: d._id.toString(),
     reference: d.reference,
     status: d.status,

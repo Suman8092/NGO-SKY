@@ -449,7 +449,23 @@ export async function onlineReceipt(
     await NgoRecordModel.exists({ identityKey: key }).session(session ?? null)
   )
     return;
+  const date = (donation.paidAt ?? donation.createdAt)
+    .toISOString()
+    .slice(0, 10);
+  const tax = await (
+    await import("./tax-receipts")
+  ).taxReceiptSnapshot(date, donation.amountMinor, donation.provider, session);
+  const organization = await NgoRecordModel.findOne({
+    module: "organization",
+    status: "active",
+    deletedAt: null,
+  }).session(session ?? null);
   const data = {
+    ...tax,
+    _issuerName: String(organization?.data.name ?? ""),
+    _issuerAddress: String(organization?.data.address ?? ""),
+    _issuerEmail: String(organization?.data.email ?? ""),
+    _issuerPhone: String(organization?.data.phone ?? ""),
     name: donation.donor.name,
     email: donation.donor.email,
     title: "Donation receipt",

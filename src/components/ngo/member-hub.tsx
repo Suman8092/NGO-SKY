@@ -1,4 +1,5 @@
 "use client";
+import { openHostedCheckout } from "./hosted-checkout";
 import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -16,14 +17,32 @@ export function MemberHub() {
   const [data, setData] = useState<Account>(),
     [error, setError] = useState("");
   useEffect(() => {
-    fetch("/api/ngo/account", { cache: "no-store" })
-      .then(async (r) => {
-        const b = await r.json();
+    const controller = new AbortController();
+    const load = async () => {
+      try {
+        const r = await fetch("/api/ngo/account", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        const body = await r.json();
         if (!r.ok)
-          throw new Error(b.error?.message || "Account records unavailable.");
-        setData(b.data);
-      })
-      .catch((e) => setError(e.message));
+          throw new Error(
+            body.error?.message || "Account records unavailable.",
+          );
+        setData(body.data);
+        setError("");
+      } catch (e) {
+        if (e instanceof Error && e.name !== "AbortError") setError(e.message);
+      }
+    };
+    void load();
+    const timer = setInterval(() => {
+      if (!document.hidden) void load();
+    }, 30000);
+    return () => {
+      controller.abort();
+      clearInterval(timer);
+    };
   }, []);
   if (error)
     return (
@@ -345,6 +364,7 @@ function FeeCheckout({ source }: { source: NgoRecord }) {
               b.error?.message ||
                 "Online fee payment is unavailable. Contact the foundation for approved payment instructions.",
             );
+          if (openHostedCheckout(b.data)) return;
           await loadCheckoutScript();
           const options = {
             key: b.data.keyId,

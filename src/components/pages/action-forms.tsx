@@ -1,4 +1,8 @@
 "use client";
+import {
+  openHostedCheckout,
+  type HostedAction,
+} from "@/components/ngo/hosted-checkout";
 
 import {
   AlertCircle,
@@ -22,7 +26,8 @@ type SubmissionState = {
 
 const fieldClass =
   "mt-2 min-h-12 w-full rounded-2xl border border-ink/[0.12] bg-white/80 px-4 py-3.5 text-sm text-ink outline-none backdrop-blur-md shadow-sm transition-all duration-200 placeholder:text-ink/35 focus:border-forest focus:bg-white focus:ring-4 focus:ring-forest/10 dark:border-white/15 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/30 dark:focus:border-[#91c4ff] dark:focus:bg-white/[0.08]";
-const labelClass = "text-xs font-bold uppercase tracking-wider text-ink/75 dark:text-white/80";
+const labelClass =
+  "text-xs font-bold uppercase tracking-wider text-ink/75 dark:text-white/80";
 
 async function postJson(endpoint: string, payload: unknown) {
   const response = await fetch(endpoint, {
@@ -66,7 +71,7 @@ function SubmissionNotice({ state }: { state: SubmissionState }) {
   return (
     <div
       aria-live="polite"
-      className={`mt-5 flex items-start gap-3 rounded-2xl border p-4.5 text-sm backdrop-blur-md shadow-sm ${
+      className={`p-4.5 mt-5 flex items-start gap-3 rounded-2xl border text-sm shadow-sm backdrop-blur-md ${
         success
           ? "border-emerald-500/20 bg-emerald-50/90 text-emerald-950 dark:border-emerald-400/20 dark:bg-emerald-950/30 dark:text-emerald-200"
           : "border-rose-500/20 bg-rose-50/90 text-rose-950 dark:border-rose-400/20 dark:bg-rose-950/30 dark:text-rose-200"
@@ -74,11 +79,17 @@ function SubmissionNotice({ state }: { state: SubmissionState }) {
       role={success ? "status" : "alert"}
     >
       {success ? (
-        <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+        <CheckCircle2
+          aria-hidden="true"
+          className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400"
+        />
       ) : (
-        <AlertCircle aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400" />
+        <AlertCircle
+          aria-hidden="true"
+          className="mt-0.5 h-5 w-5 shrink-0 text-rose-600 dark:text-rose-400"
+        />
       )}
-      <p className="leading-relaxed font-medium">{state.message}</p>
+      <p className="font-medium leading-relaxed">{state.message}</p>
     </div>
   );
 }
@@ -95,14 +106,17 @@ function SubmitButton({
   const pending = state.kind === "submitting";
   return (
     <button
-      className="group relative inline-flex min-h-13 w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-forest px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#00427d] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest disabled:cursor-wait disabled:opacity-70 dark:bg-[#91c4ff] dark:text-[#06192d] dark:hover:bg-[#85e5c6]"
+      className="min-h-13 group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full bg-forest px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-forest/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#00427d] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest disabled:cursor-wait disabled:opacity-70 dark:bg-[#91c4ff] dark:text-[#06192d] dark:hover:bg-[#85e5c6]"
       disabled={pending}
       type="submit"
     >
       {pending ? (
         <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" />
       ) : (
-        <Send aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <Send
+          aria-hidden="true"
+          className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+        />
       )}
       {pending ? submittingLabel : label}
     </button>
@@ -227,8 +241,8 @@ export function ContactForm({
           type="checkbox"
         />
         <span>
-          I consent to Skymeredian Foundation using these details to respond to my
-          enquiry.{" "}
+          I consent to Skymeredian Foundation using these details to respond to
+          my enquiry.{" "}
           <span className="text-red-600" aria-hidden="true">
             *
           </span>
@@ -620,8 +634,11 @@ export function DonationForm({
         };
       }
       const result = await postJson("/api/donations", {
-          campaignId: new URLSearchParams(window.location.search).get("campaign") || undefined,
-          referredBy: new URLSearchParams(window.location.search).get("ref") || undefined,
+        campaignId:
+          new URLSearchParams(window.location.search).get("campaign") ||
+          undefined,
+        referredBy:
+          new URLSearchParams(window.location.search).get("ref") || undefined,
         amount: selectedAmount,
         currency: "INR",
         frequency,
@@ -637,6 +654,7 @@ export function DonationForm({
         consent: data.get("consent") === "on",
         idempotencyKey: idempotency.current.key,
       });
+      if (openHostedCheckout(result.payment as HostedAction)) return;
       const donation = result.donation as undefined | { id?: string };
       const payment = result.payment as
         | undefined

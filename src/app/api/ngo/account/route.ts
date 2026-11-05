@@ -87,7 +87,19 @@ export async function GET(request: Request) {
               referredBy: member._id.toString(),
             },
           },
-          { $group: { _id: null, total: { $sum: "$amountMinor" } } },
+          {
+            $group: {
+              _id: null,
+              total: {
+                $sum: {
+                  $subtract: [
+                    "$amountMinor",
+                    { $ifNull: ["$refundedAmountMinor", 0] },
+                  ],
+                },
+              },
+            },
+          },
         ])
       : [];
     const birthday =

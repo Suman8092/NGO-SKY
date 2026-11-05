@@ -1,4 +1,5 @@
 import "server-only";
+import { Types } from "mongoose";
 import { createHash } from "node:crypto";
 import { Resend } from "resend";
 import { NgoDeliveryModel, NgoRecordModel } from "@/models/NgoRecord";
@@ -12,6 +13,7 @@ import { queueEmail, recordInput } from "./records";
 import { renderNgoDocument, documentValidity } from "./documents";
 export async function processNgoOutbox(limit = 10) {
   await requireNgoDatabase();
+  await processMessageBroadcasts();
   const env = getServerEnv();
   const from = env.RESEND_FROM_EMAIL;
   const pending = await NgoDeliveryModel.countDocuments({
@@ -97,13 +99,31 @@ export async function runNgoDailyJobs() {
   const part = (k: string) => parts.find((p) => p.type === k)?.value ?? "";
   const date = `${part("year")}-${part("month")}-${part("day")}`,
     birthday = `${part("month")}-${part("day")}`;
-  const members = await NgoRecordModel.find({
+  await NgoRecordModel.updateMany(
+    {
+      module: "members",
+      status: "approved",
+      deletedAt: null,
+      "data._expires": { $lt: date, $ne: "" },
+    },
+    {
+      $set: { status: "expired", updatedBy: "scheduled-job" },
+      $inc: { revision: 1 },
+    },
+  );
+  const members = NgoRecordModel.find({
     module: "members",
     status: "approved",
     deletedAt: null,
-  }).limit(10000);
+    $expr: {
+      $eq: [
+        { $substrCP: [{ $ifNull: ["$data.dateOfBirth", ""] }, 5, 5] },
+        birthday,
+      ],
+    },
+  }).cursor();
   let birthdayCount = 0;
-  for (const member of members) {
+  for await (const member of members) {
     if (member.data._expires && String(member.data._expires) < date) {
       member.status = "expired";
       member.revision++;
@@ -142,5 +162,84 @@ export async function runNgoDailyJobs() {
     );
     birthdayCount++;
   }
-  return { birthdayCount, delivery: await processNgoOutbox(20) };
+  const { reconcilePendingHostedPayments } = await import("./hosted-payments");
+  return {
+    birthdayCount,
+    reconciliation: await reconcilePendingHostedPayments(),
+    delivery: await processNgoOutbox(20),
+  };
+}
+
+export async function processMessageBroadcasts(batchSize = 250) {
+  const db = await requireNgoDatabase();
+  const session = await db.startSession();
+  let queued = 0;
+  try {
+    await session.withTransaction(async () => {
+      const job = await NgoRecordModel.findOne({
+        module: "broadcast-jobs",
+        status: "pending",
+      })
+        .sort({ createdAt: 1 })
+        .session(session);
+      if (!job) return;
+      const message = await NgoRecordModel.findOne({
+        _id: String(job.data.message),
+        module: "messages",
+        status: "published",
+        deletedAt: null,
+      }).session(session);
+      if (!message) {
+        job.status = "cancelled";
+        await job.save({ session });
+        return;
+      }
+      const filter: Record<string, unknown> = {
+        module: "members",
+        status: "approved",
+        deletedAt: null,
+        createdAt: { $lte: new Date(String(job.data.cutoff)) },
+      };
+      if (job.data.member) filter._id = String(job.data.member);
+      else if (job.data.cursor)
+        filter._id = { $gt: new Types.ObjectId(String(job.data.cursor)) };
+      const members = await NgoRecordModel.find(filter)
+        .sort({ _id: 1 })
+        .limit(batchSize)
+        .session(session);
+      if (members.length)
+        await NgoDeliveryModel.bulkWrite(
+          members.map((member) => ({
+            updateOne: {
+              filter: { key: `message:${message._id}:${member._id}` },
+              update: {
+                $setOnInsert: {
+                  key: `message:${message._id}:${member._id}`,
+                  to: String(member.data.email),
+                  subject: String(message.data.name),
+                  text: String(message.data.content),
+                  status: "pending",
+                  attempts: 0,
+                },
+              },
+              upsert: true,
+            },
+          })),
+          { session },
+        );
+      queued = members.length;
+      job.data = {
+        ...job.data,
+        cursor: members.at(-1)?._id.toString() ?? String(job.data.cursor),
+        queued: Number(job.data.queued ?? 0) + queued,
+      };
+      if (members.length < batchSize || job.data.member)
+        job.status = "completed";
+      job.revision++;
+      await job.save({ session });
+    });
+  } finally {
+    await session.endSession();
+  }
+  return { queued };
 }
